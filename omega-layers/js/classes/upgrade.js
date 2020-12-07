@@ -1,7 +1,7 @@
 const UPGRADE_RESOURCE = 0, UPGRADE_GENERATOR = 1, UPGRADE_GENMULTI = 2, UPGRADE_POWERGENERATOR = 3, UPGRADE_PRESTIGEREWARD = 4,
     UPGRADE_RESOURCE_TIMELAYER = 5, UPGRADE_GENERATOR_TIMELAYER = 6, UPGRADE_POWERGENERATOR_TIMELAYER = 7;
 
-const RESOURCE_ALEPH = 0;
+const RESOURCE_ALEPH = 0, RESOURCE_LAYERCOINS = 1;
 
 class AbstractUpgrade
 {
@@ -14,6 +14,8 @@ class AbstractUpgrade
         this.maxLevel = cfg && cfg.maxLevel ? new Decimal(cfg.maxLevel) : Infinity;
         this.getEffectDisplay = cfg && cfg.getEffectDisplay ? cfg.getEffectDisplay : this.getEffectDisplay;
         this.description = this.getDescription();
+        this.requires = cfg && cfg.requires ? cfg.requires : []; //require any of those upgrades
+        this.blacklist = cfg && cfg.blacklist ? cfg.blacklist : [];
     }
 
     getDescription()
@@ -48,6 +50,42 @@ class AbstractUpgrade
             return "Max";
         }
         return functions.formatNumber(this.currentPrice(), 2, 0, 1e9);
+    }
+
+    isUnlocked()
+    {
+        if(this.requires.length === 0) return true;
+        for(let req of this.requires)
+        {
+            if(req.level.gt(0))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isLocked()
+    {
+        for(let b of this.blacklist)
+        {
+            if(b.level.gt(0))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    setRequirements(requires, blacklist)
+    {
+        this.requires = requires;
+        this.blacklist = blacklist;
+    }
+
+    isBuyable()
+    {
+        return this.isUnlocked() && !this.isLocked();
     }
 }
 
@@ -102,18 +140,18 @@ class LayerUpgrade extends AbstractUpgrade
         return new Decimal(1);
     }
 
-    // for challenges
     static getEffectPower()
     {
         if(game.currentChallenge && game.currentChallenge.effectType === CHALLENGE_EFFECT_UPGRADESTRENGTH_SIMPLEBOOST)
         {
             return game.currentChallenge.applyEffect();
         }
-        return new Decimal(1);
+        return game.restackLayer.permUpgrades.upgradeEffects.apply();
     }
 
     buy()
     {
+        if(!this.isBuyable()) return;
         if(this.layerCost.resource.gte(this.currentPrice()) && this.level.lt(this.maxLevel))
         {
             this.layerCost.resource = this.layerCost.resource.sub(this.currentPrice());
@@ -123,6 +161,7 @@ class LayerUpgrade extends AbstractUpgrade
 
     buyMax()
     {
+        if(!this.isBuyable()) return;
         let oldLvl = new Decimal(this.level);
         this.level = new Decimal(Utils.determineMaxLevel(this.layerCost.resource, this));
         if(this.level.sub(oldLvl).gt(0) && this.level.lt(1e9))
@@ -140,21 +179,17 @@ class TreeUpgrade extends LayerUpgrade
 {
     constructor(layerCost, layerBoost, getPrice, getEffect, type, requires, blacklist, cfg)
     {
+        if(!cfg)
+        {
+            cfg = {};
+        }
+        cfg = Object.assign(cfg, {requires, blacklist}); //have at least one required, don't have any blacklisted
         super(layerCost, layerBoost, getPrice, getEffect, type, cfg);
-        this.requires = requires; //required upgrades
-        this.blacklist = blacklist; //cannot have these
     }
 
     isUnlocked()
     {
-        for(let req of this.requires)
-        {
-            if(req.level.eq(0))
-            {
-                return false;
-            }
-        }
-        return true;
+        return super.isUnlocked();
     }
 
     isLocked()
@@ -163,28 +198,13 @@ class TreeUpgrade extends LayerUpgrade
         {
             return false;
         }
-        for(let b of this.blacklist)
-        {
-            if(b.level.gt(0))
-            {
-                return true;
-            }
-        }
-        return false;
+        return super.isLocked();
     }
 
     isBuyable()
     {
         if(this.layerCost.isNonVolatile()) return true;
-        return this.isUnlocked() && !this.isLocked();
-    }
-
-    buy()
-    {
-        if(this.isBuyable())
-        {
-            super.buy();
-        }
+        return super.isBuyable();
     }
 }
 
@@ -210,7 +230,7 @@ class DynamicLayerUpgrade extends LayerUpgrade
 
     buy()
     {
-        if(!this.currentCostLayer()) return;
+        if(!this.currentCostLayer() || !this.isBuyable()) return;
         if(this.currentCostLayer().resource.gte(this.currentPrice()) && this.level.lt(this.maxLevel))
         {
             this.currentCostLayer().resource = this.currentCostLayer().resource.sub(this.currentPrice());
@@ -220,7 +240,7 @@ class DynamicLayerUpgrade extends LayerUpgrade
 
     buyMax()
     {
-        if(!this.currentCostLayer()) return;
+        if(!this.currentCostLayer() || !this.isBuyable()) return;
         let oldLvl = new Decimal(this.level);
         this.level = new Decimal(Utils.determineMaxLevel(this.currentCostLayer().resource, this));
         if(this.level.sub(oldLvl).gt(0) && this.level.lt(1e9))
@@ -249,6 +269,8 @@ class ResourceUpgrade extends AbstractUpgrade
         {
             case RESOURCE_ALEPH:
                 return game.alephLayer.aleph;
+            case RESOURCE_LAYERCOINS:
+                return game.restackLayer.layerCoins;
         }
     }
 
@@ -259,11 +281,15 @@ class ResourceUpgrade extends AbstractUpgrade
             case RESOURCE_ALEPH:
                 game.alephLayer.aleph = game.alephLayer.aleph.sub(res);
                 break;
+            case RESOURCE_LAYERCOINS:
+                game.restackLayer.layerCoins = game.restackLayer.layerCoins.sub(res);
+                break;
         }
     }
 
     buy()
     {
+        if(!this.isBuyable()) return;
         if(this.getResource().gte(this.currentPrice()) && this.level.lt(this.maxLevel))
         {
             this.substractResource(this.currentPrice());
@@ -273,6 +299,7 @@ class ResourceUpgrade extends AbstractUpgrade
 
     buyMax()
     {
+        if(!this.isBuyable()) return;
         let oldLvl = new Decimal(this.level);
         this.level = new Decimal(Utils.determineMaxLevel(this.getResource(), this));
         if(this.level.sub(oldLvl).gt(0) && this.level.lt(1e9))
@@ -291,6 +318,60 @@ class AlephUpgrade extends ResourceUpgrade
     constructor(description, getPrice, getEffect, cfg)
     {
         super(description, getPrice, getEffect, RESOURCE_ALEPH, cfg);
+    }
+}
+
+class RestackLayerUpgrade extends ResourceUpgrade
+{
+    constructor(description, getPrice, getEffect, cfg)
+    {
+        super(description, getPrice, getEffect, RESOURCE_LAYERCOINS, cfg);
+    }
+}
+
+class MetaDynamicLayerUpgrade extends AbstractUpgrade
+{
+    constructor(description, getLayer, getPrice, getEffect, cfg)
+    {
+        super(getPrice, getEffect, cfg);
+        this.description = description;
+        this.getLayer = getLayer;
+    }
+
+    currentLayer()
+    {
+        return this.getLayer(this.level);
+    }
+
+    canBuy()
+    {
+        return this.currentLayer().lt(game.metaLayer.layer) || (this.currentLayer().eq(game.metaLayer.layer) && game.metaLayer.resource.gte(this.currentPrice()));
+    }
+
+    buy()
+    {
+        if(!this.isBuyable()) return;
+        let canBuy = this.canBuy();
+        if(canBuy)
+        {
+            game.metaLayer.layer = game.restackLayer.upgradeTreeNames.substractLayers.apply() ? game.metaLayer.layer.sub(this.currentLayer()) : new Decimal(0);
+            game.metaLayer.resource = new Decimal(1);
+            this.level = this.level.add(1);
+        }
+    }
+
+    buyMax()
+    {
+        let oldLvl = this.level;
+        this.level = new Decimal(Utils.determineMaxLevel(game.metaLayer.layer, this));
+        if(this.level.sub(oldLvl).gt(0) && this.level.lt(1e9))
+        {
+            game.metaLayer.layer = game.metaLayer.layer.sub(this.getLayer(this.level.sub(1)));
+        }
+        while(this.currentLayer().lte(game.metaLayer.layer) && this.level.lt(1e9) && this.level.lt(this.maxLevel))
+        {
+            this.buy();
+        }
     }
 }
 

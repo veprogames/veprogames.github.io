@@ -1,6 +1,7 @@
 var game = {
     version: "2",
     layers: [],
+    highestLayer: 0,
     automators: {
         autoMaxAll: new Automator("Auto Max All", "Automatically buys max on all Layers", () =>
         {
@@ -72,6 +73,8 @@ var game = {
             }),
     },
     alephLayer: new AlephLayer(),
+    restackLayer: new ReStackLayer(),
+    metaLayer: new MetaLayer(),
     achievements: [
         new Achievement("Starting Out", "Reach 10 α", "α", () => game.layers[0] && game.layers[0].resource.gt(10)),
         new Achievement("The beginning of Idling", "Have 1 <span>α<sub>1</sub></span> Generator", "<span>α<sub>1</sub></span>", () => game.layers[0] && game.layers[0].generators[0].bought.gt(0)),
@@ -109,7 +112,18 @@ var game = {
         new Achievement("How many are there?!", "Go ε", "ε", () => game.layers[4] && game.layers[4].timesReset > 0),
         new Achievement("It's time to stop! (not)", "Go ζ", "ζ", () => game.layers[5] && game.layers[5].timesReset > 0),
         new Achievement("End Game?", "Reach 1e1,000,000,000 α", "α", () => game.layers[0] && game.layers[0].resource.gte("1ee9")),
-        new Achievement("Much Aleph, much Wow", "Reach 1e10,000 ℵ", '<span class="aleph">ℵ</span>', () => game.alephLayer.aleph.gte("1e10000"))
+        new Achievement("Temperature", "Go θ", "θ", () => game.layers[7] && game.layers[7].timesReset > 0),
+        new Achievement("Stack A-New!", "ReStack", "<img alt=\"LC\" class=\"inline\" src=\"images/layercoin.svg\"/>", () => game.restackLayer.timesReset > 0),
+        new Achievement("H λ l f L i f e", "Go λ", "λ", () => game.layers[10] && game.layers[10].timesReset > 0),
+        new Achievement("One for Everyone", "Have 7,800,000,000 Layer Coins", "<img alt=\"LC\" class=\"inline\" src=\"images/layercoin.svg\"/>", () => game.restackLayer.layerCoins.gte(7.8e9)),
+        new Achievement("What's the Point of Layers?", "Buy the Meta Upgrade", "<img alt=\"LC\" class=\"inline\" src=\"images/layercoin.svg\"/>", () => game.restackLayer.metaUpgrade.level.gt(0)),
+        new Achievement("Wake Up", "Go Meta", "<img alt=\"LC\" class=\"inline\" src=\"images/layercoin.svg\"/>", () => game.metaLayer.active),
+        new Achievement("Ω-Layers", "Reach Layer Ω", "Ω", () => game.metaLayer.layer.gte(47)),
+        new Achievement("One for each Second", "Advance 1 Layer per second", "»", () => game.metaLayer.getLayersPS().gte(1)),
+        new Achievement("The Ladder is Infinite", "Reach Layer 1000", "Ρ↑β", () => game.metaLayer.layer.gte(1000)),
+        new Achievement("Stupidly fast", "Advance 10 Layer per second", "»»", () => game.metaLayer.getLayersPS().gte(10)),
+        new Achievement("What are Layer resets?", "Buy the ReStack Tree Upgrade in Row 5", "<img alt=\"LC\" class=\"inline\" src=\"images/layercoin.svg\"/>", () => game.restackLayer.upgradeTreeNames.substractLayers.apply()),
+        new Achievement("It never Ends", "Reach Layer 1e10", "<span style='font-size: 30%;'><span>Ω<sub>ϝ</sub></span><sup>ρ</sup>↑<span>Ω<sub>ϙ</sub></span><sup>Ν</sup>↑<span>Ω<sub>ϛ</sub></span><sup>κ</sup>↑<span>Ω</span><sup>Σ</sup></span>", () => game.metaLayer.layer.gte(1e10)),
     ],
     currentLayer: null,
     currentChallenge: null,
@@ -130,6 +144,7 @@ var game = {
         autoMaxAll: true,
         notifications: true,
         saveNotifications: true,
+        titleStyle: 2,
         theme: "dark.css"
     }
 };

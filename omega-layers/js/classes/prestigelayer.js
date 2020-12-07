@@ -47,14 +47,39 @@ class PrestigeLayer
 
     static getNameForLayer(layer)
     {
+        let nLayer = layer;
+        if(layer instanceof Decimal)
+        {
+            nLayer = layer.toNumber();
+        }
+        if(layer instanceof Decimal && layer.gte(INFINITY))
+        {
+            let infinityOrder = Decimal.log(layer, INFINITY).floor();
+            if(infinityOrder.gte(6))
+            {
+                let exp = PrestigeLayer.getNameForLayer(layer.div(Decimal.pow(INFINITY, infinityOrder)).floor().sub(1));
+                return "(<span class='flipped-v'>Ω</span>↑↑" + functions.formatNumber(infinityOrder, 3, 0, 1e9) + ")<sup>" + exp + "</sup>";
+            }
+            return "<span class='flipped-v'>Ω</span><sup>" + PrestigeLayer.getNameForLayer(layer.div(INFINITY).floor().sub(1)) + "</sup>";
+        }
         let letters = "αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
         let orders = "ψϝϛͱϻϙͳϸ";
-        let order = Math.floor(layer / letters.length);
+        let totalCombinations = (orders.length + 2) * letters.length;
+        let arrowOrder = Math.floor(Math.log(nLayer) / Math.log(totalCombinations));
+        let order = Math.floor(nLayer / letters.length);
         if(order === 0)
         {
-            return letters[layer];
+            return letters[nLayer];
         }
-        return "<span>" + letters[letters.length - 1] + (order > 1 ? "<sub>" + orders[order - 2] + "</sub>" : "") + "</span>" + "<sup>" + letters[(layer) % letters.length] + "</sup>";
+        if(arrowOrder >= 4)
+        {
+            return PrestigeLayer.getNameForLayer(Math.floor(nLayer / Math.pow(totalCombinations, arrowOrder - 1))) + "↑↑" + (arrowOrder - 1);
+        }
+        if(nLayer >= totalCombinations)
+        {
+            return PrestigeLayer.getNameForLayer(nLayer % totalCombinations) + "↑" + PrestigeLayer.getNameForLayer(Math.floor(nLayer / totalCombinations) - 1);
+        }
+        return "<span>" + letters[letters.length - 1] + (order > 1 ? "<sub>" + orders[order - 2] + "</sub>" : "") + "</span>" + "<sup>" + letters[(nLayer) % letters.length] + "</sup>";
     }
 
     static getFullNameForLayer(layer)
@@ -400,7 +425,7 @@ class PrestigeLayer
                 row.push(upg);
             }
             amntBefore = amnt;
-            if(rand.nextDouble() < 0.5) amnt++;
+            if(rand.nextDouble() < 0.5 || (amnt === 1 && r >= 2)) amnt++;
             upgs.push(row);
         }
 
@@ -449,7 +474,8 @@ class PrestigeLayer
 
     getExponentialBoostFactor()
     {
-        return game.alephLayer.upgrades.layerExponentialBoost.apply();
+        return game.alephLayer.upgrades.layerExponentialBoost.apply() + game.restackLayer.permUpgrades.layerExponentialBoostFactor.apply()
+            + game.restackLayer.permUpgrades.layerExponentialBoostFactorTime.apply();
     }
 
     //the factor of how much the power on the prestige formula is
@@ -509,6 +535,7 @@ class PrestigeLayer
             multi = multi.mul(game.alephLayer.upgrades.prestigeNoPowerBoost.apply());
         }
         multi = multi.mul(game.alephLayer.upgrades.prestigeRewards.apply());
+        multi = multi.mul(game.restackLayer.permUpgrades.prestigeGains.apply());
         let power = game.currentChallenge && game.currentChallenge.effectType === CHALLENGE_EFFECT_PRESTIGEREWARD ? game.currentChallenge.applyEffect() : 1;
         if(this.layer === 0) //better beta
         {
@@ -671,6 +698,7 @@ class PrestigeLayer
         {
             this.timeSpent += dt;
         }
+        this.resource = this.resource.mul(Math.pow(game.restackLayer.metaUpgrade.apply(), dt));
     }
 
     loadFromSave(obj)

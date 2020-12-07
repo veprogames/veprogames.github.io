@@ -138,9 +138,17 @@ var functions = {
             {
                 return {upgrade: value.upgrade, active: value.active, desiredInterval: value.desiredInterval};
             }
+            if(value instanceof ReStackLayer)
+            {
+                return {layerCoins: "d" + value.layerCoins, permUpgrades: value.permUpgrades, metaUpgrade: value.metaUpgrade, upgradeTree: value.upgradeTree, timeSpent: value.timeSpent};
+            }
+            if(value instanceof MetaLayer)
+            {
+                return {active: value.active, resource: "d" + value.resource, layer: "d" + value.layer, multiplierUpgrades: value.multiplierUpgrades,
+                    powerUpgrades: value.powerUpgrades};
+            }
             return value;
         }
-        //return JSON.stringify(game, replacer);
         return btoa(unescape(encodeURIComponent(JSON.stringify(game, replacer))));
     },
     saveGame: function()
@@ -181,6 +189,8 @@ var functions = {
         }
 
         game.timeSpent = loadObj.timeSpent !== undefined ? loadObj.timeSpent : 0;
+        game.highestLayer = loadObj.highestLayer !== undefined ? loadObj.highestLayer : 0;
+        game.layers = [];
         for(let i = 0; i < loadObj.layers.length; i++)
         {
             if(!game.layers[i])
@@ -211,6 +221,10 @@ var functions = {
         {
             game.alephLayer.loadFromSave(loadObj.alephLayer);
         }
+        else
+        {
+            game.alephLayer = new AlephLayer();
+        }
         if(loadObj.automators)
         {
             for(let k of Object.keys(loadObj.automators))
@@ -228,6 +242,22 @@ var functions = {
                     game.achievements[idx].isCompleted = ach.isCompleted;
                 }
             }
+        }
+        if(loadObj.restackLayer)
+        {
+            game.restackLayer.load(loadObj.restackLayer);
+        }
+        else
+        {
+            game.restackLayer = new ReStackLayer();
+        }
+        if(loadObj.metaLayer)
+        {
+            game.metaLayer.load(loadObj.metaLayer);
+        }
+        else
+        {
+            game.metaLayer = new MetaLayer();
         }
         this.setTheme(game.settings.theme);
 

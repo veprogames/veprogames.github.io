@@ -7,12 +7,15 @@
     --color-hover-strong: #dddddd;
     --color-contrast: black;
     --color-success: #c8ffb7;
+    --button-dark: #1a1a1a;
     --notification--standard: dodgerblue;
     --notification--standard--border: #135698;
     --notification--error: #f33333;
     --notification--error--border: #ae2222;
     --notification--success: #4fd923;
     --notification--success--border: #2e9114;
+    --notification--special: #d9bb23;
+    --notification--special--border: #4a3f0e;
 }
 
 @font-face{
@@ -97,6 +100,10 @@ a{
     color: var(--color-primary);
 }
 
+fieldset{
+    border: none;
+}
+
 main{
     margin-bottom: 4rem;
     padding-top: 0.2em;
@@ -123,6 +130,11 @@ img.inline{
 
 .resource-name{
     font-family: "Typewriter", sans-serif;
+}
+
+.resource-name .flipped-v{
+    display: inline-block;
+    transform: rotate(180deg) translateY(-0.15em);
 }
 
 /*Layer Navigation*/
@@ -163,6 +175,7 @@ body{
     font-family: "Typewriter", monospace;
     background-color: var(--background-body);
     color: var(--color-contrast);
+    overflow-x: hidden;
 }
 
 button{
@@ -186,6 +199,10 @@ button:active:not(:disabled){
 
 button:disabled{
     filter: brightness(0.5);
+}
+
+button.selected{
+    background-color: var(--color-hover-strong);
 }
 
 table{
@@ -301,15 +318,25 @@ p.resource-display > span:first-child{
     padding: 0.5rem 0;
 }
 
+.upgrade .layer-number{
+    font-size: 85%;
+}
+
 /*Tree Upgrades*/
 
 .upgrade-tree .row{
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .upgrade-tree .row .upgrade{
     width: 30%;
+}
+
+.upgrade-tree .wrapper{
+    width: 30%;
+    margin: 1rem 0;
 }
 
 /*Challenges*/
@@ -443,6 +470,79 @@ p.resource-display > span:first-child{
 
 .automator label input[type=number]{
     width: 3em;
+}
+
+/*Restack*/
+
+.restack-tab{
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+}
+
+.restack-tab > p{
+    font-size: 140%;
+}
+
+.restack-tab .upgrades{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.restack-tab .upgrades > button{
+    width: 28%;
+}
+
+.restack-tab .restack{
+    font-size: 225%;
+    width: 100%;
+}
+
+.restack-tab .restack-2{
+    position: absolute;
+    left: 2rem;
+    top: 1rem;
+    font-size: 120%;
+    width: 20%;
+    padding: 1rem 0.2rem;
+}
+
+.restack-tab .respec{
+    margin-top: 1rem;
+    font-size: 120%;
+}
+
+.restack-tab .meta{
+    font-weight: bold;
+    font-size: 225%;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--button-dark);
+
+    box-shadow: 0 0 1rem var(--color-primary) inset;
+}
+
+/*Meta*/
+
+.meta-layer{
+    padding: 1rem;
+    text-align: center;
+}
+
+.meta-layer p.resource{
+    font-size: 150%;
+    min-height: 2em; /*prevent jumping from sub- or superscript*/
+}
+
+.meta-layer p.layer{
+    font-size: 90%;
+}
+
+.meta-layer .max-all{
+    font-size: 120%;
+    margin: 1rem;
 }
 
 /*Achievements*/
@@ -590,6 +690,11 @@ p.resource-display > span:first-child{
 .notification.success{
     background-color: var(--notification--success);
     border-color: var(--notification--success--border);
+}
+
+.notification.special{
+    background-color: var(--notification--special);
+    border-color: var(--notification--special--border);
 }
 
 .notification-container{

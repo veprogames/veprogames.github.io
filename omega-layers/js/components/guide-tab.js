@@ -1,8 +1,10 @@
 Vue.component("guide-tab", {
     computed: {
-        betaUnlocked: () => game.layers.length >= 2,
-        gammaUnlocked: () => game.layers.length >= 3,
-        alephUnlocked: () => game.alephLayer.isUnlocked()
+        betaUnlocked: () => game.layers.length >= 2 || game.metaLayer.active,
+        gammaUnlocked: () => game.layers.length >= 3 || game.metaLayer.active,
+        alephUnlocked: () => game.alephLayer.isUnlocked() || game.metaLayer.active,
+        restackUnlocked: () => game.restackLayer.isUnlocked() || game.metaLayer.active,
+        metaUnlocked: () => game.metaLayer.active
     },
     methods: {
         formatNumber: (n, prec, prec1000, lim) => functions.formatNumber(n, prec, prec1000, lim)
@@ -33,7 +35,7 @@ Vue.component("guide-tab", {
     <guide-item v-if="betaUnlocked">
         <template v-slot:title>Automators</template>
         <template v-slot:text>With Automators, you can automate the Game to your liking. For example, they can Prestige and Maximize Layers
-        automatically. You can also set a desired interval, which you can use if you want to make them slower. For exmaple, with a desired
+        automatically. You can also set a desired interval, which you can use if you want to make them slower. For example, with a desired
         interval of 3 seconds, the automator will never be faster than 3 seconds.</template>
     </guide-item>
     <guide-item v-if="betaUnlocked">
@@ -52,13 +54,26 @@ Vue.component("guide-tab", {
     </guide-item>
     <guide-item v-if="gammaUnlocked">
         <template v-slot:title>Volatility</template>
-        <template v-slot:text>Are you tired of clocking Prestige all the time? Now you can make layers non-volatile, resulting in them never resetting and instead
+        <template v-slot:text>Are you tired of clicking Prestige all the time? Now you can make layers non-volatile, resulting in them never resetting and instead
         giving a part of their Prestige Reward every second. Later on, Layers can also max themselves automatically.</template>
     </guide-item>
     <guide-item v-if="alephUnlocked">
         <template v-slot:title>Aleph</template>
         <template v-slot:text>After going &delta; at least once, you can gain Aleph, allowing you to buy Upgrades that globally boost the game.
         You gain 10x more Aleph for every new Layer you unlock after &delta;.
+        </template>
+    </guide-item>
+    <guide-item v-if="restackUnlocked">
+        <template v-slot:title>ReStack</template>
+        <template v-slot:text>After unlocking &kappa;, you are able to ReStack. This resets all progress so far in exchange for Layer Coins, which can be spent
+        on powerful Upgrades. If you feel like you took the wrong Path on the permanent Upgrades, you can respec. YOu will get all spent Layer Coins back but you do
+        a ReStack without any rewards. ReStack yields 10x more Layer Coins for every new Layer unlocked.
+        </template>
+    </guide-item>
+    <guide-item v-if="metaUnlocked">
+        <template v-slot:title>Meta</template>
+        <template v-slot:text>You just woke up from the Layer dream and realized that a new Layer is just another Layer. You can now buy Upgrades to increase your Resource
+        multiplier and climb Layers faster. ReStack is still available, so check that out! There is a new Upgrade Tree waiting to be upgraded.
         </template>
     </guide-item>
 </div>`

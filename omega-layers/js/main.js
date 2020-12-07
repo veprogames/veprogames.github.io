@@ -29,6 +29,21 @@ function tickGame(seconds)
     game.timeSpent += seconds;
     saveTimer += seconds;
 
+    let titleInfo = "";
+    switch(game.settings.titleStyle)
+    {
+        case 0:
+            titleInfo = "";
+            break;
+        case 1:
+            titleInfo = Utils.getMOTD();
+            break;
+        case 2:
+            titleInfo = game.metaLayer.active ? "Layer " + functions.formatNumber(game.metaLayer.layer.add(1), 3, 0) : functions.formatNumber(game.currentLayer.resource, 2, 0, 1e9) + " " + game.currentLayer.name;
+            break;
+    }
+    document.title = "Ω-Lλγers" + (game.settings.titleStyle !== 0 ? ":" : "") + " " + titleInfo + " [Open Beta]";
+
     if(saveTimer > 30)
     {
         functions.saveGame();
@@ -57,15 +72,16 @@ function tickGame(seconds)
         }
     }
 
-    let numMinimizedLayers = 0;
+    game.highestLayer = Math.max(game.highestLayer, game.layers.length - 1);
+
     let minActiveLayer = game.settings.showMinLayers;
     let maxActiveLayer = game.layers.length - game.settings.showMaxLayers;
 
-    //find out how many layers are minimized
-    let currentId = game.currentLayer.layer;
-    numMinimizedLayers = game.settings.showMinLayers + game.settings.showMaxLayers + (currentId > game.settings.showMinLayers && currentId < game.layers.length - game.settings.showMaxLayers ? 1 : 0);
+    //find out how many layers are minimized and active
+    let numActiveLayers = game.settings.showMinLayers + game.settings.showMaxLayers + (game.currentLayer.layer >= game.settings.showMinLayers && game.currentLayer.layer < game.layers.length - game.settings.showMaxLayers ? 1 : 0);
+    let numMinimizedLayers = game.layers.length - numActiveLayers;
 
-    if(numMinimizedLayers < game.layers.length)
+    if(numActiveLayers < game.layers.length && numActiveLayers > 0)
     {
         //if the layer is active, tick every frame
         for(let i = 0; i < game.layers.length; i++)
@@ -116,6 +132,9 @@ function tickGame(seconds)
             game.notifications = game.notifications.filter(notification => notification !== n);
         }
     }
+
+    game.restackLayer.tick(seconds);
+    game.metaLayer.tick(seconds);
 }
 
 function simulateGameTime(seconds)
@@ -155,45 +174,60 @@ onkeydown = e =>
     {
         keyMap.push(e.key);
     }
-
-    if(e.key === "ArrowRight")
-    {
-        functions.setNextLayer();
-    }
-    if(e.key === "ArrowLeft")
-    {
-        functions.setPreviousLayer();
-    }
     let lc = e.key.toLowerCase();
-    if(lc === "p")
+
+    if(!game.metaLayer.active)
     {
-        if(!game.currentLayer.isNonVolatile() && game.currentLayer.canPrestige())
+        if(e.key === "ArrowRight")
         {
-            game.currentLayer.prestige();
+            functions.setNextLayer();
+        }
+        if(e.key === "ArrowLeft")
+        {
+            functions.setPreviousLayer();
+        }
+        if(lc === "p")
+        {
+            if(!game.currentLayer.isNonVolatile() && game.currentLayer.canPrestige())
+            {
+                game.currentLayer.prestige();
+            }
+        }
+        for(let tab of ["Layers", "Guide", "Settings"])
+        {
+            if(lc === tab[0].toLowerCase() && !e.ctrlKey)
+            {
+                game.settings.tab = tab;
+            }
+        }
+        if(lc === "a" && !e.ctrlKey && game.alephLayer.isUnlocked())
+        {
+            game.settings.tab = "Aleph";
+        }
+        if(lc === "v" && !e.ctrlKey && game.highestLayer >= 2)
+        {
+            game.settings.tab = "Volatility";
+        }
+        if(lc === "c" && !e.ctrlKey)
+        {
+            game.settings.tab = "Achievements";
+        }
+        if(lc === "u" && !e.ctrlKey && game.highestLayer >= 1)
+        {
+            game.settings.tab = "Automators";
         }
     }
-    for(let tab of ["Layers", "Guide", "Settings"])
+    else
     {
-        if(lc === tab[0].toLowerCase() && !e.ctrlKey)
+        if(lc === "l")
         {
-            game.settings.tab = tab;
+            game.settings.tab = "Layers";
         }
     }
-    if(lc === "a" && !e.ctrlKey && game.alephLayer.isUnlocked())
+
+    if(lc === "r" && !e.ctrlKey && game.restackLayer.isUnlocked())
     {
-        game.settings.tab = "Aleph";
-    }
-    if(lc === "v" && !e.ctrlKey && functions.maxLayerUnlocked() >= 2)
-    {
-        game.settings.tab = "Volatility";
-    }
-    if(lc === "c" && !e.ctrlKey)
-    {
-        game.settings.tab = "Achievements";
-    }
-    if(lc === "u" && !e.ctrlKey && functions.maxLayerUnlocked() >= 1)
-    {
-        game.settings.tab = "Automators";
+        game.settings.tab = "ReStack";
     }
 }
 

@@ -44,11 +44,7 @@ Vue.component("news-ticker", {
                     ". If it's above 1,000, consider yourself lucky!",
                 () => `<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">get Layer ` + PrestigeLayer.getNameForLayer(game.layers.length) + ` now [working 2020]</a>`,
                 () => functions.formatNumber(game.layers[0].resource, 2, 0, 1e9) + " α? That's rookie numbers",
-                () =>
-                {
-                    let rand = new Random(new Date().getDate());
-                    return "Motto of the Day: " + ADJECTIVES[rand.nextInt(ADJECTIVES.length)] + " " + NOUNS[rand.nextInt(NOUNS.length)];
-                }
+                () => "Motto of the Day: " + Utils.getMOTD()
             ],
             currentMessage: "",
             messageIndex: -1

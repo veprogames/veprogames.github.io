@@ -9,6 +9,8 @@ Vue.component("layer-navigation", {
     methods:
         {
             setCurrentLayer: l => functions.setCurrentLayer(l),
+            currentLayer: () => game.currentLayer.layer,
+            multipleLayers: () => game.layers.length > 1,
             buttonFontSize: function(layer)
             {
                 let id = layer.layer;
@@ -23,7 +25,7 @@ Vue.component("layer-navigation", {
             fullLayerName: layer => PrestigeLayer.getFullNameForLayer(layer)
         },
     template: `<div class="layer-navigation">
-<button :title="fullLayerName(l.layer)" v-if="isDisplayed(i)" v-for="(l, i) in layers" :key="i" @click="setCurrentLayer(l)" :style="{fontSize: buttonFontSize(l)}">
+<button :class="{selected: l.layer === currentLayer() && multipleLayers()}" :title="fullLayerName(l.layer)" v-if="isDisplayed(i)" v-for="(l, i) in layers" :key="i" @click="setCurrentLayer(l)" :style="{fontSize: buttonFontSize(l)}">
     <resource-name :layerid="l.layer"></resource-name>
     <layer-colored-text v-if="showOrdinals" class="ordinal" :layerid="l.layer">#{{l.layer + 1}}</layer-colored-text>
 </button>

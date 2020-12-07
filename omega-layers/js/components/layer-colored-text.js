@@ -3,10 +3,15 @@ Vue.component("layer-colored-text", {
     computed: {
         textColor: function()
         {
-            let h = 33 * this.getLayerId();
-            if(this.getLayerId() >= 96)
+            let lid = new Decimal(this.getLayerId());
+            if(this.getLayerId() instanceof Decimal && this.getLayerId().gte(INFINITY))
             {
-                h = new Random(this.getLayerId()).nextDouble() * 360;
+                return "#cc00ff";
+            }
+            let h = 33 * Math.min(lid.toNumber(), 10000);
+            if(lid.gt(10000))
+            {
+                h += Decimal.log10(lid.div(10000)).toNumber() * 600;
             }
             let s = Math.min(100, 10 * this.getLayerId());
             return "hsl(" + h + ", " + s + "%, 50%)";
@@ -20,15 +25,6 @@ Vue.component("layer-colored-text", {
             return "0px 0px " + t[0] + "em currentcolor"+
                 ",0px 0px " + t[1] + "em currentcolor"+
                 ",0px 0px " + t[2] + "em currentcolor";
-        },
-        textAnim: function()
-        {
-            if(this.getLayerId() >= 96)
-            {
-                let length = 15 / (1 + 0.01 * (this.getLayerId() - 96));
-                return "resource-hue-spin " + length + "s linear infinite";
-            }
-            return "none";
         }
     },
     methods:
@@ -39,7 +35,7 @@ Vue.component("layer-colored-text", {
         },
         getStyle: function()
         {
-            let styles = {animation: this.textAnim};
+            let styles = {};
             if(game.settings.resourceColors)
             {
                 styles.color = this.textColor;

@@ -6,20 +6,26 @@ class Utils
         {
             return buyable.level;
         }
-        if(resource.lt(buyable.currentPrice()))
+        if(buyable instanceof MetaDynamicLayerUpgrade)
         {
-            return buyable[buyable instanceof AbstractUpgrade ? "level" : "bought"];
+            if(resource.lt(buyable.currentLayer()))
+            {
+                return buyable.level;
+            }
+        }
+        else
+        {
+            if(resource.lt(buyable.currentPrice()))
+            {
+                return buyable[buyable instanceof AbstractUpgrade ? "level" : "bought"];
+            }
         }
         let r = resource.div(1e15);
         let lvl = 512;
-        /*if(buyable.maxLevel !== Infinity)
-        {
-            lvl = Math.log10(buyable.maxLevel) / 2;
-        }*/
         let interval = lvl / 2;
         while(interval > 1e-16)
         {
-            let price = buyable.getPrice(Decimal.pow(10, lvl));
+            let price = !(buyable instanceof MetaDynamicLayerUpgrade) ? buyable.getPrice(Decimal.pow(10, lvl)) : buyable.getLayer(Decimal.pow(10, lvl));
             let canAfford = r.gte(price);
             lvl += canAfford ? interval : -interval;
             interval /= 2;
@@ -71,6 +77,12 @@ class Utils
             }
         }
         return word;
+    }
+
+    static getMOTD()
+    {
+        let rand = new Random(new Date().getDate());
+        return ADJECTIVES[rand.nextInt(ADJECTIVES.length)] + " " + NOUNS[rand.nextInt(NOUNS.length)];
     }
 
     static clamp(v, min, max)

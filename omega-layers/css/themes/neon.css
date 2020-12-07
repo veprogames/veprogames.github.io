@@ -7,9 +7,11 @@
     --color-hover-strong: #242424;
     --color-contrast: #ffffff;
     --color-success: #10b015;
+    --button-dark: #000000;
     --notification--standard: #0081ff;
     --notification--success: #04ff00;
     --notification--error: #ff0909;
+    --notification--special: #ffd700;
 }
 
 @keyframes rainbow-border{

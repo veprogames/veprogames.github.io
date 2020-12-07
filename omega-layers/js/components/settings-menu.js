@@ -16,6 +16,8 @@ Vue.component("settings-menu", {
         },
         download: function()
         {
+            this.exportGame();
+
             let date = new Date();
             let dateString = [date.getFullYear(), date.getMonth() + 1, date.getDate()].map(d => d.toString().padStart(2, "0")).join("-") + "-" +
                 [date.getHours(), date.getMinutes(), date.getSeconds()].map(d => d.toString().padStart(2, "0")).join("");
@@ -89,8 +91,8 @@ Vue.component("settings-menu", {
         <label>Show Layer Ordinals (&alpha;: #1, &beta;: #2, ...) <input type="checkbox" v-model="settings.showLayerOrdinals"/></label>
     </div>
     <div class="settings-panel">
-        <label>Show first <input :disabled="settings.showAllLayers" type="number" min="1" max="5" v-model="settings.showMinLayers"/> Layers</label>
-        <label>Show last <input :disabled="settings.showAllLayers" type="number" min="1" max="5" v-model="settings.showMaxLayers"/> Layers</label>
+        <label>Show first <input :disabled="settings.showAllLayers" type="number" min="1" max="5" v-model.number="settings.showMinLayers"/> Layers</label>
+        <label>Show last <input :disabled="settings.showAllLayers" type="number" min="1" max="5" v-model.number="settings.showMaxLayers"/> Layers</label>
     </div>
     <div class="settings-panel">
         <label>Buy Max always buys until 10 <input type="checkbox" v-model="settings.buyMaxAlways10"/></label>
@@ -104,9 +106,17 @@ Vue.component("settings-menu", {
         <label>Notifications <input type="checkbox" v-model="settings.notifications"/></label>
         <label>Save Notifications <input type="checkbox" v-model="settings.saveNotifications"/></label>
     </div>
+    <div class="settings-panel">
+        <span>Title Style</span><br/>
+        <fieldset>
+            <label><input type="radio" value="0" v-model.number="settings.titleStyle"/> None</label><br/>
+            <label><input type="radio" value="1" v-model.number="settings.titleStyle"/> Motd</label><br/>
+            <label><input type="radio" value="2" v-model.number="settings.titleStyle"/> Current Layer</label>
+        </fieldset>
+    </div>
 </div>
 <div class="settings-row">
-    <label>Theme <button v-for="t in themes" @click="setTheme(t[1])">{{t[0]}}</button></label>
+    <label>Theme <button :class="{selected: settings.theme === t[1]}" v-for="t in themes" @click="setTheme(t[1])">{{t[0]}}</button></label>
 </div>
 <div class="settings-row">
     <button @click="save()">Save Game</button>

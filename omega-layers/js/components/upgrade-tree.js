@@ -54,12 +54,24 @@ Vue.component("upgrade-tree", {
                     }
                 }
             }
+        },
+        isResourceUpgrade(u)
+        {
+            return u instanceof ResourceUpgrade;
+        },
+        isAlephUpgrade(u)
+        {
+            return u instanceof AlephUpgrade;
+        },
+        isRestackUpgrade(u)
+        {
+            return u instanceof RestackLayerUpgrade;
         }
     },
     template: `<div class="upgrade-tree">
 <div ref="tree">
     <div class="row" v-for="(row, i) in upgrades" :key="i">
-        <upgrade v-for="(u, j) in row" :upgrade="u" :key="j"></upgrade>
+        <dynamic-upgrade v-for="(u, j) in row" :upgrade="u" :key="j"></dynamic-upgrade>
     </div>
 </div>
 <div>
