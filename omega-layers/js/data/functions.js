@@ -151,9 +151,14 @@ var functions = {
         }
         return btoa(unescape(encodeURIComponent(JSON.stringify(game, replacer))));
     },
+    getSettingsSaveString: function()
+    {
+        return btoa(unescape(encodeURIComponent(JSON.stringify(game.settings))));
+    },
     saveGame: function()
     {
         localStorage.setItem("OmegaLayers", this.getSaveString());
+        localStorage.setItem("OmegaLayers_Settings", this.getSettingsSaveString());
         if(game.settings.notifications && game.settings.saveNotifications)
         {
             functions.createNotification(new Notification(NOTIFICATION_STANDARD, "Game Saved!", "images/save.svg"));
@@ -199,16 +204,10 @@ var functions = {
             }
             game.layers[i].loadFromSave(loadObj.layers[i]);
         }
+        game.currentLayer = game.layers[0];
         if(loadObj.currentChallenge)
         {
             game.currentChallenge = game.layers[loadObj.currentChallenge.layer].challenges[loadObj.currentChallenge.index];
-        }
-        for(let k in loadObj.settings)
-        {
-            if(loadObj.settings.hasOwnProperty(k))
-            {
-                game.settings[k] = loadObj.settings[k];
-            }
         }
         if(loadObj.volatility)
         {
@@ -258,6 +257,12 @@ var functions = {
         else
         {
             game.metaLayer = new MetaLayer();
+        }
+
+        if(localStorage.getItem("OmegaLayers_Settings") !== null)
+        {
+            let settings = JSON.parse(decodeURIComponent(escape(atob(localStorage.getItem("OmegaLayers_Settings")))));
+            game.settings = Object.assign(game.settings, settings);
         }
         this.setTheme(game.settings.theme);
 

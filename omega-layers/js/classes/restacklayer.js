@@ -13,7 +13,7 @@ class ReStackLayer
                 }),
             layerExponentialBoostFactorTime: new RestackLayerUpgrade("The Layer Exponential Factor increases over time",
                 level => this.getPermUpgradeCost(),
-                level => Math.min(1, this.timeSpent / 86400) * 3 * level.toNumber(), {
+                level => Math.min(1, this.timeSpent / 28800) * 3 * level.toNumber(), {
                     maxLevel: 1,
                     getEffectDisplay: effectDisplayTemplates.numberStandard(4, "+")
                 }),
@@ -105,6 +105,19 @@ class ReStackLayer
                             return this.level.gt(0) ? "Unlocked" : "Locked";
                         }
                     })
+            ],
+            [
+                new RestackLayerUpgrade("Resource Powerers are stronger",
+                    level => new Decimal("1ee10"),
+                    level => new Decimal(1).add(level), {
+                        maxLevel: 1
+                    }),
+                new RestackLayerUpgrade("Resource Multipliers scale better to their level",
+                    level => new Decimal("1ee10"),
+                    level => new Decimal(1).add(level.mul(0.15)), {
+                        maxLevel: 1,
+                        getEffectDisplay: effectDisplayTemplates.numberStandard(2, "^")
+                    }),
             ]
         ];
         this.upgradeTree[1][0].setRequirements([this.upgradeTree[0][0]], [this.upgradeTree[1][1]]);
@@ -113,6 +126,8 @@ class ReStackLayer
         this.upgradeTree[3][0].setRequirements([this.upgradeTree[2][0]], [this.upgradeTree[3][1]]);
         this.upgradeTree[3][1].setRequirements([this.upgradeTree[2][0]], [this.upgradeTree[3][0]]);
         this.upgradeTree[4][0].setRequirements([this.upgradeTree[3][0], this.upgradeTree[3][1]], []);
+        this.upgradeTree[5][0].setRequirements([this.upgradeTree[4][0]], [this.upgradeTree[5][1]]);
+        this.upgradeTree[5][1].setRequirements([this.upgradeTree[4][0]], [this.upgradeTree[5][0]]);
         this.upgradeTreeNames = {
             resourceMultiplier: this.upgradeTree[0][0],
             resourceMultiplierUpgrades: this.upgradeTree[1][0],
@@ -120,7 +135,9 @@ class ReStackLayer
             unlockResourcePowerers: this.upgradeTree[2][0],
             resourceMultiplierUpgrades2: this.upgradeTree[3][1],
             resourcePowerersUpgrades: this.upgradeTree[3][0],
-            substractLayers: this.upgradeTree[4][0]
+            substractLayers: this.upgradeTree[4][0],
+            resourcePowerersStrength: this.upgradeTree[5][0],
+            resourceMultipliersLevelScaling: this.upgradeTree[5][1]
         };
     }
 
@@ -147,7 +164,7 @@ class ReStackLayer
 
     respecPermUpgrades()
     {
-        if(!confirm("Are you sure you want to respec?") || this.allPermUpgradesBought())
+        if(game.settings.confirmations && (!confirm("Are you sure you want to respec?") || this.allPermUpgradesBought()))
         {
             return;
         }
@@ -164,7 +181,7 @@ class ReStackLayer
 
     respecUpgradeTree()
     {
-        if(!confirm("Are you sure you want to respec? This will do a ReStack without reward and you won't get any Layer Coins back."))
+        if(game.settings.confirmations && !confirm("Are you sure you want to respec? This will do a ReStack without reward and you won't get any Layer Coins back."))
         {
             return;
         }
@@ -180,7 +197,7 @@ class ReStackLayer
 
     restack(reward = true)
     {
-        if(reward && !confirm("Are you sure you want to ReStack? You will lose all progress in exchange for Layer Coins."))
+        if(reward && game.settings.confirmations && !confirm("Are you sure you want to ReStack? You will lose all progress in exchange for Layer Coins."))
         {
             return;
         }
@@ -193,6 +210,7 @@ class ReStackLayer
         game.layers = [];
         functions.generateLayer(0);
         game.currentLayer = game.layers[0];
+        this.timeSpent = 0;
         if(game.metaLayer.active)
         {
             game.metaLayer.layer = new Decimal(0);

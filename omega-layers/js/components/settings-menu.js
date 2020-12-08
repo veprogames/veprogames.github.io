@@ -105,6 +105,7 @@ Vue.component("settings-menu", {
         <label>News Ticker <input type="checkbox" v-model="settings.newsTicker"/></label>
         <label>Notifications <input type="checkbox" v-model="settings.notifications"/></label>
         <label>Save Notifications <input type="checkbox" v-model="settings.saveNotifications"/></label>
+        <label>Confirmations <input type="checkbox" v-model="settings.confirmations"/></label>
     </div>
     <div class="settings-panel">
         <span>Title Style</span><br/>

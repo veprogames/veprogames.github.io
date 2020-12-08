@@ -132,7 +132,7 @@ img.inline{
     font-family: "Typewriter", sans-serif;
 }
 
-.resource-name .flipped-v{
+.flipped-v{
     display: inline-block;
     transform: rotate(180deg) translateY(-0.15em);
 }
@@ -373,7 +373,7 @@ p.resource-display > span:first-child{
 
 .upgrade-tree-arrow{
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     position: absolute;
     left: 0;
     top: 0;
@@ -536,6 +536,10 @@ p.resource-display > span:first-child{
     min-height: 2em; /*prevent jumping from sub- or superscript*/
 }
 
+.meta-layer p.resource.alpha{
+    font-size: 100%;
+}
+
 .meta-layer p.layer{
     font-size: 90%;
 }
@@ -543,6 +547,10 @@ p.resource-display > span:first-child{
 .meta-layer .max-all{
     font-size: 120%;
     margin: 1rem;
+}
+
+.meta-layer h4{
+    margin-top: 1rem;
 }
 
 /*Achievements*/

@@ -442,6 +442,10 @@ class PrestigeLayer
 
     respecUpgradeTree()
     {
+        if(game.settings.confirmations && !confirm("Are you sure you want to Respec?"))
+        {
+            return;
+        }
         for(let upg of this.getTreeUpgradesAsArray())
         {
             upg.level = new Decimal(0);
