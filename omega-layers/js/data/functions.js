@@ -282,7 +282,7 @@ var functions = {
             }
         }
 
-        if(!isImported && game.settings.offlineProgress)
+        if(!isImported && game.settings.offlineProgress && loadObj.timeSaved !== undefined)
         {
             let t = (Date.now() - loadObj.timeSaved) / 1000;
             if(t >= 60) //after offline for over 60 seconds

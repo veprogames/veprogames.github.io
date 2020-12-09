@@ -42,7 +42,7 @@ Vue.component("news-ticker", {
                 },
                 () => "This Number is randomly generated -> " + Math.pow(10, Math.random() * 3.01).toFixed(2) +
                     ". If it's above 1,000, consider yourself lucky!",
-                () => `<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">get Layer ` + PrestigeLayer.getNameForLayer(game.metaLayer.active ? game.metaLayer.layer.add(1) : game.layers.length) + ` now [working 2020]</a>`,
+                () => `<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">get Layer ` + PrestigeLayer.getNameForLayer(game.metaLayer.active ? game.metaLayer.layer.add(1).floor() : game.layers.length) + ` now [working 2020]</a>`,
                 () => functions.formatNumber(game.metaLayer.active ? game.metaLayer.getApproxAlpha() : game.layers[0].resource, 2, 0, 1e9) + " α? That's rookie numbers",
                 () => "Motto of the Day: " + Utils.getMOTD()
             ],

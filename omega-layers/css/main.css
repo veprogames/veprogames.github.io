@@ -469,7 +469,7 @@ p.resource-display > span:first-child{
 }
 
 .automator label input[type=number]{
-    width: 3em;
+    width: 5em;
 }
 
 /*Restack*/

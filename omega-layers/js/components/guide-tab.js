@@ -2,6 +2,7 @@ Vue.component("guide-tab", {
     computed: {
         betaUnlocked: () => game.layers.length >= 2 || game.metaLayer.active,
         gammaUnlocked: () => game.layers.length >= 3 || game.metaLayer.active,
+        epsilonUnlocked: () => game.layers.length >= 5 || game.metaLayer.active,
         alephUnlocked: () => game.alephLayer.isUnlocked() || game.metaLayer.active,
         restackUnlocked: () => game.restackLayer.isUnlocked() || game.metaLayer.active,
         metaUnlocked: () => game.metaLayer.active
@@ -62,6 +63,11 @@ Vue.component("guide-tab", {
         <template v-slot:text>After going &delta; at least once, you can gain Aleph, allowing you to buy Upgrades that globally boost the game.
         You gain 10x more Aleph for every new Layer you unlock after &delta;.
         </template>
+    </guide-item>
+    <guide-item v-if="epsilonUnlocked">
+        <template v-slot:title>Upgrade Tree</template>
+        <template v-slot:text>Upgrade Trees provide time-based Upgrades. You have to pick a path while buying them, but you can respec to pick a new one. This
+        won't give back spent resource! Automators don't assume a path, so you will have to pick one manually.</template>
     </guide-item>
     <guide-item v-if="restackUnlocked">
         <template v-slot:title>ReStack</template>
