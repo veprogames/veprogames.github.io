@@ -17,9 +17,15 @@ var app = new Vue({
 
 function onCreate()
 {
+    let loadingText =  document.querySelector("#loading > p");
+
+    loadingText.innerHTML = "Initializing...";
     functions.generateLayer(0);
     functions.setCurrentLayer(game.layers[0]);
+    loadingText.innerHTML = "Loading Savegame...";
     functions.loadGame();
+
+    document.getElementById("loading").style.opacity = "0";
 
     requestAnimationFrame(update);
 }

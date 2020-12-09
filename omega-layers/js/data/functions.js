@@ -287,6 +287,7 @@ var functions = {
             let t = (Date.now() - loadObj.timeSaved) / 1000;
             if(t >= 60) //after offline for over 60 seconds
             {
+                document.querySelector("#loading > p").innerHTML = "Applying Offline Progress...";
                 simulateGameTime(t);
                 functions.createNotification(new Notification(NOTIFICATION_STANDARD, "You were offline for " + functions.formatTime(t)));
             }

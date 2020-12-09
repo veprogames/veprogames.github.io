@@ -26,6 +26,10 @@
     <link id="theme" rel="stylesheet" href="css/themes/dark.css"/>
 </head>
 <body>
+<div id="loading">
+    <h2><span class="omega">&Omega;</span> - L &lambda; &gamma; e r s</h2>
+    <p>Initializing...</p>
+</div>
 <div id="app">
     <header>
         <nav>
@@ -73,7 +77,12 @@
 
 <script src="js/break_eternity.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@antimatter-dimensions/notations"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<!-- development version, includes helpful console warnings -->
+<!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+<!-- production version, optimized for size and speed -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
 <script src="js/vocabulary.js"></script>
 <script src="js/classes/random.js"></script>
 <script src="js/classes/utils.js"></script>

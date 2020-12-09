@@ -6,6 +6,10 @@ Vue.component("restack-tab", {
         }
     },
     computed: {
+        showMetaHint: function()
+        {
+            return this.restack.metaUpgrade.level.gt(0);
+        },
         canRestack: function()
         {
             return this.restack.getRestackGain().gt(0);
@@ -36,6 +40,7 @@ Vue.component("restack-tab", {
     <upgrade-tree v-if="isMeta" :upgrades="restack.upgradeTree"></upgrade-tree>
 </div>
 <button class="restack" @click="restack.restack()" :disabled="!canRestack" v-if="!isMeta">ReStack<br/>+{{formatNumber(restack.getRestackGain(), 2, 0)}} <img alt="LC" class="inline" src="images/layercoin.svg"/></button>
+<p v-if="showMetaHint">Check back after reaching <resource-name :layerid="23"></resource-name></p>
 <button v-if="restack.canMeta() && !isMeta" @click="restack.goMeta()" class="meta">I have woken up. I am now aware that a new Layer is just another layer. It is time to become meta.</button>
 </div>`
 });
