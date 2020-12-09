@@ -157,6 +157,7 @@ var functions = {
     },
     saveGame: function()
     {
+        game.timeSaved = Date.now();
         localStorage.setItem("OmegaLayers", this.getSaveString());
         localStorage.setItem("OmegaLayers_Settings", this.getSettingsSaveString());
         if(game.settings.notifications && game.settings.saveNotifications)
@@ -167,6 +168,7 @@ var functions = {
     loadGame(str)
     {
         let loadObj;
+        let isImported = str !== undefined;
         str = str || localStorage.getItem("OmegaLayers") || null;
         if(str === null) return;
         if(str === "free boost")
@@ -277,6 +279,16 @@ var functions = {
                         l.respecUpgradeTree();
                     }
                 }
+            }
+        }
+
+        if(!isImported && game.settings.offlineProgress)
+        {
+            let t = (Date.now() - loadObj.timeSaved) / 1000;
+            if(t >= 60) //after offline for over 60 seconds
+            {
+                simulateGameTime(t);
+                functions.createNotification(new Notification(NOTIFICATION_STANDARD, "You were offline for " + functions.formatTime(t)));
             }
         }
 

@@ -62,6 +62,10 @@ function tickGame(seconds)
 
     if(keyPressed("m"))
     {
+        if(game.settings.tab === "Layers" && game.metaLayer.active)
+        {
+            game.metaLayer.maxAll();
+        }
         if(game.settings.tab === "Aleph")
         {
             game.alephLayer.maxAll();
@@ -139,8 +143,8 @@ function tickGame(seconds)
 
 function simulateGameTime(seconds)
 {
-    let times = 1000;
-    let timePerTick = seconds / 1000;
+    let times = 100;
+    let timePerTick = seconds / 100;
     if(timePerTick < 0.01)
     {
         times = Math.floor(times / (0.01 / timePerTick));

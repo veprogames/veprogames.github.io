@@ -1,5 +1,6 @@
 var game = {
     version: "2",
+    timeSaved: Date.now(),
     layers: [],
     highestLayer: 0,
     automators: {
@@ -147,6 +148,7 @@ var game = {
         notifications: true,
         saveNotifications: true,
         confirmations: true,
+        offlineProgress: true,
         titleStyle: 2,
         theme: "dark.css"
     }

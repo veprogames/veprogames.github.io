@@ -115,6 +115,9 @@ Vue.component("settings-menu", {
             <label><input type="radio" value="2" v-model.number="settings.titleStyle"/> Current Layer</label>
         </fieldset>
     </div>
+    <div class="settings-panel">
+        <label>Offline Progress <input type="checkbox" v-model="settings.offlineProgress"/><br/>(increases loading time)</label>
+    </div>
 </div>
 <div class="settings-row">
     <label>Theme <button :class="{selected: settings.theme === t[1]}" v-for="t in themes" @click="setTheme(t[1])">{{t[0]}}</button></label>
