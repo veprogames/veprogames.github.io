@@ -72,7 +72,7 @@ Vue.component("guide-tab", {
     <guide-item v-if="restackUnlocked">
         <template v-slot:title>ReStack</template>
         <template v-slot:text>After unlocking &kappa;, you are able to ReStack. This resets all progress so far in exchange for Layer Coins, which can be spent
-        on powerful Upgrades. If you feel like you took the wrong Path on the permanent Upgrades, you can respec. YOu will get all spent Layer Coins back but you do
+        on powerful Upgrades. If you feel like you took the wrong Path on the permanent Upgrades, you can respec. You will get all spent Layer Coins back but you do
         a ReStack without any rewards. ReStack yields 10x more Layer Coins for every new Layer unlocked.
         </template>
     </guide-item>
