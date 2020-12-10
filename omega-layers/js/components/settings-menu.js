@@ -8,6 +8,16 @@ Vue.component("settings-menu", {
             themes: [["Dark", "dark.css"], ["Light", "light.css"], ["Neon", "neon.css"], ["Godot Blue", "darkblue.css"]]
         }
     },
+    mounted: function()
+    {
+        this.$refs.exportBox.onfocus = e => textBoxFocused = true;
+        this.$refs.exportBox.onblur = e => textBoxFocused = false;
+    },
+    beforeDestroy: function()
+    {
+        this.$refs.exportBox.onfocus = null;
+        this.$refs.exportBox.onblur = null;
+    },
     methods: {
         save: () => functions.saveGame(),
         clear: function()
@@ -129,7 +139,7 @@ Vue.component("settings-menu", {
     <button @click="hardResetGame()">Wipe Game</button>
 </div>
 <div class="settings-row">
-    <textarea class="export" v-model="exportString"></textarea>
+    <textarea ref="exportBox" class="export" v-model="exportString"></textarea>
 </div>
 <div class="settings-row">
     <button @click="copy()">Copy to Clipboard</button>

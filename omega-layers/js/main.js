@@ -6,6 +6,7 @@ const INFINITY = Decimal.pow(2, 1024);
 
 let keyMap = [];
 let tabMap = {};
+let textBoxFocused = false;
 
 var app = new Vue({
     el: "#app",
@@ -186,6 +187,10 @@ onkeydown = e =>
     }
     let lc = e.key.toLowerCase();
 
+    if(textBoxFocused)
+    {
+        return;
+    }
     if(!game.metaLayer.active)
     {
         if(e.key === "ArrowRight")

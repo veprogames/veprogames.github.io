@@ -107,12 +107,15 @@ var functions = {
             {
                 return value !== null && value !== undefined && game.layers[value.layer.layer] ? {layer: value.layer.layer, index: game.layers[value.layer.layer].challenges.findIndex(c => c === value)} : null;
             }
+            if(key === "settings")
+            {
+                return undefined;
+            }
             if(value instanceof PrestigeLayer)
             {
                 return {challenges: value.challenges, generators: value.generators, powerGenerators: value.powerGenerators,
                         upgrades: value.upgrades, treeUpgrades: value.treeUpgrades, power: "d" + value.power, resource: "d" + value.resource,
-                        totalResource: "d" + value.totalResource, maxResource: "d" + value.maxResource, timeSpent: value.timeSpent, timesReset: value.timesReset,
-                        volatility: value.volatility, alephLayer: value.alephLayer, achievements: value.achievements, automators: value.automators};
+                        totalResource: "d" + value.totalResource, maxResource: "d" + value.maxResource, timeSpent: value.timeSpent, timesReset: value.timesReset};
             }
             if(value instanceof Achievement)
             {
@@ -158,11 +161,21 @@ var functions = {
     saveGame: function()
     {
         game.timeSaved = Date.now();
-        localStorage.setItem("OmegaLayers", this.getSaveString());
-        localStorage.setItem("OmegaLayers_Settings", this.getSettingsSaveString());
-        if(game.settings.notifications && game.settings.saveNotifications)
+        try
         {
-            functions.createNotification(new Notification(NOTIFICATION_STANDARD, "Game Saved!", "images/save.svg"));
+            localStorage.setItem("OmegaLayers", this.getSaveString());
+            localStorage.setItem("OmegaLayers_Settings", this.getSettingsSaveString());
+            if(game.settings.notifications && game.settings.saveNotifications)
+            {
+                functions.createNotification(new Notification(NOTIFICATION_STANDARD, "Game Saved!", "images/save.svg"));
+            }
+        }
+        catch(e)
+        {
+            if(game.settings.notifications && game.settings.saveNotifications)
+            {
+                functions.createNotification(new Notification(NOTIFICATION_ERROR, "Error Saving Game", "images/save.svg"));
+            }
         }
     },
     loadGame(str)
@@ -205,6 +218,10 @@ var functions = {
                 functions.generateLayer(i);
             }
             game.layers[i].loadFromSave(loadObj.layers[i]);
+        }
+        if(!game.layers[0])
+        {
+            functions.generateLayer(0);
         }
         game.currentLayer = game.layers[0];
         if(loadObj.currentChallenge)
@@ -263,8 +280,15 @@ var functions = {
 
         if(localStorage.getItem("OmegaLayers_Settings") !== null)
         {
-            let settings = JSON.parse(decodeURIComponent(escape(atob(localStorage.getItem("OmegaLayers_Settings")))));
-            game.settings = Object.assign(game.settings, settings);
+            try
+            {
+                let settings = JSON.parse(decodeURIComponent(escape(atob(localStorage.getItem("OmegaLayers_Settings")))));
+                game.settings = Object.assign(game.settings, settings);
+            }
+            catch(e)
+            {
+                console.warn("Error loading Settings\n", e.stack);
+            }
         }
         this.setTheme(game.settings.theme);
 
