@@ -49,7 +49,7 @@ function tickGame(seconds)
             titleInfo = game.metaLayer.active ? "Layer " + functions.formatNumber(game.metaLayer.layer.add(1), 3, 0) : functions.formatNumber(game.currentLayer.resource, 2, 0, 1e9) + " " + game.currentLayer.name;
             break;
     }
-    document.title = "Ω-Lλγers" + (game.settings.titleStyle !== 0 ? ":" : "") + " " + titleInfo + " [Open Beta]";
+    document.title = "Ω-Lλγers" + (game.settings.titleStyle !== 0 ? ":" : "") + " " + titleInfo;
 
     if(saveTimer > 30)
     {

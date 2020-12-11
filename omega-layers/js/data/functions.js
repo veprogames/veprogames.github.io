@@ -294,7 +294,7 @@ var functions = {
 
         if(game.version !== loadObj.version)
         {
-            if(game.version === "2")
+            if(loadObj.version === "1")
             {
                 for(let l of game.layers)
                 {

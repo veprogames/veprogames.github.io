@@ -1,5 +1,5 @@
 var game = {
-    version: "2",
+    version: "1.0",
     timeSaved: Date.now(),
     layers: [],
     highestLayer: 0,
