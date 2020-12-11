@@ -19,6 +19,10 @@ var game = {
         {
             for(let i = 0; i < game.layers.length - 1; i++)
             {
+                if(game.layers[game.layers.length - 2].canPrestige() && !game.settings.autoPrestigeHighestLayer)
+                {
+                    break;
+                }
                 if(game.layers[i].canPrestige() && !game.layers[i].isNonVolatile())
                 {
                     game.layers[i].prestige();
@@ -145,6 +149,7 @@ var game = {
         resourceGlow: true,
         newsTicker: true,
         autoMaxAll: true,
+        autoPrestigeHighestLayer: true,
         notifications: true,
         saveNotifications: true,
         confirmations: true,

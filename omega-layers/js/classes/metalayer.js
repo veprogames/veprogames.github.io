@@ -118,8 +118,9 @@ class MetaLayer
                 this.resource = this.resource.mul(Decimal.pow(this.getMultiPS(), dt));
                 if(this.resource.log10().gte(PrestigeLayer.getPrestigeCarryOverForLayer(this.layer.toNumber())))
                 {
-                    this.resource = this.resource.div(Decimal.pow(10, PrestigeLayer.getPrestigeCarryOverForLayer(this.layer.toNumber())));
-                    this.layer = this.layer.add(1);
+                    let layerAmnt = this.layer.gt(10) ? this.resource.log(Decimal.pow(10, PrestigeLayer.getPrestigeCarryOverForLayer(10))).floor() : 1;
+                    this.resource = this.resource.div(Decimal.pow(10, PrestigeLayer.getPrestigeCarryOverForLayer(this.layer.toNumber())).pow(layerAmnt));
+                    this.layer = this.layer.add(layerAmnt);
                 }
             }
             else

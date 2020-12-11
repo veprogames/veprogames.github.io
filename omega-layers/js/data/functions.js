@@ -208,11 +208,6 @@ var functions = {
             return false;
         }
 
-        if(loadObj.layers.length === 0)
-        {
-            alert("Check Console");
-        }
-
         game.timeSpent = loadObj.timeSpent !== undefined ? loadObj.timeSpent : 0;
         game.highestLayer = loadObj.highestLayer !== undefined ? loadObj.highestLayer : 0;
         game.layers = [];

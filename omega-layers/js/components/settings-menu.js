@@ -108,6 +108,7 @@ Vue.component("settings-menu", {
         <label>Buy Max always buys until 10 <input type="checkbox" v-model="settings.buyMaxAlways10"/></label>
         <label>Disable Buy Max on highest unlocked Layer <input type="checkbox" v-model="settings.disableBuyMaxOnHighestLayer"/></label>
         <label v-if="volatilityUnlocked()">Auto Max All <input type="checkbox" v-model="settings.autoMaxAll"/></label>
+        <label>Auto Prestige Highest Layer <input type="checkbox" v-model="settings.autoPrestigeHighestLayer"/></label>
     </div>
     <div class="settings-panel">
         <label>Allow Resource Colors <input type="checkbox" v-model="settings.resourceColors"/></label>
