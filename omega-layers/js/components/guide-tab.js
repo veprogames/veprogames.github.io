@@ -19,6 +19,11 @@ Vue.component("guide-tab", {
         produces 1 &alpha; every second. Continue buying Generators to increase your &alpha; production.</template>
     </guide-item>
     <guide-item>
+        <template v-slot:title>Export & Import</template>
+        <template v-slot:text>In the Settings Menu, you can Export and Import your Game, allowing you to keep it somewhere safe. <b>It is recommended to Export often</b>.
+        Browser Storage isn't the most reliable thing. You may share Export Codes in my Discord Server, if you want.</template>
+    </guide-item>
+    <guide-item>
         <template v-slot:title>Generators</template>
         <template v-slot:text>Generators produce Resources every second or other Generators. The first Generator produces Resources. The 2nd Generator produces
         1st Generators, the 3rd Generator produces 2nd Generators and so on. You buy Generators with Resources</template>
