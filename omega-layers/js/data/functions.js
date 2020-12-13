@@ -335,8 +335,8 @@ var functions = {
         localStorage.setItem("OmegaLayers", null);
         game.currentLayer = null;
         game.layers = [];
-        functions.loadGame(initialGame);
         functions.generateLayer(0);
+        functions.loadGame(initialGame);
         game.currentLayer = game.layers[0];
     }
 };

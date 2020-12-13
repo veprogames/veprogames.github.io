@@ -17,7 +17,7 @@ class AlephLayer
             deltaBoost: new AlephUpgrade("Gain more δ",
                 level => Decimal.pow(1e5, level).mul(1e3),
                 level => Decimal.pow(10, level), {
-                    maxLevel: 3
+                    maxLevel: 4
                 }),
             powerGenerators: new AlephUpgrade("All Power Generators on every Layer are stronger",
                 level => Utils.createValueDilation(Decimal.pow(1e5, Decimal.pow(level, 1.5)).mul(1e20), 0.001),

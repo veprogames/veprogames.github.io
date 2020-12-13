@@ -69,6 +69,15 @@ Vue.component("guide-tab", {
         You gain 10x more Aleph for every new Layer you unlock after &delta;.
         </template>
     </guide-item>
+    <guide-item v-if="alephUnlocked">
+        <template v-slot:title>Layer Exponential Factor</template>
+        <template v-slot:text>The Layer Exponential Factor determines the exponential difference between 2 Layers. For example, with a Layer Exponential Factor
+        of 22, a Simple Boost of xe10 on a Layer means xe220 on 1 Layer later, xe4840 2 Layers later and so on.<br/>
+        With a Layer Exponential Factor of 24, it would be: xe10, xe240, xe5760, ...<br/>
+        With a Layer Exponential Factor of 30, it would be: xe10, xe300, xe9000, ...<br/>
+        This applies to basically everything like certain challenge rewards, Upgrade Effects and Power Boosts.
+        </template>
+    </guide-item>
     <guide-item v-if="epsilonUnlocked">
         <template v-slot:title>Upgrade Tree</template>
         <template v-slot:text>Upgrade Trees provide time-based Upgrades. You have to pick a path while buying them, but you can respec to pick a new one. This
