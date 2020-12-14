@@ -609,7 +609,7 @@ p.resource-display > span:first-child{
     width: 12rem;
     min-height: 5rem;
     background-color: rgba(0, 0, 0, 0.75);
-    color: var(--color-contrast);
+    color: #dddddd;
     font-size: 70%;
     text-align: center;
 }

@@ -13,7 +13,7 @@ class AlephLayer
                 }),
             alephBoost: new AlephUpgrade("Gain more Aleph based on the log(ℵ) you have",
                 level => new Decimal(1e6).pow(Decimal.pow(1.5, level)),
-                level => new Decimal(1).add(game.alephLayer.aleph.add(1).log10().mul(level).mul(0.05)).pow(2.5)),
+                level => new Decimal(1).add(Decimal.max(0, game.alephLayer.aleph).add(1).log10().mul(level).mul(0.05)).pow(2.5)),
             deltaBoost: new AlephUpgrade("Gain more δ",
                 level => Decimal.pow(1e5, level).mul(1e3),
                 level => Decimal.pow(10, level), {
