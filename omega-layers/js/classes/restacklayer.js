@@ -148,7 +148,7 @@ class ReStackLayer
 
     getPermUpgradeCost()
     {
-        return Decimal.pow(5, Object.values(this.permUpgrades).filter(u => u.level.gt(0)).length);
+        return Decimal.pow(5, Object.values(this.permUpgrades).filter(u => u.level.gt(0)).length).floor();
     }
 
     getRestackGain()

@@ -26,9 +26,9 @@ Vue.component("upgrade", {
             if(this.upgrade instanceof DynamicLayerUpgrade)
             {
                 if(!this.upgrade.currentCostLayer()) return false;
-                return this.upgrade.currentPrice().lt(this.upgrade.currentCostLayer().resource);
+                return this.upgrade.currentPrice().lte(this.upgrade.currentCostLayer().resource);
             }
-            return this.upgrade.currentPrice().lt(this.upgrade.layerCost.resource);
+            return this.upgrade.currentPrice().lte(this.upgrade.layerCost.resource);
         },
         isMetaUpgrade: function()
         {
