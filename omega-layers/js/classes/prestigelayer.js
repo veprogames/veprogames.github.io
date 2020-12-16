@@ -702,7 +702,7 @@ class PrestigeLayer
         {
             this.timeSpent += dt;
         }
-        this.resource = this.resource.mul(Math.pow(game.restackLayer.metaUpgrade.apply(), dt));
+        this.resource = this.resource.mul(Decimal.pow(game.restackLayer.metaUpgrade.apply(), dt));
     }
 
     loadFromSave(obj)
