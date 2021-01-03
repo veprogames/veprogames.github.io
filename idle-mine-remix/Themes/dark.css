@@ -1,0 +1,84 @@
+body{
+    background-color: #363636;
+    color: #c1c1c1;
+}
+
+span, h4, p, button{
+    color: #c1c1c1;
+}
+
+button:hover:not(disabled):not(.changemineobj){
+    background-color: #636363 !important;
+}
+
+header, footer{
+    background-color: #212121;
+}
+
+div.upgrade, button, footer button{
+    background-color: #4d4d4d;
+}
+
+footer button, .story-quote span, article.settings button, textarea{
+    color: #c1c1c1;
+}
+
+button:hover, button:not(.chapter-control button){
+    background-color: #636363;
+}
+
+footer button:hover, article.settings button:hover, .craft-pickaxe button:hover{
+    background-color: #636363 !important;
+}
+
+button.level-change:hover{
+    background-color: transparent !important;
+}
+
+div.upgrade:hover{
+    background-color: #636363 !important;
+}
+
+.highlightedupgrade .multibuy, select, .craft-pickaxe button{
+    color: #c1c1c1;
+}
+
+textarea, select, .upg-tabs button{
+    background-color: #636363;
+}
+
+.upg-tabs button:hover{
+    background-color: #777777;
+}
+
+a{
+    color: #299bff;
+}
+
+a:visited{
+    color: #0072ff;
+}
+
+.red{
+    color: #ff6c68;
+}
+
+.upgrade.gem{
+    background-color: #005177;
+}
+
+.upgrade.gem:hover{
+    background-color: #0071a4 !important;
+}
+
+.upgrade.pc{
+    background-color: #2733a3;
+}
+
+.upgrade.pc:hover{
+    background-color: #2c3dc3 !important;
+}
+
+.powers-table td{
+    border-color: #c1c1c1;
+}

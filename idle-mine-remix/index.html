@@ -1,0 +1,608 @@
+<!doctype html>
+<html>
+<head>
+    <title>Idle Mine: Remix</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <link rel="stylesheet" href="main.css"/>
+    <link id="css_theme" rel="stylesheet" href="Themes/light.css"/>
+
+    <meta name="description"
+            content="Incremental Game based on Idle Mine by Crovie."/>
+    <meta name="keywords" content="games, game, idle, incremental, idle mine. idle mine remix"/>
+    <meta name="url" content="https://cook1eegames.feedia.co/idle-mine-remix"/>
+    <meta name="og:title" content="Idle Mine: Remix"/>
+    <meta name="og:type" content="website"/>
+    <meta name="og:url" content="https://cook1eegames.feedia.co/idle-mine-remix"/>
+    <meta name="og:description"
+            content="Incremental Game based on Idle Mine by Crovie."/>
+    <meta name="og:image" content="https://cook1eegames.feedia.co/idle-mine-remix/Images/logo.png"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Idle Mine: Remix"/>
+    <meta name="twitter:description"
+            content="Incremental Game based on Idle Mine by Crovie."/>
+    <meta name="twitter:image" content="https://cook1eegames.feedia.co/idle-mine-remix/Images/logo.png"/>
+    <meta name="twitter:site" content="@cook1eegames"/>
+    <meta name="twitter:creator" content="@cook1eegames"/>
+</head>
+<body>
+
+<div id="app">
+    <canvas id="cache" ref="cache" width="256" height="224"></canvas>
+    <header>
+        <h1 style="flex-grow: 1;">Idle Mine: Remix</h1>
+        <span style="flex-grow: 1.1; text-align: center;">{{formatNumber(money, 2, 1e12)}} $</span>
+        <span class="inline-resource" style="flex-grow: 1;  justify-content: flex-end;"><img class="inline" src="Images/gem.png"/> {{formatNumber(gems, 2, 1e12, 0)}}</span>
+        <span class="inline-resource" v-if="highestMineObjectLevel >= 90" style="flex-grow: 1;  justify-content: flex-end;"><img class="inline" src="Images/planetcoin.png"/> {{formatNumber(planetCoins, 2, 1e12, 0)}}</span>
+    </header>
+    <main>
+        <article class="main" v-if="settings.tab === 'main'">
+            <div class="mineobject">
+                <button class="changemineobj" :style="{visibility: mineObjectLevel > 0 ? 'visible' : 'hidden'}" @click="prevMineObjectLevel()"><img class="left" src="Images/btn_left.png"/></button>
+                <div>
+                    <h4 v-if="settings.showMineObjLevel">#{{mineObjectLevel + 1}}</h4>
+                    <mine-object :level="mineObjectLevel"></mine-object>
+                    <h2>{{currentMineObject.name}}</h2>
+                    <p>HP: {{formatNumber(currentMineObject.hp, 2, 1e12)}}</p>
+                    <p>D: {{formatNumber(currentMineObject.def, 2, 1e12)}}</p>
+                    <p style="margin: 0;">${{formatNumber(currentMineObject.value, 2, 1e12)}}</p>
+                    <p style="margin: 0.7rem;" v-if="currentMineObject.drops.planetcoin !== undefined">{{formatPercent(currentMineObject.drops.planetcoin.chance, 1)}} for
+                    <span class="inline-resource"><img class="inline" src="Images/planetcoin.png"/> {{formatNumber(currentMineObject.drops.planetcoin.amount, 2, 1e9)}}</span></p>
+                    <p style="margin: 0.7rem;" v-if="currentMineObject.drops.wisdom !== undefined">{{formatPercent(currentMineObject.drops.wisdom.chance, 1)}} for
+                        <span class="inline-resource"><img class="inline" src="Images/wisdom.png"/> {{formatNumber(currentMineObject.getTotalWisdom(), 2, 1e9)}}</span></p>
+                </div>
+                <button class="changemineobj" :style="{visibility: mineObjectLevel < highestMineObjectLevel ? 'visible' : 'hidden'}" @click="nextMineObjectLevel()"><img class="right" src="Images/btn_right.png"/></button>
+            </div>
+            <div>
+                <div class="upg-tabs" v-if="gemUpgradesUnlocked()">
+                    <button @click="settings.upgradeTab = 'money'">
+                        <span class="inline-resource"><img class="inline" src="Images/money.png"/> Money Upgrades</span>
+                    </button>
+                    <button @click="settings.upgradeTab = 'gems'">
+                        <span class="inline-resource"><img class="inline" src="Images/gem.png"/> Gem Upgrades</span>
+                    </button>
+                    <button @click="settings.upgradeTab = 'planetcoins'" v-if="highestMineObjectLevel >= 90">
+                        <span class="inline-resource"><img class="inline" src="Images/planetcoin.png"/> PC Upgrades</span>
+                    </button>
+                </div>
+                <div class="upgradelist-wrapper">
+                    <div class="upgradelist" v-if="settings.upgradeTab === 'money'">
+                        <upgrade v-for="u in upgrades" :key="u.name" :upg="u"></upgrade>
+                    </div>
+                    <div class="upgradelist" v-if="settings.upgradeTab === 'gems'">
+                        <upgrade class="gem" v-for="u in gemUpgrades" :key="u.name" :upg="u"></upgrade>
+                    </div>
+                    <div class="upgradelist" v-if="settings.upgradeTab === 'planetcoins'">
+                        <upgrade class="pc" v-for="u in planetCoinUpgrades" :key="u.name" :upg="u"></upgrade>
+                    </div>
+                </div>
+                <div class="highlightedupgrade" v-if="highlightedUpgrade !== null">
+                    <div>
+                        <h3>{{highlightedUpgrade.name}}</h3>
+                        <span>{{highlightedUpgrade.desc}}</span><br/>
+                        <span><b>{{highlightedUpgrade.getEffectDisplay()}}</b></span><br/>
+                        <span><b>{{highlightedUpgrade.getPriceDisplay()}}</b></span><br/>
+                    </div>
+                    <div>
+                        <p><span class="multibuy" :class="{active: keyPressed('Shift') && !keyPressed('Control')}">Hold SHIFT to buy 10</span><br/>
+                            <span class="multibuy" :class="{active: keyPressed('Control')}">Hold CTRL to buy 100</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="stats">
+                <div>
+                    <p><img src="Images/pickaxe.png" alt="pickaxe" class="inline" /> {{pickaxe.name}}</p>
+                    <p>P: {{formatNumber(pickaxe.pow, 2, 1e12)}}</p>
+                    <p>Q: {{formatPercent(pickaxe.quality, 0, 1e12)}}</p>
+                    <p>Base Dmg: {{formatNumber(pickaxe.getDamage(), 2, 1e12)}}</p>
+                </div>
+                <div class="resources" style="text-align: right">
+                    <p :class="{red: getActiveDamage().eq(0)}">Damage/click<br/>{{formatNumber(getActiveDamage(), 2, 1e12)}}</p>
+                    <p :class="{red: getIdleDamage().eq(0)}" >Damage/s<br/>{{formatNumber(getIdleDPS(), 2, 1e12)}}</p>
+                    <p>Money per Click<br/>{{formatNumber(getMPC(), 2, 1e12, 2)}} $</p>
+                    <p>Money/s<br/>{{formatNumber(getMPS(), 2, 1e12, 2)}} $</p>
+                    <div>Avg. Gems/s<br/>
+                        <p style="margin: 0;" class="inline-resource">{{formatNumber(getGPS(), 2, 1e12, 3)}} <img class="inline" src="Images/gem.png"/></p>
+                    </div>
+                    <div v-if="maxPlanetCoins.gt(0)">Avg. Planet Coins/s<br/>
+                        <p style="margin: 0;" class="inline-resource">{{formatNumber(getPCPS(), 2, 1e12, 3)}} <img class="inline" src="Images/planetcoin.png"/></p>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 3.5rem;">
+                <div class="messagelog">
+                    <p v-for="m in messageLog" :style="{color: m.color}">{{m.message}}</p>
+                </div>
+                <div class="craft-pickaxe">
+                    <button class="level-change" @click="usedGemsLevel--" v-if="upgrades.gemWaster.level > 0" :disabled="usedGemsLevel === 0">
+                        <img v-if="usedGemsLevel > 0" class="left level-change" src="Images/btn_left.png"/>
+                    </button>
+                    <button @click="craftPick(getUsedGems())">
+                        Craft a new Pickaxe <br/><span v-if="settings.showMinCraftDamage" style="font-size: 60%; display: block;">Minimum Base Damage: {{formatNumber(getMinCraftDamage(), 2, 1e12, 0)}}</span>
+                        <span class="inline-resource"><img class="inline" src="Images/gem.png"/>
+                            {{formatThousands(getUsedGems())}}
+                            <span v-if="keyPressed('Shift') && applyUpgrade(planetCoinUpgrades.bulkCraft).gt(1)">&nbsp;x {{applyUpgrade(planetCoinUpgrades.bulkCraft).toFixed(0)}}</span>
+                        </span>
+                    </button>
+                    <button class="level-change" @click="usedGemsLevel++" v-if="upgrades.gemWaster.level > 0"  :disabled="usedGemsLevel === upgrades.gemWaster.level + gemUpgrades.gemWaster.level">
+                        <img v-if="usedGemsLevel < upgrades.gemWaster.level + gemUpgrades.gemWaster.level" class="right level-change" src="Images/btn_right.png"/>
+                    </button>
+                </div>
+            </div>
+        </article>
+        <article v-if="settings.tab === 'powers'" class="powers">
+            <p class="wisdom"><span class="inline-resource">You have <img class="inline" src="Images/wisdom.png"/> {{formatNumber(wisdom, 2, 1e12, 0)}}</span></p>
+            <p>With <img class="inline" src="Images/wisdom.png"/> wisdom, you are able to become smart enough to become stronger with every click! Get smart in all areas of mining to get to heights
+            no one has thought of yet.</p>
+            <powers-table :pow="powers.data"></powers-table>
+
+            <div class="powers-upgrades">
+                <upgrade-standalone :upg="powers.upgrades.powerPowerActive"></upgrade-standalone>
+                <upgrade-standalone :upg="powers.upgrades.powerPowerIdle"></upgrade-standalone>
+                <upgrade-standalone :upg="powers.upgrades.damageBoost"></upgrade-standalone>
+                <upgrade-standalone :upg="powers.upgrades.gemBoostSimple"></upgrade-standalone>
+                <upgrade-standalone :upg="powers.upgrades.damageBoostUpgrades"></upgrade-standalone>
+                <upgrade-standalone :upg="powers.upgrades.powerPowerPower"></upgrade-standalone>
+                <upgrade-standalone :upg="powers.upgrades.powerResetKeep"></upgrade-standalone>
+            </div>
+        </article>
+        <article v-if="settings.tab === 'settings'" class="settings">
+            <h2>Settings</h2>
+            <p>Change the Number Format of the Game, Save manually or export and import your Game.</p>
+            <span>Number Format</span>
+            <select ref="numberformatselect" @input="numberFormatter = numberFormatters[$event.target.selectedIndex]; settings.numberFormatterIndex = $event.target.selectedIndex;"><option v-for="(f, i) in numberFormatters">{{f.name}}</option></select>
+            <br/>
+            <span>Theme</span>
+            <button @click="setTheme('light'); saveGame();">Light</button>
+            <button @click="setTheme('dark'); saveGame();">Dark</button>
+            <br/>
+            <label><span>Show Mineral Level</span><input type="checkbox" v-model="settings.showMineObjLevel"/></label>
+            <br/>
+            <label><span>Show minimum Base Damage for crafted Pickaxes</span><input type="checkbox" v-model="settings.showMinCraftDamage"/></label>
+            <br/>
+            <button @click="saveGame()">Save</button>
+            <button @click="exportGame()">Export</button>
+            <button @click="loadGame(settings.exportFieldString)">Import (from Text Field)</button>
+            <button @click="hardReset()">Hard Reset</button><br/>
+            <p>Note: The Game won't save if cookies and browser storage are disabled. Clearing cookies and browser data might erase
+            your savegame.</p>
+            <textarea v-model="settings.exportFieldString"></textarea>
+            <p>Thanks to crovie, the creator of <a target="_blank" href="https://www.kongregate.com/games/crovie/idle-mine"><i>Idle Mine</i></a>
+            for making this interesting Game concept.</p>
+            <p>Notations provided by <a target="_blank" href="https://github.com/antimatter-dimensions/notations"><i>ad-notations</i></a>.</p>
+            <div class="social">
+                <a target="_blank" href="https://discord.gg/75d7Jj5"><img src="Images/social/discord.png"/></a>
+                <span>My Discord Server</span>
+                <a target="_blank" href="https://www.youtube.com/channel/UCiQP-YPI3WYY241iJe9mgRQ"><img src="Images/social/youtube.png"/></a>
+                <span>My YouTube</span>
+                <a target="_blank" href="https://cook1eegames.feedia.co"><img src="Images/social/cook1eegames.png"/></a>
+                <span>My Website</span>
+                <a target="_blank" href="https://idle-mine-remix.fandom.com/wiki/"><img src="Images/social/wiki.png"/></a>
+                <span>Wiki</span>
+            </div>
+        </article>
+        <article v-if="settings.tab === 'story'" class="story">
+            <div class="chapter-control">
+                <button @click="decreaseStoryPage"><img v-if="story.page > 0" class="left" src="Images/btn_left.png"/></button>
+                <h3>Chapter {{story.page + 1}}: {{story.chapters[story.page]}}</h3>
+                <button @click="increaseStoryPage"><img v-if="story.page < getMaxStoryPage()" class="right" src="Images/btn_right.png"/></button>
+            </div>
+            <div class="story-milestones" ref="storymilestones">
+                <div v-if="storyDisplayed('gameStart')">
+                    <h3>Welcome to Idle Mine: Remix!</h3>
+                    <p>So you have decided to start with mining. You have heard that many treasures lie down below the surface, so you
+                    can't wait to find out what you can find. Maybe you can become rich?<br/>
+                    There's you, and your Auto-Mining-Device. Let's get started!</p>
+                    <p>This also acts as s sort of guide. If something is unclear, look into here as a reference.</p>
+                </div>
+                <div v-if="storyDisplayed('firstMud')">
+                    <p>You mined your first piece of <b>Mud</b>! Well, it's not worth a lot, but you've got to start somewhere.</p>
+                    <div class="story-quote"><mine-object :level="0" :nodamage="true"></mine-object><span>Just some ordinary Mud</span></div>
+                    <p>Even 2 $ can be a good start. Maybe you should try to mine something more precious?</p>
+                </div>
+                <div v-if="storyDisplayed('firstPaper')">
+                    <p>You take your Pickaxe and proceed to hit some old homework with it (You didn't need it anymore, anyways).</p>
+                    <div class="story-quote"><mine-object :level="1" :nodamage="true"></mine-object><span>Paper (Your old Homework)</span></div>
+                    <p>For some reason it was worth a whopping 10 $! It seems like you've got the hang of it. Unfortunately, you also find out
+                    that it was kind of resistent to your pickaxe, so you need to craft a better one to keep growing. Luckily you have this rusty
+                    Blacksmith at home (for whatever reason). It doesnt look good enough though. You should try to Upgrade it.</p>
+                    <h4>How do I get Gems?</h4>
+                    <p>Every time you mine something, there is a chance that you will be awarded a Gem, used to craft Pickaxes.</p>
+                    <h4>Stats, Stats, Stats...</h4>
+                    <p>Some general Tips: Every Mineral has defense, which is an absolute reduction to click and idle damage.
+                    To find out what's the most efficient to mine, look at where Money/s and Money per Click are the highest.
+                    More gems/s mean that you can get gems faster to craft new Pickaxes. The base Damage of a pickaxe is calculated
+                    by multiplying its power with the quality (for example: 1,000 * 150% = 1,500). After that, Active and Idle Power
+                    Upgrades are applied.</p>
+                </div>
+                <div v-if="storyDisplayed('blacksmithUpgrade')">
+                    <p>Just a little improvement to your Blacksmith makes it seem much stronger!</p>
+                    <div class="story-quote"><img src="Images/upgrades/blacksmith.png"/><span>Blacksmith Power!</span></div>
+                    <p>You should try to craft a new Pickaxe. You only need one Gem to do it! Luckily you have a few of them at home. You don't
+                    remember when you got them, they are just here for some reason. After crafting, you should try your luck with salt.</p>
+                    <h3>When should I craft?</h3>
+                    <p>The power and quality of a pickaxe is based on Blacksmith Upgrades. The resulting power and quality will be random,
+                        but will at least be as much as the minimum power and quality.</p>
+                </div>
+                <div v-if="storyDisplayed('firstSalt')">
+                    <p>You take out all the salt from your kitchen drawer, and start to hammer on it with your newly crafted Pickaxe. It works
+                    surpisingly well, you think.</p>
+                    <div class="story-quote"><mine-object :level="2" :nodamage="true"></mine-object><span>Salt (from your Kitchen Drawer)</span></div>
+                    <p>22 $! That is sure a lot. You could buy some Games from it, or you take it serious and invest the money into your blacksmith.</p>
+                </div>
+                <div v-if="storyDisplayed('firstClay')">
+                    <p>You go to a nearby lake and dig out some clay.</p>
+                    <div class="story-quote"><mine-object :level="3" :nodamage="true"></mine-object><span>Clay (fresh from the Lake)</span></div>
+                    <p>It's already worth 50 $! That's much more than salt. Of course it was tougher, but the reward speaks for itself.
+                    There's a Cave nearby. This is where the real adventure will start. Maybe you should improve your blacksmith a bit more and get a
+                    new Pickaxe before proceeding.</p>
+                </div>
+                <div v-if="storyDisplayed('firstStone')">
+                    <p>Of course, the first thing you see when entering the cave is Stone and Rocks. And there is sure a lot of it. There is so much to be mined...</p>
+                    <div class="story-quote"><mine-object :level="4" :nodamage="true"></mine-object><span>Rock (from the cave entrance)</span></div>
+                    <p>120 $! Not bad at all. You see a big growth coming. Venture deeper into the Cave and mine better and better stuff. Don't forget
+                    to buy Upgrades and craft new Pickaxes</p>
+                    <h4>Offline Income</h4>
+                    <p>For up to 6 hours, you can earn 50 % of your Money per second offline. You have to be offline for at least 5 minutes
+                    to be eligible of earning offline money.</p>
+                </div>
+                <div v-if="storyDisplayed('tenThousand')">
+                    <div class="story-quote"><img src="Images/money.png"/><span>I Gotta be rich!</span></div>
+                    <p>Ten Thousand dollars! That's surely more than your average wage. I think you are far enough to pay your living with it.
+                    But also, improving your mining technology is very expensive, but it will pay off very fast.</p>
+                    <p>You have mined new Stuff along the way like Coal, Lead and Copper. You are starting to venture deeper into the cave.
+                    To be honest, this might be just the start. Great treasures await!</p>
+                </div>
+                <div v-if="storyDisplayed('firstSpookyBone')">
+                    <p>You have already went down a good bit into the mine. Stuff is getting precious down there. The first abnormal minerals are appearing</p>
+                    <div class="story-quote"><mine-object :level="12" :nodamage="true"></mine-object><span>Ohhhh, Spooky!</span></div>
+                    <p>{{formatThousands(14000)}} $ for a bunch of Bones? Well, they are spooky! Even though you don't know why exactly they are...</p>
+                </div>
+                <div v-if="storyDisplayed('millionaire')">
+                    <p>There are multiple ways to earn a million: Winning at a quiz show, having a certain job, or, mining precious materials?
+                    Anyways, you've just reached <b>a Million</b>!</p>
+                    <div class="story-quote"><img src="Images/money.png"/><span>Rich. For real now.</span></div>
+                    <p>The journey doesn't end here! Why not get even richer? The cave is seemingly endless.</p>
+                </div>
+                <div v-if="storyDisplayed('preciousStones')">
+                    <p>Precious stuff is appearing now. You are starting to see typical Gemstones: Sapphire, Ruby and Emerald. You don't know how deep
+                    you are, but this cave is the biggest you've ever seen. It just never ends and seems to get bigger the deeper you are.</p>
+                    <div class="story-quote"><mine-object :level="18" :nodamage="true"></mine-object><span>Precious, and worth Millions</span></div>
+                    <p>Are we reaching the end? Definitely not!</p>
+                </div>
+                <div v-if="storyDisplayed('gemWaster')">
+                    <p>You earn Gems more easily now, so you got an Idea: if you invest multiple Gems into a Pickaxe, it should be even better.
+                    Now you can also use 3 Gems to craft a Pickaxe, but they turn out to be much better.</p>
+                    <div class="story-quote"><img src="Images/upgrades/gemwaster.png"/><span>Not a waste at all!</span></div>
+                </div>
+                <div v-if="storyDisplayed('unrealStones')">
+                    <p>You don't know what it is. It has never been discovered before. You are probably the first who has gone so far.</p>
+                    <div class="story-quote"><mine-object :level="27" :nodamage="true"></mine-object><span>What is this?</span></div>
+                    <p>Just about 20 of these will make you the worlds richest person. Maybe the money could also be used to study and research on
+                        this mysterious material.</p>
+                    <p>Along the way, you discover more unknown and ultra precious things that have yet to be studied.</p>
+                </div>
+                <div v-if="storyDisplayed('fireEssence')">
+                    <p>There it is. Another type of essence. This time it seems to be fiery and very hot. Sadly you don't have a thermometer with you.</p>
+                    <div class="story-quote"><mine-object :level="33" :nodamage="true"></mine-object><span>HOT, HOT!</span></div>
+                    <p>Now, you need only <b>one</b> to become the richest person on the world. Alternatively, you could also give every person on the world
+                        about 25 $. That would be enough for some food.</p>
+                </div>
+                <div v-if="storyDisplayed('mysterium')">
+                    <div class="story-quote"><mine-object :level="35" :nodamage="true"></mine-object><span>I don't know either</span></div>
+                    <p>This thing is so precious that there isn't even a name for it, so let's just call it "Mysterium", because it
+                        is a mystery, after all. It will be forever mysterious and the mystery will never be solved. How mysterious is that?</p>
+                </div>
+                <div v-if="storyDisplayed('fiftyTrillion')">
+                    <p>That sure is a lot of Money. Maybe it is enough to buy the Moon?</p>
+                    <div class="story-quote"><img src="Images/money.png"/><span>Richer than Rich</span></div>
+                    <p>This is enough to pay off the US National debt.<br/>
+                    <button @click="payUSDebt()">PAY ($ {{formatThousands(22e12, 1e100)}})</button></p>
+                </div>
+                <div v-if="storyDisplayed('lightEssence')">
+                    <p>Yet another Essence found. This one glows a lot and is even bright, so bright that a few of them could light up
+                    an entire city.</p>
+                    <div class="story-quote"><mine-object :level="47" :nodamage="true"></mine-object><span>Enlighten!</span></div>
+                    <p>You still have no idea where the end is, you look down into a colorful cluster of minerals, shining in many
+                    different colors. You feel like that will change soon.</p>
+                </div>
+                <div v-if="storyDisplayed('hellStone')">
+                    <p>After passing several huge mineral clusters, and feeling like going down for many kilometers, you start to
+                        feel the heat of the air down here. It is still very bearable, though. A few dozen meters later, a <b>sudden change</b>
+                        happens.</p>
+                    <div class="story-quote"><mine-object :level="50" :nodamage="true"></mine-object><span>Is this hell?</span></div>
+                    <p>These Minerals are completely different. They are very hot, dont glow at all and don't look beautiful either.
+                        On the other hand, they are worth a ton of money and you feel like you've hit the end. <i>But did you?</i></p>
+                </div>
+                <div v-if="storyDisplayed('hellStoneFinal')">
+                    <h3>The End?</h3>
+                    <p>The Hellstone is getting darker and darker, harder and harder to break; an end seems to be near.
+                    Suddenly, the cave ends. The ground is filled with even more demonic Hellstone. They are nearly pitch black and seem unbreakable.
+                    You need a very good Pickaxe now.</p>
+                    <div class="story-quote"><mine-object :level="54" :nodamage="true"></mine-object><span>Unbreakable? I doubt that!</span></div>
+                    <p>Let's get a good Pickaxe, mine this and find out more! Maybe we did it?</p>
+                </div>
+                <div v-if="storyDisplayed('infinitum')">
+                    <p>After breaking the last hellstone, a small hole opens up below it. You didn't reach the end of the wave.
+                    There was just that wall of Hellstone...</p>
+                    <div class="story-quote"><mine-object :level="55" :nodamage="true"></mine-object><span>To Infinity. And beyond!</span></div>
+                    <p>By now you have probably accepted that this cave is endless and will never end, which in return means that
+                    you will become so rich that nobody can believe it.</p>
+                </div>
+                <div v-if="storyDisplayed('theGem')">
+                    <p>It is really crazy down here. Those minerals don't even fit into the real world anymore. This just feels like
+                    another realm. You notice that progressing seems to get harder and harder...</p>
+                    <p>Suddenly you see light at the end of the Tunnel. A huge Gem. A really huge Gem. Breaking it would give you
+                    insights you couldn't think of before. Something to speed of progress a lot.</p>
+                    <div class="story-quote"><mine-object :level="60" :nodamage="true"></mine-object><span>It's not just a Gem!</span></div>
+                </div>
+                <div v-if="storyDisplayed('gemUpgrades')">
+                    <p><b>You instantly feel a wave of wisdom streaming through your body...</b><br/>
+                    That's it! Why should only money be invested into Upgrades? What if we do that with gems?</p>
+                    <div class="story-quote"><img src="Images/gem.png"/><span>You are of much use now</span></div>
+                    <p>With gems, you can now improve your blacksmith, the Auto-Mining-Device, and find even more gems!
+                        <b>Infinite Growth awaits!</b></p>
+                </div>
+                <div v-if="storyDisplayed('fractalium')">
+                    <p>You are in another realm. High amounts of energy and light, inverted minerals and Holograms.
+                    The values of these Objects are tremendous. Even one of them means infinite wealth. Now,
+                    you make an even crazier discovery.</p>
+                    <div class="story-quote"><mine-object :level="68" :nodamage="true"></mine-object>
+                        <span>z<sub>n+1</sub> = z<sub>n</sub><sup>2</sup> + c</span>
+                    </div>
+                    <p>A fractal. Infinite amount of complexity, yet so simple to describe. {{numberFormatter.format(150e30)}} $ are
+                        enough to buy a white dwarf, an earth-sized ball of compressed carbon (a Diamond!).</p>
+                    <p>The cave is starting to get slimmer again, the end might be near?</p>
+                </div>
+                <div v-if="storyDisplayed('reachPortal')">
+                    <p>It all shrinks down to just a small Portal, about 2 meters in diameter, glowing in a mysterious reddish pink.
+                        Breaking it should reveal more...</p>
+                    <div class="story-quote"><mine-object :level="71" :nodamage="true"></mine-object>
+                        <span>T́͝͞o̶͟ ͡͡o̕͝t̴́h̕e͘͜͡r͞ ̵̶̷D͏i̵͠͠ḿé̢ns̡͟i̡͞o̧͜ns̨̛,͏͢ ͢an̵̸͢d͏ ̨͘R̨҉̸ea̴͝l̡m̵̀ş͘<</span>
+                    </div>
+                    <p>It is very tough to break, nearly invincible. You need a very strong Pickaxe. Now, upgrade your Blacksmith, invest money
+                        and gems, and make a very powerful Pickaxe to break through!</p>
+                </div>
+                <div v-if="storyDisplayed('breakPortal')">
+                    <p>The Portal slows drags you in. The air seems to become colder. Everything around you seems to dim, until you just seem
+                    to be surrounded by darkness. You stay calm. You are prepared and think you know what will happen next.
+                    <br/>Suddenly, you hear something, very far in the background.</p>
+                    <div class="story-quote"><span>„I waited for you“</span></div>
+                    <p>Were you chosen to be a miner? Does that explain why you had a blacksmith and leftover gems at home?
+                    You are starting to understand. You were allowed to find out about the infinite riches of the underground.</p>
+                </div>
+                <div v-if="storyDisplayed('proceduralRealm1')">
+                    It's been a while, you still dig down (and the numbers grow, just as expected). There is no end in sight, but that is actually good.
+                    Those mineral names are weird, they make no sense. No wonder why this is the "procedural realm", but is it infinite?
+                    <div class="story-quote"><mine-object :level="75" :nodamage="true"></mine-object><span>Just procedural, like all the other stuff</span></div>
+                </div>
+                <div v-if="storyDisplayed('reachSpacePortal')">
+                    Aren't procedural realms infinite? Well, this one isn't. It closes down yet again. This portal is blueish, and when you look through it,
+                    you just see stars and galaxies.
+                    <div class="story-quote"><mine-object :level="89" :nodamage="true"></mine-object><span>SPAAAAACE!</span></div>
+                    It's a portal to space. There's a little spaceship standing besides the portal, it must have been the mining god
+                    you heard lately (He waited for you, after all). This portal is tough yet again, but not so resistant. Make a pickaxe and open this thing!
+                </div>
+                <div v-if="storyDisplayed('breakSpacePortal')">
+                    You enter the spaceship, and fly straight through the portal. In the far distance you can see the sun, and you see many asteroids flying around you.
+                    You actually are in the asteroid belt, that's not so far away (astronomically speaking). Well, it's time to mine Asteroids.
+                    <div class="story-quote"><mine-object :level="90" :nodamage="true"></mine-object><span>Welcome to the Asteroid Belt!</span></div>
+                </div>
+                <div v-if="storyDisplayed('planetcoin')">
+                    As this Object breaks, something pops out of it... what is this? It is a new type of Resource, a planet coin.
+                    <div class="story-quote"><img src="Images/planetcoin.png"/><span>New opportunities to Upgrade!</span></div>
+                    Check out the new Upgrades, it will surely be worth it!
+                </div>
+                <div v-if="storyDisplayed('pluto')">
+                    You did it! You mined a planet! Mmh, it's just a dwarf planet, but it was a real planet until 2006.
+                    <div class="story-quote"><mine-object :level="100" :nodamage="true"></mine-object><span>Almost a Planet</span></div>
+                    Why do Objects keep reappearing here after you mined them? It seems like to universe of Idle Mine: Remix says no to several laws of physics.
+                </div>
+                <div v-if="storyDisplayed('theMoon')">
+                    You just mined the Moon! Luckily it is reappearing every time you mine it...<br/>
+                    Out Moon is one of the biggest moons in the solar system, you've gotten pretty far.
+                    <div class="story-quote"><mine-object :level="101" :nodamage="true"></mine-object><span>Man in the Moon</span></div>
+                </div>
+                <div v-if="storyDisplayed('mars')">
+                    Mars is one of our nearest planets that might be colonized in the nearer future. If Mars is close to the earth, you can see it as a bright reddish
+                    dot in the sky.
+                    <div class="story-quote"><mine-object :level="105" :nodamage="true"></mine-object><span>Is there life on Mars?</span></div>
+                </div>
+                <div v-if="storyDisplayed('venus')">
+                    Venus is the planet that can get the closest to Earth, although it is in the front of the sun at that point. Venus gets so big on the sky that you can
+                    almost see its phase with the naked eye. Also, with a maximum apparent magnitude of about -4.6, it really stands out in the sky and might even
+                    be visible during the day with a great eyesight!
+                    <div class="story-quote"><mine-object :level="106" :nodamage="true"></mine-object><span>The evening star</span></div>
+                </div>
+                <div v-if="storyDisplayed('saturn')">
+                    Saturn is the second biggest planet in the solar system.
+                    <div class="story-quote"><mine-object :level="109" :nodamage="true"></mine-object><span>Largest Ring System</span></div>
+                    It also has the biggest ring system that can easily be seen through a telescope. Sadly, it is going to disappear over the next hundreds of million years.
+                </div>
+                <div v-if="storyDisplayed('jupiter')">
+                    Finally, Jupiter is the largest planet of the solar system. You already mined the moons before, but now you get to the real planet.
+                    <div class="story-quote"><mine-object :level="110" :nodamage="true"></mine-object><span>Largest Planet of the Solar System</span></div>
+                    Jupiter has over 70 known moons, having diameters ranging from just a few kilometers to over 5000 kilometers (Ganymede).
+                    Now, it is time to exit our solar system. Time to mine Exoplanets!
+                </div>
+                <div v-if="storyDisplayed('wasp79b')">
+                    WASP-79b is one of the largest exoplanets ever discovered. It is about twice as big as Jupiter, which translates to a diameter of over 250,000 kilometers.
+                    <div class="story-quote"><mine-object :level="114" :nodamage="true"></mine-object><span>Largest Planet</span></div>
+                    In the Universe, planets cannot become much larger than that because the immense mass and pressure in the core would start a nuclear fusion, which
+                    means that it would become a star. But in this game, physics are... different. We can go further.<br/>There's an infinite amount of exoplanets to
+                    discover!
+                </div>
+                <div v-if="storyDisplayed('hyperSaturn')">
+                    Ever seen a saturn-like planet with a diameter of millions of kilometers? Well, it's impossible in our universe, but here it isn't...
+                    If you replaced Saturn with this, you would probably clearly see the glowing rings in a clear night with your naked eye.
+                    <div class="story-quote"><mine-object :level="124" :nodamage="true"></mine-object><span>Saturn, but around 100x larger</span></div>
+                </div>
+                <div v-if="storyDisplayed('superEarth')">
+                    This planet, similar to earth, has a diameter of about 120,000,000 kilometers. That means that, if replaced with the sun, would stretch out to around mercuries
+                    orbit.
+                    <div class="story-quote"><mine-object :level="134" :nodamage="true"></mine-object><span>Much space for humans</span></div>
+                    Superearth would be big enough to house trillions of people. Game Servers can't be worldwide because of extreme lag :( (no information can travel faster than the speed
+                    of light). Also, imagine a YouTuber with over 100 billion subscribers :D
+                </div>
+                <div v-if="storyDisplayed('colossia')">
+                    You feel like you're getting to very huge planets now. They are just immense... Now look at these diameters:
+                    <div class="story-quote"><mine-object :level="137" :nodamage="true"></mine-object><span>400,000,000 km</span></div>
+                        <b>Colossia:</b> If you replaced Saturn with this planet, it would appear much larger than our moon on the sky. It would break our solar system
+                        due to its extreme gravitational force.
+                    <div v-if="storyDisplayed('giagantia')">
+                        <div class="story-quote"><mine-object :level="138" :nodamage="true"></mine-object><span>2,400,000,000 km</span></div>
+                        <b>Giagantia:</b> Replaced with our sun, this planet would stretch out to Saturns orbit. It is also nearly as big as the largest known Star, UY Scuti.
+                    </div>
+                    <div v-if="storyDisplayed('garagantula')">
+                        <div class="story-quote"><mine-object :level="139" :nodamage="true"></mine-object><span>20,000,000,000 km</span></div>
+                        <b>Garagantula:</b> Replaced with our sun, this planet would stretch out well beyond Plutos orbit.
+                    </div>
+                    <div v-if="storyDisplayed('planetOmega')">
+                        <div class="story-quote"><mine-object :level="140" :nodamage="true"></mine-object><span>150,000,000,000 km</span></div>
+                        <b>Giagarantula Omega:</b> It's diameter is about 100th of a light year. That means any signal would need over 10 days to get redirected to the other side of the planet.
+                    </div>
+                </div>
+                <div v-if="storyDisplayed('breakPlanetOmega')">
+                    Phew, that was a big one. A million times bigger than Jupiter. Theoretically, a planet this big would have collapsed into a extremely massive black hole.
+                    But, in the end, you did it.
+                    <div class="story-quote"><mine-object :level="140" :nodamage="true"></mine-object><span>The biggest Planet(?) broken!</span></div>
+                    <b>Wait!</b> This is not the end. Let's explore the infiniteness of the Universe. There are many more planets to mine...
+                </div>
+                <div v-if="storyDisplayed('planet160')">
+                    ... in this Universe. And it seems to get boring. Those Planets are just getting bigger and bigger, with arbitrary names. Why aren't we just mining Stars? Are they too hot? Possibly.
+                    Get stronger and stronger, and soon Stars should be no Problem anymore.
+                </div>
+                <div v-if="storyDisplayed('reachWisdomEssence')">
+                    Wait, what is this!? While chilling and moving through the vacuum, you see a rock flying by, a few meters in size. <i>What were the chances?</i>
+                    It is very blue (blue-er than blue!) and the closer you get, the smarter you feel.<br/>
+                    <div class="story-quote"><mine-object :level="169" :nodamage="true"></mine-object><span>You have to Mine it.</span></div>
+                    <p>Who knows what will happen when you mine this? Remember what happened when you broke THE GEM. You will probably get even stronger after mining this stone.</p>
+                </div>
+                <div v-if="storyDisplayed('breakWisdomEssence')">
+                    <i>Wisdom streams out of the Stone.</i> You cannot see it, but you feel getting smarter with every second.
+                    <p>You got an Idea: If you get smarter, you can find out how to do more Damage. With more Damage you can get smarter faster. Time to <b>Synergize</b>!</p>
+                    <p>You found out how to mine Stars, let's go!</p>
+                    <h4>How to get Wisdom?</h4>
+                    <p>Around every 5th Object drops wisdom instead of planet coins. The further you are, the more wisdom it drops.</p>
+                </div>
+                <div v-if="storyDisplayed('miningStars')">
+                    <p>Congratulations, you mined your first Star! Even though they're not solid, it was really challenging. The extreme heat made mining it very tough.</p>
+                    <div class="story-quote"><mine-object :level="170" :nodamage="true"></mine-object><span>Basically just a Ball 'o Hydrogen.</span></div>
+                    <p>What's next? Of course, mining bigger Stars!</p>
+                </div>
+                <div v-if="storyDisplayed('wisdomUpgrade')">
+                    Finally, the Wisdom is put to good use. Becoming smarter and doing more Damage with every click, how awesome is that?
+                    <div class="story-quote"><img src="Images/wisdom.png"/><span>Smarter → Stronger → Smarter → ...</span></div>
+                    <p>There are even more Upgrades regarding Wisdom. Numbers will only grow faster now!</p>
+                </div>
+                <div v-if="storyDisplayed('mineSun')">
+                    You mined our Sun... well, since were in the Idle Mine: Remix realm, the Sun reappeared the moment you mined it, so no worries!
+                    <div class="story-quote"><mine-object :level="173" :nodamage="true"></mine-object><span>Giver of Life</span></div>
+                </div>
+                <div v-if="storyDisplayed('minePolaris')">
+                    Polaris was and is used to orient in the Night Sky. It always points towards north. Also, it is one of the brightest stars in the Night Sky.
+                    <div class="story-quote"><mine-object :level="178" :nodamage="true"></mine-object><span>50x bigger than our Sun</span></div>
+                </div>
+                <div v-if="storyDisplayed('mineBetelgeuse')">
+                    Betelgeuse is around 500x as large as our Sun, and it is over 600 light years away. Early this year, it has gained attention because it quickly lost luminosity,
+                    which possibly meant that Betelgeuse would go Supernova, creating a Nebula as bright as the full Moon, lasting for several Months.
+                    <div class="story-quote"><mine-object :level="186" :nodamage="true"></mine-object><span>Spoiler: It didn't explode</span></div>
+                </div>
+                <div v-if="storyDisplayed('mineScuti')">
+                    UY Scuti is the largest Star discovered in the Universe, even larger than VY Canis Majoris.
+                    <div class="story-quote"><mine-object :level="190" :nodamage="true"></mine-object><span>← The Largest</span></div>
+                </div>
+                <div v-if="storyDisplayed('mineStarGroup')">
+                    Now we're taking! Since you mined the biggest star, the next option is to mine several Stars at once!
+                    Let's go mine even more stars at once, and let's see how far it can go.
+                </div>
+                <div v-if="storyDisplayed('mineSmallGalaxy')">
+                    An entire Galaxy. Over 20,000 Ly in diameter and billions of stars. You just mined that. You are now stronger than the most massive black hole.
+                    <div class="story-quote"><mine-object :level="197" :nodamage="true"></mine-object><span>More Stars than you can count!</span></div>
+                </div>
+                <div v-if="storyDisplayed('mineMilkyWay')">
+                    You mined our Galaxy. Don't worry, our Milky Way also reappears the moment you mine it. The Milky Way has a diameter of about 100,000 Ly and has over 100 billion stars.
+                    Our Sun is just one of them.
+                    <div class="story-quote"><mine-object :level="199" :nodamage="true"></mine-object><span>Our true home</span></div>
+                </div>
+                <div v-if="storyDisplayed('mineLocalGroup')">
+                    After mining several Galaxies, you're doing the next step like you did before. Now you mine several Galaxies at once. First up: The Local Group.
+                    <div class="story-quote"><mine-object :level="205" :nodamage="true"></mine-object><span>It contains the Milky Way and Andromeda</span></div>
+                    <p>At that point, one must think how it even is possible to mine something that is over 10 Million Light Years large. It seems like your Pickaxe acts like a black hole now, just... a bit different.</p>
+                </div>
+                <div v-if="storyDisplayed('mineGalaxyCluster')">
+                    What comes after Galaxy Groups? Correct: Galaxy Clusters. They contain even more Galaxies, but they don't pose a problem to you.
+                    <div class="story-quote"><mine-object :level="208" :nodamage="true"></mine-object><span>Like a Galaxy Group Group</span></div>
+                </div>
+                <div v-if="storyDisplayed('mineGalaxySuperCluster')">
+                    What comes after Galaxy Clusters? Correct: Galaxy Superclusters. (does that sentence seem familiar?)
+                    <div class="story-quote"><mine-object :level="210" :nodamage="true"></mine-object><span>Like a Galaxy Group Group Group</span></div>
+                </div>
+                <div v-if="storyDisplayed('mineFilament')">
+                    Filaments are huge structures, around a Billion Light Years large, containing millions of galaxies (if not even billions!). Are we gonna mine the entire Universe soon?
+                    <div class="story-quote"><mine-object :level="212" :nodamage="true"></mine-object><span>Almost there!</span></div>
+                </div>
+                <div v-if="storyDisplayed('reachUniverse')">
+                    <p>You are mining Filaments with ease now, and it becomes clear what is next: mining the ENTIRE Universe. It has really come this far...
+                    Increase your damage with wisdom, buy some Gem Upgrades, and finish it off! Don't worry, our Universe will reappear after mining it.</p>
+                    <div class="story-quote"><mine-object :level="214" :nodamage="true"></mine-object><span>Everything we know, everything we have.</span></div>
+                </div>
+                <div v-if="storyDisplayed('mineUniverse')">
+                    <p>You mine the very fabric that our Universe has. You eat it up from the inside. You mine Trillions of planets and Billions of Galaxies at once, every second.
+                    The Universe shrinks, the heat this generates makes it glow. Suddenly, it's gone. For a short moment, you see colorful dots around you.</p>
+                    <div class="story-quote"><mine-object :level="215" :nodamage="true"></mine-object><span>Our Universe is not the only one...</span></div>
+                    <p>The Universe pops back up as nothing has happened. You are now beyond anything humanity can describe. You just mined the entire Universe as if it was nothing.</p>
+                </div>
+                <div v-if="storyDisplayed('mineUniverse')">
+                    <h3>Conclusion</h3>
+                    <p>Thanks for playing my Game! This marks the end of the story. Your task now is to further explore the Multiverse,
+                    filled with an infinite amount of new Universes to mine.</p>
+                    <p>I wonder how far the numbers can go! Through the Gem Upgrades, progress should always be possible, and a progress wall
+                    should be very far away. Can you reach {{numberFormatter.format(story.longGoal1)}} $?<br/>
+                    Nah, your wisdom should make it even faster... can you reach {{numberFormatter.format(story.longGoal2)}} $? That's ∞<sup>4</sup>!</p>
+                    <p>This doesn't mean it's the end forever. I could add new Content in the future to extend the story. Anyways, I hope you had
+                    fun playing :)</p>
+                </div>
+            </div>
+            <p v-if="getNextStoryText() !== null" class="objective"><b>What to do next?</b><br/>{{getNextStoryText()}}</p>
+        </article>
+    </main>
+    <footer>
+        <button @click="changeTab('main')"><img src="Images/pickaxe.png" alt="pickaxe" class="inline" /> Mining</button>
+        <button v-if="powers.unlocked()" @click="changeTab('powers')"><img src="Images/wisdom.png" alt="powers" class="inline" /> Powers</button>
+        <button @click="changeTab('story')" class="story-tab">
+            <span v-if="story.notifications > 0" class="notification">{{story.notifications}}</span>
+            <img :class="{notification: story.notifications > 0}" src="Images/story.png" alt="pickaxe" class="inline" /> Story
+        </button>
+        <button @click="changeTab('settings')"><img src="Images/settings.png" alt="options" class="inline" /> Settings</button>
+    </footer>
+</div>
+
+<!-- development version, includes helpful console warnings -->
+<!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+<!-- production version, optimized for size and speed -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/break_infinity.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@antimatter-dimensions/notations"></script>
+<script src="Scripts/adcommunitynotations.js"></script>
+<script src="Scripts/customnotations.js"></script>
+<script src="Scripts/random.js"></script>
+<script src="Scripts/utils.js"></script>
+<script src="Scripts/mineobject.js"></script>
+<script src="Scripts/upgrade.js"></script>
+<script src="Scripts/pickaxe.js"></script>
+
+<script src="Scripts/Components/mine-object.js"></script>
+<script src="Scripts/Components/upgrade.js"></script>
+<script src="Scripts/Components/upgrade-standalone.js"></script>
+<script src="Scripts/Components/powers-table.js"></script>
+
+<script src="Scripts/Define/dictionary.js"></script>
+<script src="Scripts/Define/game.js"></script>
+<script src="Scripts/Define/functions.js"></script>
+
+<script src="Scripts/main.js"></script>
+
+</body>
+</html>
