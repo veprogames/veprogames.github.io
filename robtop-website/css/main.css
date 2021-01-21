@@ -99,6 +99,18 @@
     padding: 0;
 }
 
+*::selection{
+    background-color: #ff8f00b0;
+}
+
+*::-moz-selection{
+    background-color: #ff8f00b0;
+}
+
+img{
+    user-select: none;
+}
+
 html, body{
     overflow-x: hidden;
 }
