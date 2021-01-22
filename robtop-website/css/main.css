@@ -613,6 +613,7 @@ div.about-me p.description{
     grid-template-rows: auto;
     background-color: rgba(0, 0, 0, 0.25);
     padding-left: 5vw;
+    padding-bottom: 1rem;
 }
 
 .gamepreview-collection > div{
