@@ -51,7 +51,7 @@ document.body.onload = function () {
 
     closeVideoPlayerButton.onclick = closeVideoPlayer;
 
-    let animateDivs = document.querySelectorAll("section, footer, .review, .game-teaser");
+    let animateDivs = document.querySelectorAll("section, .review, .game-teaser");
 
     let animateGames = document.querySelectorAll(".game-description");
 
