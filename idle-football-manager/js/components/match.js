@@ -33,6 +33,9 @@ app.component("match", {
         timeScale(){
             return Math.round(10 ** this.matchTimeScaleLog);
         },
+        stadiumUnlocked(){
+            return Stadium.isUnlocked
+        },
         reward(){
             return this.match.getRewardMoney();
         }
@@ -76,8 +79,10 @@ app.component("match", {
         <template v-slot:body>
             <p>Your performance in this match rewarded you:</p>
             <p class="reward">+ {{formatNumber(reward)}} $</p>
-            <p>Your Stadium earned you:</p>
-            <p class="reward">+ {{formatNumber(match.stadiumReward)}} $</p>
+            <div v-if="stadiumUnlocked">
+                <p>Your Stadium earned you:</p>
+                <p class="reward">+ {{formatNumber(match.stadiumReward)}} $</p>
+            </div>
             <p>You now have {{formatNumber(money)}} $</p>
         </template>
     </window>

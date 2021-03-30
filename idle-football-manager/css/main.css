@@ -269,10 +269,18 @@ main{
 .team-management .inactive-players{
     background-color: var(--color-background);
     position: fixed;
-    bottom: 0;
+    bottom: -200px;
     left: 0;
     width: 100%;
     padding: 1rem;
+    opacity: 0.5;
+
+    transition: bottom 500ms ease-in-out, opacity 500ms ease-in-out;
+}
+
+.team-management .inactive-players:hover{
+    bottom: 0;
+    opacity: 1;
 }
 
 .team-management .players .player{

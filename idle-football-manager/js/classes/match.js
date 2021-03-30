@@ -140,7 +140,7 @@ class Match {
     }
 
     tick(dt) {
-        if(!this.ended && windowFocus){
+        if(!this.ended){
             let power = this.getNormPower();
             for(let i = 0; i < this.timeScale; i++) {
                 this.time += dt;
