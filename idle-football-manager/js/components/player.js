@@ -1,0 +1,30 @@
+app.component("player", {
+    props: ["player"],
+    methods: {
+        formatNumber: functions.formatNumber
+    },
+    computed: {
+        canMove(){
+            return (!this.teamFull && !this.player.active) || this.player.active;
+        },
+        teamFull(){
+            return game.team.getActivePlayers().length >= 11;
+        },
+        isBought(){
+            return this.player.isBought();
+        }
+    },
+    template: `<div class="player">
+<p class="header">{{player.name}}<br/>{{formatNumber(player.currentStamina * 100)}} %</p>
+<img alt="" src="images/player.png"/>
+<div class="stats">
+    <p><span>ATT</span> {{formatNumber(player.getBaseAttack())}}</p>
+    <p>{{formatNumber(player.getBaseDefense())}} <span>DEF</span></p>
+    <p><span>AGG</span> {{formatNumber(player.aggressivity * 100)}}</p>
+    <p>{{formatNumber(player.stamina * 100)}} <span>STA</span></p>
+</div>
+<button :disabled="!canMove" v-if="isBought" @click="player.active = !player.active"><span v-if="!player.active">Move to Team</span><span v-else>Move from Team</span></button>
+<button v-if="!player.active && isBought" @click="player.sell()">Sell ({{formatNumber(player.getSellAmount())}} $)</button>
+<button v-if="!isBought" :disabled="!player.canAfford()" @click="player.buy()">Buy ($ {{formatNumber(player.getPrice())}})</button>
+</div>`
+});
