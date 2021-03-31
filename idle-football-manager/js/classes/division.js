@@ -21,18 +21,22 @@ class Division {
     }
 
     getMatchDay(matchday) {
-        let matches = [];
-        let teams = []; //record teams that already have a match
-        while(teams.length < this.teams.length) {
-            let i = this.teams.findIndex(t => !teams.includes(t));
-            let off = (matchday % (this.teams.length - 1)) + 1;
-            let team1 = this.teams[i], team2 = this.teams[((i + off) % this.teams.length)];
-            if(teams.includes(team2)){
-                team2 = this.teams.find(t => !teams.includes(t) && t !== team1);
-            }
-            matches.push([team1, team2]);
-            teams = teams.concat([team1, team2]);
+        let fixed = 0;
+        let clock = [];
+        for(let i = 0; i < this.teams.length - 1; i++){
+            clock.push(1 + (i + matchday) % (this.teams.length - 1));
         }
+        let matches = [];
+
+        let row1 = [fixed].concat(clock.slice(0, this.teams.length / 2 - 1));
+        let row2 = clock.slice(this.teams.length / 2 - 1).reverse();
+
+        for(let i = 0; i < row1.length; i++){
+            let team1 = this.teams[row1[i]];
+            let team2 = this.teams[row2[i]];
+            matches.push(matchday % 2 === 0 ? [team1, team2] : [team2, team1]);
+        }
+
         return matches;
     }
 
