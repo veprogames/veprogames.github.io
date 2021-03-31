@@ -30,7 +30,7 @@ app.component("tutorial", {
     Players stats. Your Teams strength is multiplied by <b>Synergy</b>.</p>
     <p>The more Players that are active in your team, the higher your synergy is.
     Therefore, it is better to have more weak players than one strong player.</p>
-    <p>Each Player has 4 Stats: <b>ATT</b>ack, <b>DEF</b>ense, <b>AGG</b>ressivity (Chance to get a Red Card) and 
+    <p>Each Player has 4 Stats: <b>ATT</b>ack, <b>DEF</b>ense, <b>AGG</b>ressiveness (Chance to get a Red Card) and 
     <b>STA</b>mina (How fast players lose and regenerate Stamina). Stamina passively fills every second while a player is not playing.</p></template>
     <template v-slot:image>
         <team-logo :logo="logo"></team-logo>

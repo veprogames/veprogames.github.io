@@ -42,8 +42,8 @@ class Match {
         let team2 = 1 + Math.max(0, (att2 - def1));
 
         return {
-            team1: (att1 - def2 > 0 ? team1 : 1 / team2) ** 0.25,
-            team2: (att2 - def1 > 0 ? team2 : 1 / team1) ** 0.25
+            team1: (att1 - def2 > 0 ? team1 : 1 / team2) ** 0.35,
+            team2: (att2 - def1 > 0 ? team2 : 1 / team1) ** 0.35
         };
     }
 
@@ -143,6 +143,7 @@ class Match {
         if(!this.ended){
             let power = this.getNormPower();
             for(let i = 0; i < this.timeScale; i++) {
+                dt = Math.min(1 / 30, dt);
                 this.time += dt;
 
                 for(let i = 0; i < this.powerMulti.length; i++) {

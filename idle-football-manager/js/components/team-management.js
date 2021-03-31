@@ -52,14 +52,14 @@ app.component("team-management", {
     <div class="strategy">
         <h4>Strategy</h4>
         <button :class="{'selected': strategySelected(strategyNormal)}" @click="setStrategy(strategyNormal)">Normal</button>
-        <button :class="{'selected': strategySelected(strategyOffensive)}" @click="setStrategy(strategyOffensive)">Offensive (ATT x1.3, DEF &div;1.3)</button>
-        <button :class="{'selected': strategySelected(strategyDefensive)}" @click="setStrategy(strategyDefensive)">Defensive (DEF x1.3, ATT &div;1.3)</button>
+        <button :class="{'selected': strategySelected(strategyOffensive)}" @click="setStrategy(strategyOffensive)">Offensive<br/>ATT x1.3, DEF &div;1.3</button>
+        <button :class="{'selected': strategySelected(strategyDefensive)}" @click="setStrategy(strategyDefensive)">Defensive<br/>DEF x1.3, ATT &div;1.3</button>
     </div>
     <div class="strategy">
-        <h4>Aggressivity</h4>
+        <h4>Aggressiveness</h4>
         <button :class="{'selected': aggressivitySelected(strategyNormal)}" @click="setAggressivity(strategyNormal)">Normal</button>
-        <button :class="{'selected': aggressivitySelected(strategyOffensive)}" @click="setAggressivity(strategyOffensive)">Aggressive (ATT x1.1, DEF x1.1, 100% more Red Cards)</button>
-        <button :class="{'selected': aggressivitySelected(strategyDefensive)}" @click="setAggressivity(strategyDefensive)">Defensive (ATT &div;1.1, DEF &div;1.1, 50% less Red Cards)</button>
+        <button :class="{'selected': aggressivitySelected(strategyOffensive)}" @click="setAggressivity(strategyOffensive)">Aggressive<br/>ATT x1.1, DEF x1.1, 100% more Red Cards</button>
+        <button :class="{'selected': aggressivitySelected(strategyDefensive)}" @click="setAggressivity(strategyDefensive)">Defensive<br/>ATT &div;1.1, DEF &div;1.1, 50% less Red Cards</button>
     </div>
 </div>
 <div>

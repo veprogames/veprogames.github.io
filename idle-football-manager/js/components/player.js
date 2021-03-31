@@ -15,8 +15,8 @@ app.component("player", {
         }
     },
     template: `<div class="player">
-<p class="header">{{player.name}}<br/>{{formatNumber(player.currentStamina * 100)}} %</p>
-<img alt="" src="images/player.png"/>
+<p class="header"><div class="icon-flex"><img alt="" src="images/player.png"/> {{player.name}}</div><br/>{{formatNumber(player.currentStamina * 100)}} %</p>
+
 <div class="stats">
     <p><span>ATT</span> {{formatNumber(player.getBaseAttack())}}</p>
     <p>{{formatNumber(player.getBaseDefense())}} <span>DEF</span></p>

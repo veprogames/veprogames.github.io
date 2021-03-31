@@ -240,7 +240,6 @@ main{
 .team-management .players{
     display: flex;
     flex-wrap: wrap;
-    padding-bottom: 400px;
 }
 
 .team-management .players.active{
@@ -251,7 +250,7 @@ main{
 }
 
 .team-management .placeholder{
-    height: 330px;
+    height: 240px;
     width: 200px;
     margin: 2rem;
     background-color: rgba(0, 0, 0, 0.5);
@@ -260,7 +259,7 @@ main{
 
 .team-management .players.inactive{
     flex: 1;
-    height: 400px;
+    height: 300px;
     flex-wrap: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -269,7 +268,7 @@ main{
 .team-management .inactive-players{
     background-color: var(--color-background);
     position: fixed;
-    bottom: -200px;
+    bottom: -150px;
     left: 0;
     width: 100%;
     padding: 1rem;
@@ -314,6 +313,8 @@ main{
 }
 
 .team-management .strategies{
+    display: flex;
+    justify-content: space-between;
     background-color: var(--color-header);
 }
 
@@ -326,7 +327,7 @@ main{
     box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
     min-width: 200px;
     width: 200px;
-    height: 330px;
+    height: 240px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -337,11 +338,7 @@ main{
     font-weight: bold;
     text-align: center;
     color: black;
-}
-
-.player img{
-    height: 96px;
-    width: 96px;
+    padding: 0.25rem;
 }
 
 .player .stats{

@@ -37,7 +37,7 @@ class Team {
     }
 
     getActiveSortedPlayers(){
-        return this.getSortedPlayers().filter(p => p.active);
+        return this.getSortedPlayers().filter(p => p.active).reverse();
     }
 
     getInactiveSortedPlayers(){
