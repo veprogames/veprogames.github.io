@@ -9,7 +9,7 @@ class Stadium{
                 level => new Decimal(1000 * level).mul(Decimal.pow((9 / 4), (level - 1) / 10)).floor(), {
                     getEffectDisplay: effectDisplayTemplates.numberStandard(0, "")
                 }),
-            ticketPrice: new MoneyUpgrade(level => Decimal.pow(7, level / 5).mul(3300000),
+            ticketPrice: new MoneyUpgrade(level => Decimal.pow(9, level / 5).mul(3300000),
                 level => Decimal.pow(2, level / 5), {
                     getEffectDisplay: effectDisplayTemplates.numberStandard(2)
                 }),
