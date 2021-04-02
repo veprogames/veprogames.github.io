@@ -51,15 +51,15 @@ app.component("team-management", {
 <div class="strategies">
     <div class="strategy">
         <h4>Strategy</h4>
-        <button :class="{'selected': strategySelected(strategyNormal)}" @click="setStrategy(strategyNormal)">Normal</button>
-        <button :class="{'selected': strategySelected(strategyOffensive)}" @click="setStrategy(strategyOffensive)">Offensive<br/>ATT x1.3, DEF &div;1.3</button>
-        <button :class="{'selected': strategySelected(strategyDefensive)}" @click="setStrategy(strategyDefensive)">Defensive<br/>DEF x1.3, ATT &div;1.3</button>
+        <button :class="{'selected': strategySelected(strategyNormal)}" @click="setStrategy(strategyNormal)"><img alt="Neutral" src="images/icons/strategy/neutral.png"/><br/>ATT x1<br/>DEF x1</button>
+        <button :class="{'selected': strategySelected(strategyOffensive)}" @click="setStrategy(strategyOffensive)"><img alt="Offensive" src="images/icons/strategy/offensive.png"/><br/>ATT x1.3<br/>DEF &div;1.3</button>
+        <button :class="{'selected': strategySelected(strategyDefensive)}" @click="setStrategy(strategyDefensive)"><img alt="Defensive" src="images/icons/strategy/defensive.png"/><br/>DEF x1.3<br/>ATT &div;1.3</button>
     </div>
     <div class="strategy">
         <h4>Aggressiveness</h4>
-        <button :class="{'selected': aggressivitySelected(strategyNormal)}" @click="setAggressivity(strategyNormal)">Normal</button>
-        <button :class="{'selected': aggressivitySelected(strategyOffensive)}" @click="setAggressivity(strategyOffensive)">Aggressive<br/>ATT x1.1, DEF x1.1, 100% more Red Cards</button>
-        <button :class="{'selected': aggressivitySelected(strategyDefensive)}" @click="setAggressivity(strategyDefensive)">Defensive<br/>ATT &div;1.1, DEF &div;1.1, 50% less Red Cards</button>
+        <button :class="{'selected': aggressivitySelected(strategyNormal)}" @click="setAggressivity(strategyNormal)"><img alt="Neutral" src="images/icons/strategy/neutral.png"/><br/>ATT x1, DEF x1<br/>Red Cards x1</button>
+        <button :class="{'selected': aggressivitySelected(strategyOffensive)}" @click="setAggressivity(strategyOffensive)"><img alt="Offensive" src="images/icons/strategy/offensive.png"/><br/>ATT x1.1, DEF x1.1<br/>Red Cards x2</button>
+        <button :class="{'selected': aggressivitySelected(strategyDefensive)}" @click="setAggressivity(strategyDefensive)"><img alt="Defensive" src="images/icons/strategy/defensive.png"/><br/>ATT &div;1.1, DEF &div;1.1<br/>Red Cards &div;2</button>
     </div>
 </div>
 <div>

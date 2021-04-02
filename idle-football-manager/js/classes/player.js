@@ -30,8 +30,12 @@ class Player {
         return this.defense.mul(0.5 + 0.5 * this.currentStamina);
     }
 
+    getRegenerationTime(){
+        return 1000 / (this.stamina * game.moneyUpgrades.playerRegeneration.apply().toNumber());
+    }
+
     regenerate(dt){
-        this.currentStamina = Math.min(1, this.currentStamina + dt * this.stamina / 1000 * game.moneyUpgrades.playerRegeneration.apply().toNumber());
+        this.currentStamina = Math.min(1, this.currentStamina + dt * 1 / this.getRegenerationTime());
     }
 
     isBought(){

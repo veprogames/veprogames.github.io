@@ -10,11 +10,16 @@ app.component("match", {
         this.matchTimeScaleLog = Math.log10(game.settings.match.speed);
     },
     methods: {
-        formatTime: functions.formatMatchTime,
+        formatTime: functions.formatTime,
         formatNumber: functions.formatNumber,
         setTimeScale(){
             this.match.timeScale = this.timeScale;
             game.settings.match.speed = this.timeScale;
+        },
+        playNextMatch(){
+            if(this.match.ended && game.team.canPlayNextMatch()){
+                game.league.divisions[game.team.divisionRank].playNextMatch();
+            }
         }
     },
     computed: {
@@ -84,6 +89,9 @@ app.component("match", {
                 <p class="reward">+ {{formatNumber(match.stadiumReward)}} $</p>
             </div>
             <p>You now have {{formatNumber(money)}} $</p>
+            <p>
+                <button @click="playNextMatch()">→ Play next Match</button>
+            </p>
         </template>
     </window>
 </transition>

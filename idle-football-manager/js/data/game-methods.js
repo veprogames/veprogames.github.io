@@ -9,7 +9,7 @@ let functions = {
         return n.lt(lim) ? n.toNumber().toLocaleString("en-US", {minimumFractionDigits: prec1000, maximumFractionDigits: prec1000})
             : game.numberFormatter.format(n, prec, prec1000);
     },
-    formatMatchTime(s){
+    formatTime(s){
         let times = [Math.floor(s / 60), Math.floor(s) % 60];
         return times.map(t => t.toString().padStart(2, "0")).join(":");
     },
@@ -120,6 +120,8 @@ let functions = {
             }
 
             game.settings.match.speed = loadVal(obj.settings.match.speed, 1);
+            game.settings.match.autoPlay = loadVal(obj.settings.match.autoPlay, false);
+            game.settings.match.minAutoPlayStamina = loadVal(obj.settings.match.minAutoPlayStamina, 0);
             game.settings.term = loadVal(obj.settings.term, "Football");
             if(obj.numberFormatter){
                 let notation = notations.find(n => n.name === obj.numberFormatter);

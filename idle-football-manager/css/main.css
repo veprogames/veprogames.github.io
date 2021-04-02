@@ -36,11 +36,11 @@ button.selected{
 }
 
 button:active{
-    filter: brightness(1.2);
+    filter: brightness(1.3);
 }
 
 button:disabled{
-    filter: brightness(0.7) saturate(0.7);
+    filter: brightness(0.5);
     cursor: not-allowed;
 }
 
@@ -68,6 +68,28 @@ a, a:visited{
 .icon-flex img, .icon-flex canvas{
     margin-right: 0.5em;
     height: 1.5em;
+}
+
+.card{
+    width: 70%;
+    margin: auto;
+    padding: 0.5rem;
+    background-color: var(--color-card);
+    border: 4px solid var(--color-card-border);
+    color: var(--color-text-dark);
+    border-radius: 8px;
+}
+
+.card.flex{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.card.flex-column{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .money{
@@ -150,6 +172,22 @@ a, a:visited{
     border-radius: 6px;
 }
 
+/*Player Window*/
+
+.window-player .stats{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+    grid-row-gap: 4rem;
+    padding: 0.5rem;
+}
+
+.window-player .stats p{
+    text-align: center;
+    font-size: 110%;
+    margin-bottom: 0.5rem;
+}
+
 /*Tutorial Window*/
 
 .window-tutorial .image{
@@ -173,6 +211,7 @@ header{
     justify-content: space-between;
     align-items: center;
     background-color: var(--color-header);
+    background-image: linear-gradient(45deg, transparent, rgba(0, 0, 0, 0.2));
     padding: 1rem;
 }
 
@@ -199,7 +238,7 @@ header ul li:hover{
 /*Main*/
 
 main{
-    background-image: url("../images/background.jpg");
+    background-image: url("../images/background.png");
     background-size: cover;
     background-position: center;
     flex-grow: 1;
@@ -247,6 +286,7 @@ main{
     justify-content: center;
     min-height: 400px;
     max-width: 1200px;
+    padding-bottom: 150px;
 }
 
 .team-management .placeholder{
@@ -309,8 +349,15 @@ main{
 }
 
 .team-management .strategy button{
-    margin: 0 1rem;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    min-width: 7.5rem;
 }
+
+.team-management .strategy button img{
+    height: 2em;
+}
+
 
 .team-management .strategies{
     display: flex;
@@ -341,7 +388,19 @@ main{
     padding: 0.25rem;
 }
 
-.player .stats{
+.player .header .icon-flex{ /*Clickable Area for Stat Breakdown*/
+    cursor: pointer;
+}
+
+.player .header .icon-flex:hover{
+    text-decoration: underline;
+}
+
+.player .header img{
+    border-radius: 50%;
+}
+
+.player > .stats{
     display: flex;
     flex-wrap: wrap;
     margin: 0.5rem 0;
@@ -349,7 +408,7 @@ main{
     background-color: var(--color-card-stat);
 }
 
-.player .stats p{
+.player > .stats p{
     display: flex;
     align-items: center;
     font-weight: bold;
@@ -361,23 +420,33 @@ main{
     padding: 0.5rem 0;
 }
 
-.player .stats p > span{
+.player > .stats p > span{
     display: inline-block;
     width: 3em;
     font-weight: initial;
     font-size: 65%;
 }
 
-.player .stats p:nth-child(2n) > span{
+.player > .stats p:nth-child(2n) > span{
     text-align: right;
 }
 
-.player .stats p:nth-child(2n){
+.player > .stats p:nth-child(2n){
     justify-content: flex-end;
+}
+
+.player .actions{
+    width: 100%;
 }
 
 .player button{
     width: 100%;
+    font-size: 70%;
+    padding: 0.35rem;
+}
+
+.player progress{
+    width: 100px;
 }
 
 /*Player Market*/
@@ -395,10 +464,10 @@ main{
 /*Division*/
 
 .division{
-    width: 100%;
-    padding: 0 2rem;
+    width: 80%;
+    margin: auto;
     border-spacing: 0;
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
 }
 
 .division thead{
@@ -570,6 +639,10 @@ main{
     text-align: center;
 }
 
+.match .window button{
+    margin-top: 1rem;
+}
+
 .match .reward{
     font-size: 200%;
     font-weight: bold;
@@ -630,6 +703,10 @@ main{
 .tab-settings h3{
     font-size: 150%;
     margin: 1rem;
+}
+
+.tab-settings label{
+    margin: 0 0.5rem;
 }
 
 .tab-settings textarea{

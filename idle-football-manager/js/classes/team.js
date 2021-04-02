@@ -118,6 +118,14 @@ class Team {
         return this.getCombinedStats().defense;
     }
 
+    getAverageStamina(){
+        let s = 0;
+        for(let p of this.getActivePlayers()){
+            s += p.currentStamina;
+        }
+        return s / this.getActivePlayers().length;
+    }
+
     addPlayer(player) {
         this.players.push(player);
     }

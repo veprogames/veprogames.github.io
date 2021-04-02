@@ -44,16 +44,23 @@ app.component("tab-settings", {
         }
     },
     template: `<div class="tab-settings">
-    <h3>Team Settings</h3>
+    <h3 class="big-heading">Team Settings</h3>
     <team-settings :team="team"></team-settings>
-    <h3>Game Settings</h3>
-    Term shown in Game Header
-    <label><input type="radio" name="term" v-model="settings.term" value="Football"/> Football</label>
-    <label><input type="radio" name="term" v-model="settings.term" value="Soccer"/> Soccer</label><br/>
-    <notation-select></notation-select><br/>
-    <label>Match Autoplay <input type="checkbox" v-model="settings.match.autoPlay"/></label><br/>
+    <h3 class="big-heading">Game Settings</h3>
+    <div class="card flex">
+        <div>
+            Term shown in Game Header<br/>
+            <label><input type="radio" name="term" v-model="settings.term" value="Football"/> Football</label>
+            <label><input type="radio" name="term" v-model="settings.term" value="Soccer"/> Soccer</label><br/>
+        </div>
+        <div>   
+            <label>Match Autoplay <input type="checkbox" v-model="settings.match.autoPlay"/></label><br/>
+            <label>Min Avg. Stamina required <input type="range" min="0" max="1" step="any" v-model.number="settings.match.minAutoPlayStamina"/></label>
+            <notation-select></notation-select><br/>
+        </div>
+    </div>
     <button @click="restartTutorial()">Restart Tutorial</button><br/>
-    <h3>Save Management</h3>
+    <h3 class="big-heading">Save Management</h3>
     <div>
         <div>
             <button @click="exportGame()">Export Game</button>
@@ -64,7 +71,7 @@ app.component("tab-settings", {
         <textarea v-model="saveString">
         </textarea>
     </div>
-    <h3>Social</h3>
+    <h3 class="big-heading">Social</h3>
     <a target="_blank" href="https://discord.gg/75d7Jj5" class="icon-flex"><img alt="" src="images/icons/discord.png"/> Join my Discord Server</a>
     <a target="_blank" href="https://cook1eegames.feedia.co" class="icon-flex"><img alt="" src="images/icons/website.png"/> Visit my Website</a>
 </div>`

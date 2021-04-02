@@ -29,7 +29,7 @@ function update(){
     let dt = (Date.now() - lastUpdate) / 1000;
     lastUpdate = Date.now();
 
-    if(game.settings.match.autoPlay){
+    if(game.settings.match.autoPlay && game.team.getAverageStamina() >= game.settings.match.minAutoPlayStamina){
         if(game.team.canPlayNextMatch() && (!game.currentMatch || game.currentMatch.ended)){
             game.league.divisions[game.team.divisionRank].playNextMatch();
         }

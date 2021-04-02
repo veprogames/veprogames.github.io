@@ -58,7 +58,8 @@ let game = {
         term: "Football",
         match: {
             speed: 1,
-            autoPlay: false
+            autoPlay: false,
+            minAutoPlayStamina: 0
         }
     }
 };
