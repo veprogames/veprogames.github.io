@@ -12,7 +12,7 @@ app.component("stadium", {
 <h2 class="big-heading">🏟 Your Stadium</h2>
 <div class="info">
     <p>{{formatNumber(stadium.attendance)}} / {{formatNumber(stadium.getCapacity())}} watching</p>
-    <p>{{formatNumber(stadium.fans)}} Fans</p>
+    <p>{{formatNumber(stadium.fans)}} Fans (guaranteed viewers)</p>
     <p>{{formatNumber(stadium.getTicketPrice(), 2, 2)}} $ per Ticket → {{formatNumber(maxPayment)}} $ possible</p>
     <img alt="Stadium" src="images/stadium.png"/>
 </div>
