@@ -20,7 +20,7 @@ app.component("stadium", {
 <div class="upgrade-container">
     <upgrade :upgrade="stadium.upgrades.capacity">
         <template v-slot:title>Stadium Capacity</template>
-        <template v-slot:description>Increase the Amount of people that can watch the watch at once.</template>
+        <template v-slot:description>Increase the Amount of people that can watch the match at once.</template>
     </upgrade>
     <upgrade :upgrade="stadium.upgrades.ticketPrice">
         <template v-slot:title>Pricing Tactics</template>

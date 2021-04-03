@@ -92,6 +92,9 @@ class Match {
             game.stadium.emptyStadium();
 
             if(game.league.divisions[this.getPlayerTeam().divisionRank].hasEnded()){
+                /*if(game.league.divisions[game.team.divisionRank].getSortedTeams()[0] === game.team){
+                    game.canEnterNextCountry = true;
+                }*/
                 game.league.moveTeams();
                 game.playerMarket.refresh();
             }
