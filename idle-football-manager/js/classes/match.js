@@ -27,9 +27,6 @@ class Match {
     addRedCard(team, player, minute){
         this.gameEvents.push({teamIndex: team === this.team2 ? 1 : 0, event: 1, name: player.name, minute});
         player.redCard = 2;
-        if(team === game.team){
-            player.active = false;
-        }
     }
 
     getNormPower() {
@@ -93,6 +90,12 @@ class Match {
             game.money = game.money.add(reward);
             this.stadiumReward = reward;
             game.stadium.emptyStadium();
+
+            for(let p of this.getPlayerTeam().getActivePlayers()){
+                if(p.hasRedCard()){
+                    p.active = false;
+                }
+            }
 
             if(game.league.divisions[this.getPlayerTeam().divisionRank].hasEnded()){
                 if(game.league.divisions[game.team.divisionRank].getSortedTeams()[0] === game.team){
