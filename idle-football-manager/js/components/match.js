@@ -48,7 +48,7 @@ app.component("match", {
     template: `<div class="match">
 <match-view :ballx="match.ballX"></match-view>
 <div class="stats">
-    <p class="time">{{formatTime(match.time)}}</p>
+    <p class="time">{{formatTime(match.time)}} <button v-if="match.time === 0" @click="playNextMatch()">Start</button></p>
     <div class="score">
         <div class="icon-flex">
             <team-logo :logo="match.team1.logo"></team-logo>

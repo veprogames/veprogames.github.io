@@ -4,9 +4,9 @@ class Stadium{
         this.attendance = new Decimal(0);
         this.upgrades = {
             //planned 9x money per division, 4x ticket money per division (division number + upgrade)
-            capacity: new MoneyUpgrade(level => Decimal.pow(9, level / 10).mul(1000000),
+            capacity: new MoneyUpgrade(level => Decimal.pow(9, level / 10).mul(125000),
                 //4x ticket price -> need 9 / 4x more capacity
-                level => new Decimal(1000 * level).mul(Decimal.pow((9 / 4), (level - 1) / 10)).floor(), {
+                level => new Decimal(450 * level).mul(Decimal.pow((9 / 4), (level - 1) / 10)).floor(), {
                     getEffectDisplay: effectDisplayTemplates.numberStandard(0, "")
                 }),
             ticketPrice: new MoneyUpgrade(level => Decimal.pow(9, level / 5).mul(3300000),
@@ -22,7 +22,7 @@ class Stadium{
     }
 
     static get isUnlocked(){
-        return game.team.divisionRank >= 3 || game.country >= 1 || game.stadium.getCapacity().gt(0);
+        return game.team.divisionRank >= 2 || game.country >= 1 || game.stadium.getCapacity().gt(0);
     }
 
     getTicketPrice(){

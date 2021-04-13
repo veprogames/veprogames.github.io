@@ -57,7 +57,7 @@ class Team {
     }
 
     getActivePlayingPlayers() {
-        return this.players.filter(p => p.active && !p.redCard);
+        return this.players.filter(p => p.active && !p.hasRedCard());
     }
 
     getActivePlayers() {
@@ -69,7 +69,7 @@ class Team {
     }
 
     getRedCardChance(){
-        let base = 0.00001;
+        let base = 0.000003;
         if(this.aggressivity === Strategy.OFFENSIVE){
             base *= 2;
         }
@@ -81,7 +81,7 @@ class Team {
 
     //less players -> less synergy; encourages filling the team; 50% to 150%
     getSynergy(){
-        return 0.5 + 0.5 * this.getActivePlayers().length / 11;
+        return 0.25 + 0.75 * (this.getActivePlayingPlayers().length / 11) ** 2;
     }
 
     getCombinedStats() {

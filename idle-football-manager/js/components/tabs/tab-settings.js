@@ -1,7 +1,9 @@
 app.component("tab-settings", {
     data(){
         return {
-            saveString: "Your savegame will appear here. Keep it somewhere safe! Make sure to backup often."
+            saveString: "Your savegame will appear here. Keep it somewhere safe! Make sure to backup often.\n" +
+                "Import Game will read the content of this textbox.\n" +
+                "The downloaded File contains the content to be pasted into this text box."
         };
     },
     computed: {
@@ -61,6 +63,8 @@ app.component("tab-settings", {
     </div>
     <button @click="restartTutorial()">Restart Tutorial</button><br/>
     <h3 class="big-heading">Save Management</h3>
+    <p>Note: The Game does <b>not</b> save if <b>cookies or storage</b> are disabled. Cleaning Utilities might clear Browser Storage.
+    It is recommended to export your savegame <b>often</b>.</p>
     <div>
         <div>
             <button @click="exportGame()">Export Game</button>

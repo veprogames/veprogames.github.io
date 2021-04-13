@@ -2,7 +2,7 @@ let game = {
     //reactivity fix hack
     init: false,
     numberFormatter: new ADNotations.StandardNotation(),
-    money: new Decimal(10000),
+    money: new Decimal(25000),
     team: null,
     currentMatch: null,
     nextMatch: null,
@@ -20,7 +20,7 @@ let game = {
     canEnterNextCountry: false,
     playerMarket: new PlayerMarket(),
     moneyUpgrades:{
-        matchSpeed: new MoneyUpgrade(level => Decimal.pow(4, level).mul(10000),
+        matchSpeed: new MoneyUpgrade(level => Decimal.pow(3, level).mul(10000),
             level => 180 * (200 / 180) ** level, {
                 maxLevel: 12
             }),
@@ -30,7 +30,7 @@ let game = {
         cheaperPlayers: new MoneyUpgrade(level => Decimal.pow(7, level / 3).mul(1000000),
             level => 1 / 1.02 ** level),
         playerRegeneration: new MoneyUpgrade(level => Decimal.pow(1.25, level).mul(5000000),
-            level => new Decimal(1 + 0.02 * level), {
+            level => new Decimal(1 + 0.05 * level), {
                 getEffectDisplay: effectDisplayTemplates.percentStandard(0)
             })
     },

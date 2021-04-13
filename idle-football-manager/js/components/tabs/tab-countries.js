@@ -2,16 +2,19 @@ app.component("tab-countries", {
     data(){
         return {
             countries: game.countries,
-            country: game.country,
-            canEnterNextCountry: game.canEnterNextCountry
+            country: game.country
         };
     },
     methods: {
+        canEnterNextCountry(){
+           return game.canEnterNextCountry;
+        },
         enterNextCountry(){
             if(game.canEnterNextCountry){
                 game.country++;
                 game.league = GeneratorUtils.generateLeague(0, game.country);
                 game.league.divisions[0].teams[0] = game.team;
+                game.team.divisionRank = 0;
                 game.league.simulate();
                 game.playerMarket.refresh();
                 game.canEnterNextCountry = false;

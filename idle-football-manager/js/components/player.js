@@ -10,6 +10,9 @@ app.component("player", {
     },
     computed: {
         canMove(){
+            if(this.player.hasRedCard() && !this.player.active){
+                return false;
+            }
             return (!this.teamFull && !this.player.active) || this.player.active;
         },
         teamFull(){
@@ -20,7 +23,7 @@ app.component("player", {
         }
     },
     template: `<div class="player">
-<p class="header"><div @click="showStatBreakdown = true" class="icon-flex"><img alt="" src="images/player.png"/> {{player.name}}</div>
+<p class="header"><div @click="showStatBreakdown = true" class="icon-flex"><img alt="" src="images/player.png"/><img v-if="player.hasRedCard()" alt="" src="images/icons/red-card.png"/> {{player.name}}</div>
 <div class="icon-flex" v-if="isBought"><img alt="" src="images/icons/stamina.png"/> <progress :value="player.currentStamina" max="1"></progress></div></p>
 
 <div class="stats">

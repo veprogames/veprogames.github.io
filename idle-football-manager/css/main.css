@@ -398,6 +398,7 @@ main{
 
 .player .header img{
     border-radius: 50%;
+    margin-right: 0.1rem;
 }
 
 .player > .stats{
@@ -703,6 +704,10 @@ main{
 .tab-settings h3{
     font-size: 150%;
     margin: 1rem;
+}
+
+.tab-settings p{
+    padding: 0 20%;
 }
 
 .tab-settings label{

@@ -9,7 +9,7 @@ class Player {
         this.stamina = stamina;
         this.aggressivity = aggressivity;
         this.currentStamina = 1;
-        this.redCard = false;
+        this.redCard = 0;
     }
 
     //used for display on player component
@@ -31,7 +31,7 @@ class Player {
     }
 
     getRegenerationTime(){
-        return 1000 / (this.stamina * game.moneyUpgrades.playerRegeneration.apply().toNumber());
+        return 500 / (this.stamina * game.moneyUpgrades.playerRegeneration.apply().toNumber());
     }
 
     regenerate(dt){
@@ -40,6 +40,10 @@ class Player {
 
     isBought(){
         return game.team.players.find(p => p === this) !== undefined;
+    }
+
+    hasRedCard(){
+        return this.redCard > 0;
     }
 
     getPrice(){
@@ -79,6 +83,6 @@ class Player {
         this.currentStamina = obj.currentStamina;
         this.marketValue = obj.marketValue;
         this.sellMultiplier = obj.sellMultiplier;
-        this.redCard = obj.redCard;
+        this.redCard = Number(obj.redCard);
     }
 }

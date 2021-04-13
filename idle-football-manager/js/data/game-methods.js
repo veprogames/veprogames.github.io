@@ -58,7 +58,7 @@ let functions = {
                 return value;
             });
 
-            game.money = loadVal(obj.money, new Decimal(10000));
+            game.money = loadVal(obj.money, new Decimal(25000));
             game.country = loadVal(obj.country, 0);
             game.canEnterNextCountry = loadVal(obj.canEnterNextCountry, false);
             Vue.nextTick(() => {

@@ -26,7 +26,10 @@ class Match {
 
     addRedCard(team, player, minute){
         this.gameEvents.push({teamIndex: team === this.team2 ? 1 : 0, event: 1, name: player.name, minute});
-        player.redCard = true;
+        player.redCard = 2;
+        if(team === game.team){
+            player.active = false;
+        }
     }
 
     getNormPower() {
@@ -63,8 +66,8 @@ class Match {
     }
 
     endGame() {
-        for(let player of this.team1.players.concat(this.team2.players)){
-            player.redCard = false;
+        for(let p of this.team1.players.concat(this.team2.players)){
+            p.redCard = Math.max(0, p.redCard - 1);
         }
 
         if(this.score1 > this.score2) {
@@ -92,9 +95,9 @@ class Match {
             game.stadium.emptyStadium();
 
             if(game.league.divisions[this.getPlayerTeam().divisionRank].hasEnded()){
-                /*if(game.league.divisions[game.team.divisionRank].getSortedTeams()[0] === game.team){
+                if(game.league.divisions[game.team.divisionRank].getSortedTeams()[0] === game.team){
                     game.canEnterNextCountry = true;
-                }*/
+                }
                 game.league.moveTeams();
                 game.playerMarket.refresh();
             }
@@ -145,20 +148,21 @@ class Match {
     tick(dt) {
         if(!this.ended){
             let power = this.getNormPower();
-            for(let i = 0; i < this.timeScale; i++) {
+            for(let i = 0; i < Math.min(60, this.timeScale); i++) {
                 dt = Math.min(1 / 30, dt);
-                this.time += dt;
+                let tm = Math.max(1, this.timeScale / 60);
+                this.time += dt * tm;
 
                 for(let i = 0; i < this.powerMulti.length; i++) {
                     this.powerMulti[i] = 1 + 0.5 * Math.sin(this.time / this.powerMultiFreq[i] * 2 * Math.PI);
                 }
 
-                if(Math.random() < 0.04 * dt) {
+                if(Math.random() < 0.04 * dt * tm) {
                     let pow = Math.random() < 0.1 ? 3 * (Math.random() < 0.1 ? 3 : 1) : 1;
                     let pow2 = this.ballX <= -0.8 ? 4 : 1;
                     this.ballSpeed += power.team1 * 0.1 * pow * pow2 * this.powerMulti[0];
                 }
-                if(Math.random() < 0.04 * dt) {
+                if(Math.random() < 0.04 * dt * tm) {
                     let pow = Math.random() < 0.1 ? 3 * (Math.random() < 0.1 ? 3 : 1) : 1;
                     let pow2 = this.ballX >= 0.8 ? 4 : 1;
                     this.ballSpeed -= power.team2 * 0.1 * pow * pow2 * this.powerMulti[1];
@@ -166,21 +170,21 @@ class Match {
 
                 if(this.team1.getActivePlayingPlayers().length > 0){
                     for(let p of this.team1.getActivePlayingPlayers()){
-                        if(Math.random() < this.team1.getRedCardChance() * p.aggressivity * dt){
+                        if(Math.random() < this.team1.getRedCardChance() * p.aggressivity * dt * tm){
                             this.addRedCard(this.team1, p, this.getMinute());
                         }
                     }
                 }
                 if(this.team2.getActivePlayingPlayers().length > 0){
                     for(let p of this.team2.getActivePlayingPlayers()){
-                        if(Math.random() < this.team2.getRedCardChance() * p.aggressivity * dt){
+                        if(Math.random() < this.team2.getRedCardChance() * p.aggressivity * dt * tm){
                             this.addRedCard(this.team2, p, this.getMinute());
                         }
                     }
                 }
 
                 for(let p of this.getPlayerTeam().getActivePlayingPlayers()){
-                    p.currentStamina = Math.max(0, p.currentStamina - Math.random() * 3e-5 * dt * (1 / p.stamina));
+                    p.currentStamina = Math.max(0, p.currentStamina - Math.random() * 3e-5 * dt * tm * (1 / p.stamina));
                 }
 
                 this.ballX += this.ballSpeed * dt;
