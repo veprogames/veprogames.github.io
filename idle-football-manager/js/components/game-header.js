@@ -1,24 +1,24 @@
 app.component("game-header", {
+    data(){
+        return{
+            logo: game.team.logo
+        }
+    },
     methods: {
         changeTab(tab){
             game.tab = tab;
         },
         formatNumber: functions.formatNumber
     },
-    data(){
-        return{
-            logo: game.team.logo,
-        }
-    },
     computed:{
-        stadiumUnlocked(){
-            return Stadium.isUnlocked
-        },
-        countriesUnlocked(){
-            return Country.isUnlocked
-        },
         term(){
             return game.settings.term;
+        },
+        stadiumUnlocked(){
+            return Stadium.isUnlocked;
+        },
+        countriesUnlocked(){
+            return Country.isUnlocked;
         }
     },
     template: `<header>

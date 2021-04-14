@@ -6,10 +6,6 @@ function initializeGame(){
     game.team = game.league.divisions[0].teams[0];
     game.league.simulate();
     game.playerMarket.refresh();
-
-    Vue.nextTick(() => {
-        game.init = true;
-    });
 }
 
 function setup(){

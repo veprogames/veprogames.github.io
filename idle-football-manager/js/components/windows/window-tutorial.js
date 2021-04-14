@@ -3,7 +3,6 @@ app.component("window-tutorial", {
     template: `<window class="window-tutorial">
     <template v-slot:header><slot name="header"></slot></template>
     <template v-slot:body>
-    
         <div class="image">
             <slot name="image"></slot>
         </div>

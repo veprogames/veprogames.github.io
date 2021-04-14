@@ -3,16 +3,10 @@ app.component("tab-settings", {
         return {
             saveString: "Your savegame will appear here. Keep it somewhere safe! Make sure to backup often.\n" +
                 "Import Game will read the content of this textbox.\n" +
-                "The downloaded File contains the content to be pasted into this text box."
+                "The downloaded File contains the content to be pasted into this text box.",
+            team: game.team,
+            settings: game.settings
         };
-    },
-    computed: {
-        team(){
-            return game.team;
-        },
-        settings(){
-            return game.settings;
-        }
     },
     methods: {
         restartTutorial(){

@@ -1,14 +1,14 @@
 app.component("tab-player-market", {
+    data(){
+        return {
+            playerMarket: game.playerMarket,
+            money: game.money
+        }
+    },
     methods: {
         formatNumber: functions.formatNumber
     },
     computed: {
-        playerMarket(){
-            return this.$root.playerMarket
-        },
-        money(){
-            return game.money;
-        },
         refreshTime(){
             return 4 - game.league.divisions[game.team.divisionRank].matchDay % 4;
         }

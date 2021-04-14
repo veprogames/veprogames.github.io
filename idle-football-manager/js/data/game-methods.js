@@ -61,13 +61,13 @@ let functions = {
             game.money = loadVal(obj.money, new Decimal(25000));
             game.country = loadVal(obj.country, 0);
             game.canEnterNextCountry = loadVal(obj.canEnterNextCountry, false);
-            Vue.nextTick(() => {
+            /*Vue.nextTick(() => {
                 game.tab = "tab-player-market";
                 game.init = true;
                 Vue.nextTick(() => {
                     game.tab = loadVal(obj.tab, "tab-team");
                 });
-            });
+            });*/
 
             if(obj.league){
                 for(let d = 0; d < obj.league.divisions.length; d++){

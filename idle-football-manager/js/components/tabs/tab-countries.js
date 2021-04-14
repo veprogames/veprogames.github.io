@@ -1,14 +1,10 @@
 app.component("tab-countries", {
     data(){
         return {
-            countries: game.countries,
-            country: game.country
+            countries: game.countries
         };
     },
     methods: {
-        canEnterNextCountry(){
-           return game.canEnterNextCountry;
-        },
         enterNextCountry(){
             if(game.canEnterNextCountry){
                 game.country++;
@@ -22,6 +18,14 @@ app.component("tab-countries", {
         },
         countryIsLocked(i){
             return i - 1 > this.country;
+        }
+    },
+    computed: {
+        canEnterNextCountry(){
+            return game.canEnterNextCountry;
+        },
+        country(){
+            return game.country;
         }
     },
     template: `<div class="tab-countries">

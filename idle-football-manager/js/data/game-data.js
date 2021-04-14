@@ -1,6 +1,4 @@
 let game = {
-    //reactivity fix hack
-    init: false,
     numberFormatter: new ADNotations.StandardNotation(),
     money: new Decimal(25000),
     team: null,
@@ -25,7 +23,7 @@ let game = {
                 maxLevel: 12
             }),
         //-> 9x money per division, ~11x player price per division
-        matchRewards: new MoneyUpgrade(level => Decimal.pow(6, level / 4).mul(100000),
+        matchRewards: new MoneyUpgrade(level => Decimal.pow(9, level / 4).mul(100000),
             level => (9 / 6) ** (level / 4)),
         cheaperPlayers: new MoneyUpgrade(level => Decimal.pow(7, level / 3).mul(1000000),
             level => 1 / 1.02 ** level),

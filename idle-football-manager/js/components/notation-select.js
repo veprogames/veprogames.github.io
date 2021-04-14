@@ -1,6 +1,7 @@
 app.component("notation-select", {
     data(){
         return {
+            notations: window.notations,
             notationName: game.numberFormatter.name
         }
     },
@@ -16,9 +17,6 @@ app.component("notation-select", {
         }
     },
     computed: {
-        notations(){
-            return notations;
-        },
         notationNames(){
             return notations.map(n => n.name);
         }

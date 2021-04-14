@@ -1,8 +1,8 @@
 app.component("tab-team",{
-    computed: {
-        team(){
-            return this.$root.team;
-        }
+    data(){
+        return {
+            team: game.team
+        };
     },
     template: `<div class="tab-team">
 <team-management :team="team"></team-management>

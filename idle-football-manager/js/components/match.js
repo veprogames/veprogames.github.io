@@ -3,7 +3,8 @@ app.component("match", {
     data(){
         return {
             matchTimeScaleLog: 0,
-            windowOpen: true
+            windowOpen: true,
+            money: game.money
         }
     },
     mounted(){
@@ -23,8 +24,8 @@ app.component("match", {
         }
     },
     computed: {
-        money(){
-            return game.money;
+        stadiumUnlocked(){
+            return Stadium.isUnlocked;
         },
         team1Events(){
             return this.match.gameEvents.filter(goal => goal.teamIndex === 0);
@@ -37,9 +38,6 @@ app.component("match", {
         },
         timeScale(){
             return Math.round(10 ** this.matchTimeScaleLog);
-        },
-        stadiumUnlocked(){
-            return Stadium.isUnlocked
         },
         reward(){
             return this.match.getRewardMoney();
