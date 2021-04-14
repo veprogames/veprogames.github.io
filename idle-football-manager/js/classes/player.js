@@ -56,7 +56,7 @@ class Player {
 
     buy(){
         if(!this.isBought() && this.canAfford()){
-            game.money = game.money.sub(this.marketValue);
+            game.money = game.money.sub(this.getPrice());
             game.team.players.push(this);
             game.playerMarket.players = game.playerMarket.players.filter(p => p !== this);
         }
