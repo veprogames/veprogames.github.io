@@ -1,5 +1,5 @@
 let computed = {
     showTutorial(){
-        return localStorage.getItem("idleSoccerManager") === null || game.restartedTutorial;
+        return localStorage.getItem("idleSoccerManager") === null || this.restartedTutorial;
     }
 }

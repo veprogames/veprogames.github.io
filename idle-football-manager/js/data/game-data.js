@@ -1,4 +1,5 @@
 let game = {
+    init: false,
     numberFormatter: new ADNotations.StandardNotation(),
     money: new Decimal(25000),
     team: null,

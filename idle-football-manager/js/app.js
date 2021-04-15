@@ -18,6 +18,8 @@ function setup(){
         functions.loadGame();
     }
 
+    Vue.nextTick(() => game.init = true);
+
     requestAnimationFrame(update);
 }
 
@@ -50,7 +52,7 @@ function update(){
 
 let app = Vue.createApp({
     data: function(){
-        return {...game};
+        return game;
     },
     methods: functions,
     computed,

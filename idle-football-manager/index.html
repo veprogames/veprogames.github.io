@@ -29,7 +29,7 @@
 <body>
 
 <div id="app">
-    <game-header></game-header>
+    <game-header v-if="init"></game-header>
     <tutorial v-if="showTutorial"></tutorial>
     <main>
         <component :is="tab"></component>

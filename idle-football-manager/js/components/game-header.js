@@ -1,9 +1,4 @@
 app.component("game-header", {
-    data(){
-        return{
-            logo: game.team.logo
-        }
-    },
     methods: {
         changeTab(tab){
             game.tab = tab;
@@ -11,8 +6,11 @@ app.component("game-header", {
         formatNumber: functions.formatNumber
     },
     computed:{
+        logo(){
+            return this.$root.team.logo;
+        },
         term(){
-            return game.settings.term;
+            return this.$root.settings.term;
         },
         stadiumUnlocked(){
             return Stadium.isUnlocked;

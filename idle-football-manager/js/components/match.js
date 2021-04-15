@@ -3,8 +3,7 @@ app.component("match", {
     data(){
         return {
             matchTimeScaleLog: 0,
-            windowOpen: true,
-            money: game.money
+            windowOpen: true
         }
     },
     mounted(){
@@ -24,6 +23,9 @@ app.component("match", {
         }
     },
     computed: {
+        money(){
+            return game.money;
+        },
         stadiumUnlocked(){
             return Stadium.isUnlocked;
         },
