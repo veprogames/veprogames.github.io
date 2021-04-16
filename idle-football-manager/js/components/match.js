@@ -17,7 +17,7 @@ app.component("match", {
             game.settings.match.speed = this.timeScale;
         },
         playNextMatch(){
-            if(this.match.time === 0 && game.team.canPlayNextMatch()){
+            if(this.canPlayNextMatch){
                 game.league.divisions[game.team.divisionRank].playNextMatch();
             }
         }
@@ -43,12 +43,15 @@ app.component("match", {
         },
         reward(){
             return this.match.getRewardMoney();
+        },
+        canPlayNextMatch(){
+            return this.match.time === 0 && game.team.canPlayNextMatch();
         }
     },
     template: `<div class="match">
 <match-view :ballx="match.ballX"></match-view>
 <div class="stats">
-    <p class="time">{{formatTime(match.time)}} <button v-if="match.time === 0" @click="playNextMatch()">Start</button></p>
+    <p class="time">{{formatTime(match.time)}} <button :disabled="!canPlayNextMatch" v-if="match.time === 0" @click="playNextMatch()">Start</button></p>
     <div class="score">
         <div class="icon-flex">
             <team-logo :logo="match.team1.logo"></team-logo>

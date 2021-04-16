@@ -36,6 +36,7 @@ app.component("tab-settings", {
                 functions.loadGame(initalGame);
                 initializeGame();
                 functions.saveGame();
+                game.tab = "tab-team";
             }
         }
     },
