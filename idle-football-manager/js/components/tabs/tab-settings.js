@@ -51,7 +51,8 @@ app.component("tab-settings", {
         </div>
         <div>   
             <label>Match Autoplay <input type="checkbox" v-model="settings.match.autoPlay"/></label><br/>
-            <label>Min Avg. Stamina required <input type="range" min="0" max="1" step="any" v-model.number="settings.match.minAutoPlayStamina"/></label>
+            <label>Min Avg. Stamina required <input type="range" min="0" max="1" step="any" v-model.number="settings.match.minAutoPlayStamina"/></label><br/>
+            <label>Refill Team after Match <input type="checkbox" v-model="settings.team.refillPlayers"/></label>
             <notation-select></notation-select><br/>
         </div>
     </div>

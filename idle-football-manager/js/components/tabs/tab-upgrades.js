@@ -1,12 +1,16 @@
 app.component("tab-upgrades", {
     data(){
         return {
-            upgrades: game.moneyUpgrades,
-            money: game.money
+            upgrades: game.moneyUpgrades
         }
     },
     methods: {
         formatNumber: functions.formatNumber
+    },
+    computed: {
+        money(){
+            return game.money
+        }
     },
     template: `<div class="tab-upgrades">
 <p class="money">You have {{formatNumber(money)}} $</p>

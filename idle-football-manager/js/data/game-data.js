@@ -55,6 +55,9 @@ let game = {
     tab: "tab-team",
     settings: {
         term: "Football",
+        team: {
+            refillPlayers: true
+        },
         match: {
             speed: 1,
             autoPlay: false,

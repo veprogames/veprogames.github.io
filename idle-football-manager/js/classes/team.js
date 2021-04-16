@@ -134,6 +134,12 @@ class Team {
         this.players = this.players.filter(p => p !== player);
     }
 
+    refillPlayers(){
+        while(this.getActivePlayers().length < 11 && this.getInactivePlayers().filter(p => !p.hasRedCard()).length > 0){
+            this.getInactiveSortedPlayers()[0].active = true;
+        }
+    }
+
     canPlayNextMatch(){
         return this.getActivePlayingPlayers().length > 0;
     }

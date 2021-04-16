@@ -25,10 +25,6 @@ class Stadium{
         return game.team.divisionRank >= 2 || game.country >= 1 || game.stadium.getCapacity().gt(0);
     }
 
-    isUnlocked(){
-        return game.team.divisionRank >= 2 || game.country >= 1 || game.stadium.getCapacity().gt(0);
-    }
-
     getTicketPrice(){
         return Decimal.pow(2, GeneratorUtils.getNormRank(game.team.divisionRank, game.country)).mul(5).mul(this.upgrades.ticketPrice.apply());
     }

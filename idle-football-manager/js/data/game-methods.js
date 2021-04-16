@@ -61,13 +61,6 @@ let functions = {
             game.money = loadVal(obj.money, new Decimal(25000));
             game.country = loadVal(obj.country, 0);
             game.canEnterNextCountry = loadVal(obj.canEnterNextCountry, false);
-            /*Vue.nextTick(() => {
-                game.tab = "tab-player-market";
-                game.init = true;
-                Vue.nextTick(() => {
-                    game.tab = loadVal(obj.tab, "tab-team");
-                });
-            });*/
 
             if(obj.league){
                 for(let d = 0; d < obj.league.divisions.length; d++){
@@ -122,6 +115,9 @@ let functions = {
             game.settings.match.speed = loadVal(obj.settings.match.speed, 1);
             game.settings.match.autoPlay = loadVal(obj.settings.match.autoPlay, false);
             game.settings.match.minAutoPlayStamina = loadVal(obj.settings.match.minAutoPlayStamina, 0);
+            if(obj.settings.team){
+                game.settings.team.refillPlayers = loadVal(obj.settings.team.refillPlayers, true);
+            }
             game.settings.term = loadVal(obj.settings.term, "Football");
             if(obj.numberFormatter){
                 let notation = notations.find(n => n.name === obj.numberFormatter);

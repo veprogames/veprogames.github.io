@@ -85,19 +85,25 @@ class Match {
         this.team2.divisionStats.goalsOpponent += this.score1;
 
         if(this.getPlayerTeam()){
+            let playerTeam = this.getPlayerTeam();
+
             game.stadium.changeFans(this.getGameResult());
             let reward = game.stadium.getPaidMoney();
             game.money = game.money.add(reward);
             this.stadiumReward = reward;
             game.stadium.emptyStadium();
 
-            for(let p of this.getPlayerTeam().getActivePlayers()){
+            if(game.settings.team.refillPlayers){
+                playerTeam.refillPlayers();
+            }
+
+            for(let p of playerTeam.getActivePlayers()){
                 if(p.hasRedCard()){
                     p.active = false;
                 }
             }
 
-            if(game.league.divisions[this.getPlayerTeam().divisionRank].hasEnded()){
+            if(game.league.divisions[playerTeam.divisionRank].hasEnded()){
                 if(game.league.divisions[game.team.divisionRank].getSortedTeams()[0] === game.team){
                     game.canEnterNextCountry = true;
                 }

@@ -24,12 +24,13 @@
 
     <link rel="stylesheet" href="css/themes/light.css"/>
     <link rel="stylesheet" href="css/main.css"/>
+    <link rel="icon" href="icon.ico"/>
     <title>Idle Football Manager</title>
 </head>
 <body>
 
 <div id="app">
-    <game-header v-if="init"></game-header>
+    <game-header></game-header>
     <tutorial v-if="showTutorial"></tutorial>
     <main>
         <component :is="tab"></component>
