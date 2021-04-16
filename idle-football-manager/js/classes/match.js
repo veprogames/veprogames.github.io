@@ -93,14 +93,14 @@ class Match {
             this.stadiumReward = reward;
             game.stadium.emptyStadium();
 
-            if(game.settings.team.refillPlayers){
-                playerTeam.refillPlayers();
-            }
-
             for(let p of playerTeam.getActivePlayers()){
                 if(p.hasRedCard()){
                     p.active = false;
                 }
+            }
+
+            if(game.settings.team.refillPlayers){
+                playerTeam.refillPlayers();
             }
 
             if(game.league.divisions[playerTeam.divisionRank].hasEnded()){

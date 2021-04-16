@@ -17,7 +17,7 @@ app.component("match", {
             game.settings.match.speed = this.timeScale;
         },
         playNextMatch(){
-            if(this.match.ended && game.team.canPlayNextMatch()){
+            if(this.match.time === 0 && game.team.canPlayNextMatch()){
                 game.league.divisions[game.team.divisionRank].playNextMatch();
             }
         }

@@ -93,9 +93,15 @@ let functions = {
                 game.currentMatch = new Match();
                 game.currentMatch.load(obj.currentMatch);
             }
+            else{
+                game.currentMatch = null;
+            }
             if(obj.nextMatch){
                 game.nextMatch = new Match();
                 game.nextMatch.load(obj.nextMatch);
+            }
+            else{
+                game.nextMatch = null;
             }
 
             for(let k of Object.keys(obj.moneyUpgrades)){
