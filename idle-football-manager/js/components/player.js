@@ -11,7 +11,7 @@ app.component("player", {
     },
     computed: {
         canMove(){
-            if(this.player.hasRedCard() && (!game.currentMatch.ended || !this.player.active)){
+            if(this.player.hasRedCard() && (game.currentMatch && !game.currentMatch.ended || !this.player.active)){
                 return false;
             }
             return (!this.teamFull && !this.player.active) || this.player.active;

@@ -45,7 +45,7 @@ app.component("match", {
             return this.match.getRewardMoney();
         },
         canPlayNextMatch(){
-            return this.match.time === 0 && game.team.canPlayNextMatch();
+            return this.match.time === 0 || this.match.ended && game.team.canPlayNextMatch();
         }
     },
     template: `<div class="match">

@@ -103,7 +103,7 @@ class Match {
                 playerTeam.refillPlayers();
             }
 
-            if(game.league.divisions[playerTeam.divisionRank].hasEnded()){
+            if(game.league.divisions[playerTeam.divisionRank].hasEnded() && playerTeam.divisionRank === game.league.divisions.length - 1){
                 if(game.league.divisions[game.team.divisionRank].getSortedTeams()[0] === game.team){
                     game.canEnterNextCountry = true;
                 }

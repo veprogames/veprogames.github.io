@@ -22,7 +22,7 @@ app.component("tab-countries", {
     },
     computed: {
         canEnterNextCountry(){
-            return game.canEnterNextCountry;
+            return game.canEnterNextCountry && game.team.divisionRank === game.league.divisions.length - 1;
         },
         country(){
             return game.country;
