@@ -11,6 +11,16 @@ function initializeGame(){
 function setup(){
     game.league = GeneratorUtils.generateLeague(0, game.country);
     window.initalGame = functions.getSaveString();
+
+    let error = "";
+    window.onerror = (msg, url, ln, col, error) => {
+        error = [msg, url, error, ln, col].join(":");
+        document.body.innerHTML = `<h2>Error</h2>
+<p>An error occurred while loading the game. You may forward this to the developer:</p>
+<p class="game-error">${btoa(error)}</p>`;
+        return false;
+    }
+
     if(localStorage.getItem("idleSoccerManager") === null){
         initializeGame();
     }
@@ -18,9 +28,12 @@ function setup(){
         functions.loadGame();
     }
 
-    Vue.nextTick(() => game.init = true);
+    if(!error.length){
+        Vue.nextTick(() => game.init = true);
+        window.onerror = null;
 
-    requestAnimationFrame(update);
+        requestAnimationFrame(update);
+    }
 }
 
 function update(){
@@ -39,6 +52,14 @@ function update(){
         if(!p.active || !game.currentMatch || (game.currentMatch && game.currentMatch.ended)){
             p.regenerate(dt);
         }
+    }
+
+    for(let k of Object.keys(game.training.tasks)){
+        game.training.tasks[k].tick(dt);
+    }
+
+    for(let c of game.tv.channels){
+        c.tick(dt);
     }
 
     for(let a of game.achievements){
@@ -64,3 +85,5 @@ onfocus = e => windowFocus = true;
 
 setInterval(() => functions.saveGame(), 60e3);
 onbeforeunload = () => functions.saveGame();
+
+let keyMap = new KeyMap();

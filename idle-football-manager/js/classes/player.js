@@ -9,25 +9,26 @@ class Player {
         this.stamina = stamina;
         this.aggressivity = aggressivity;
         this.currentStamina = 1;
+        this.trainingFactor = new Decimal(1);
         this.redCard = 0;
     }
 
     //used for display on player component
     getBaseAttack() {
-        return this.attack;
+        return this.attack.mul(this.trainingFactor);
     }
 
     //used for display on player component
     getBaseDefense() {
-        return this.defense;
+        return this.defense.mul(this.trainingFactor);
     }
 
     getAttack() {
-        return this.attack.mul(0.5 + 0.5 * this.currentStamina);
+        return this.getBaseAttack().mul(0.5 + 0.5 * this.currentStamina);
     }
 
     getDefense(){
-        return this.defense.mul(0.5 + 0.5 * this.currentStamina);
+        return this.getBaseDefense().mul(0.5 + 0.5 * this.currentStamina);
     }
 
     getRegenerationTime(){
@@ -63,7 +64,7 @@ class Player {
     }
 
     getSellAmount(){
-        return this.getPrice().mul(this.sellMultiplier);
+        return this.getPrice().mul(this.sellMultiplier).mul(this.trainingFactor.pow(0.8));
     }
 
     sell(){
@@ -84,5 +85,6 @@ class Player {
         this.marketValue = obj.marketValue;
         this.sellMultiplier = obj.sellMultiplier;
         this.redCard = Number(obj.redCard);
+        this.trainingFactor = obj.trainingFactor ? obj.trainingFactor : new Decimal(1);
     }
 }

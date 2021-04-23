@@ -42,8 +42,8 @@ class Match {
         let team2 = 1 + Math.max(0, (att2 - def1));
 
         return {
-            team1: (att1 - def2 > 0 ? team1 : 1 / team2) ** 0.35,
-            team2: (att2 - def1 > 0 ? team2 : 1 / team1) ** 0.35
+            team1: (att1 - def2 > 0 ? team1 : 1 / team2) ** 0.325,
+            team2: (att2 - def1 > 0 ? team2 : 1 / team1) ** 0.325
         };
     }
 

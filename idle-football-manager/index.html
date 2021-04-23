@@ -30,7 +30,7 @@
 <body>
 
 <div id="app">
-    <game-header></game-header>
+    <game-header v-if="init"></game-header>
     <tutorial v-if="showTutorial"></tutorial>
     <main>
         <component :is="tab"></component>
@@ -47,6 +47,7 @@
 <!-- Classes -->
 <script src="js/classes/utils.js"></script>
 <script src="js/classes/random.js"></script>
+<script src="js/classes/keymap.js"></script>
 <script src="js/classes/upgrade.js"></script>
 <script src="js/classes/achievement.js"></script>
 <script src="js/classes/player.js"></script>
@@ -59,6 +60,10 @@
 <script src="js/classes/country.js"></script>
 <script src="js/classes/stadium.js"></script>
 <script src="js/classes/team-logo.js"></script>
+<script src="js/classes/task/game-task.js"></script>
+<script src="js/classes/task/player-training-task.js"></script>
+<script src="js/classes/player-training.js"></script>
+<script src="js/classes/tv-channel.js"></script>
 <script src="js/classes/generator-utils.js"></script>
 
 <!-- Data -->
@@ -76,6 +81,7 @@
 <script src="js/components/windows/window-team.js"></script>
 <script src="js/components/windows/window-tutorial.js"></script>
 <script src="js/components/windows/window-player.js"></script>
+<script src="js/components/progress-bar.js"></script>
 <script src="js/components/upgrade.js"></script>
 <script src="js/components/achievement.js"></script>
 <script src="js/components/division.js"></script>
@@ -89,6 +95,8 @@
 <script src="js/components/team-logo.js"></script>
 <script src="js/components/team-settings.js"></script>
 <script src="js/components/stadium.js"></script>
+<script src="js/components/game-task.js"></script>
+<script src="js/components/tv-channel.js"></script>
 <script src="js/components/tutorial.js"></script>
 <script src="js/components/notation-select.js"></script>
 <script src="js/components/game-header.js"></script>
@@ -102,6 +110,8 @@
 <script src="js/components/tabs/tab-countries.js"></script>
 <script src="js/components/tabs/tab-achievements.js"></script>
 <script src="js/components/tabs/tab-stadium.js"></script>
+<script src="js/components/tabs/tab-player-training.js"></script>
+<script src="js/components/tabs/tab-tv-channels.js"></script>
 <script src="js/components/tabs/tab-settings.js"></script>
 
 <script src="js/mount.js"></script>

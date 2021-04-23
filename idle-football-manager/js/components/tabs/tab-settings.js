@@ -4,7 +4,6 @@ app.component("tab-settings", {
             saveString: "Your savegame will appear here. Keep it somewhere safe! Make sure to backup often.\n" +
                 "Import Game will read the content of this textbox.\n" +
                 "The downloaded File contains the content to be pasted into this text box.",
-            team: game.team,
             settings: game.settings
         };
     },
@@ -16,13 +15,20 @@ app.component("tab-settings", {
             this.saveString = functions.getSaveString();
         },
         importGame(){
-            functions.loadGame(this.saveString);
+            if(functions.loadGame(this.saveString)){
+                game.tab = "tab-team";
+            }
+            else{
+                alert("Error: Save code could not be imported.");
+            }
         },
         download(){
             this.saveString = functions.getSaveString();
             let a = document.createElement("a");
+            let d = new Date();
+            let y = d.getFullYear(), m = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"][d.getMonth()], day = d.getDate();
             a.href = "data:text/plain;charset=utf-8," + this.saveString;
-            a.download = "idle-soccer-manager-" + Date.now() + ".txt";
+            a.download = "idle-soccer-manager-" + [day, m, y].join("-") + ".txt";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -40,6 +46,11 @@ app.component("tab-settings", {
             }
         }
     },
+    computed: {
+        team(){
+            return game.team;
+        }
+    },
     template: `<div class="tab-settings">
     <h3 class="big-heading">Team Settings</h3>
     <team-settings :team="team"></team-settings>
@@ -55,6 +66,9 @@ app.component("tab-settings", {
             <label>Min Avg. Stamina required <input type="range" min="0" max="1" step="any" v-model.number="settings.match.minAutoPlayStamina"/></label><br/>
             <label>Refill Team after Match <input type="checkbox" v-model="settings.team.refillPlayers"/></label>
             <notation-select></notation-select><br/>
+        </div>
+        <div>
+            <label>Hold Shift to sell Players <input type="checkbox" v-model="settings.players.shiftToSell"/></label><br/>
         </div>
     </div>
     <button @click="restartTutorial()">Restart Tutorial</button><br/>

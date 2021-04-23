@@ -43,6 +43,7 @@ class GeneratorUtils {
     }
 
     static getNormRank(rank, country){
-        return 10 * country + rank;
+        let power = Math.max(10 * country + rank - 40, 0);
+        return (10 * country + rank) * 1.01 ** power;
     }
 }

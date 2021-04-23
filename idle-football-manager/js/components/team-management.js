@@ -69,7 +69,7 @@ app.component("team-management", {
     </div>
 </div>
 <div class="inactive-players">
-    <div v-if="playerCount === 0">
+    <div class="no-players" v-if="playerCount === 0">
         You don't have any players in your Team. Consider buying some first in the Market.
     </div>
     <div class="players inactive">

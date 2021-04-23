@@ -7,6 +7,9 @@ app.component("window-player" , {
     computed: {
         regenerationTimeLeft(){
             return this.player.getRegenerationTime() * (1 - this.player.currentStamina);
+        },
+        trainingUnlocked(){
+            return PlayerTraining.isUnlocked;
         }
     },
     template: `<window class="window-player">
@@ -30,6 +33,10 @@ app.component("window-player" , {
                   → x{{formatNumber(player.stamina, 2, 2)}} Stamina Regeneration<br/>
                   → Lose &div;{{formatNumber(player.stamina, 2, 2)}} Stamina per Game<br/>
                   → {{formatTime(player.getRegenerationTime())}} to regenerate<span v-if="regenerationTimeLeft > 0"> ({{formatTime(regenerationTimeLeft)}} left)</span></div>
+            <div v-if="trainingUnlocked">
+                  <p><b>Training Factor:</b> {{formatNumber(player.trainingFactor, 2, 2)}}</p>
+                  → x{{formatNumber(player.trainingFactor, 2, 2)}} to Attack and Defense
+            </div>
         </div>
     </template>
 </window>`

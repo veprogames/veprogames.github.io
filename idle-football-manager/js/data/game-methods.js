@@ -50,7 +50,14 @@ let functions = {
 
         str = str || localStorage.getItem("idleSoccerManager");
         if(str){
-            let json = decodeURIComponent(escape(atob(str)));
+            let json;
+            try{
+                json = decodeURIComponent(escape(atob(str)));
+            }
+            catch(e){
+                console.warn(e);
+                return false;
+            }
             let obj = JSON.parse(json, (key, value) => {
                 if(typeof value === "string" && !isNaN(value) && !isNaN(parseFloat(value)) && !isNaN(new Decimal(value))){
                     return new Decimal(value);
@@ -104,6 +111,19 @@ let functions = {
                 game.nextMatch = null;
             }
 
+            if(obj.training){
+                game.training.load(obj.training);
+            }
+
+            if(obj.tv){
+                for(let i = 0; i < obj.tv.channels.length; i++){
+                    game.tv.channels[i].bought = obj.tv.channels[i].bought;
+                }
+                for(let k of Object.keys(obj.tv.upgrades)){
+                    game.tv.upgrades[k].level = obj.tv.upgrades[k].level;
+                }
+            }
+
             for(let k of Object.keys(obj.moneyUpgrades)){
                 game.moneyUpgrades[k].level = obj.moneyUpgrades[k].level;
             }
@@ -124,6 +144,9 @@ let functions = {
             if(obj.settings.team){
                 game.settings.team.refillPlayers = loadVal(obj.settings.team.refillPlayers, true);
             }
+            if(obj.settings.players){
+                game.settings.players.shiftToSell = loadVal(obj.settings.players.shiftToSell, false);
+            }
             game.settings.term = loadVal(obj.settings.term, "Football");
             if(obj.numberFormatter){
                 let notation = notations.find(n => n.name === obj.numberFormatter);
@@ -132,5 +155,7 @@ let functions = {
                 }
             }
         }
+
+        return true;
     }
 };
