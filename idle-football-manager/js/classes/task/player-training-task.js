@@ -23,7 +23,7 @@ class PlayerTrainingTaskStamina extends PlayerTrainingTask{
     constructor(){
         super(() => {
             for(let p of game.training.players){
-                p.stamina += 1;
+                p.stamina += 0.01;
             }
         });
     }
