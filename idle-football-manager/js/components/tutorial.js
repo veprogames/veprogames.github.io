@@ -21,7 +21,7 @@ app.component("tutorial", {
         a Game where you build your own Football Team and compete to become the champion!</p>
         <p>You can <b>freely navigate inside the Game</b> while the Tutorial Window is open. Feel free to try out the mechanics
         on the go! Click the (X) on the top right of the window to view the next page</p>
-        <p>You can <b>always restart</b> the Tutorial in the Settings Menu!</p>
+        <p>You can <b>always restart</b> the Tutorial in the Settings Menu! You can also use it to <b>configure</b> the Game to your needs and to <b>backup your progress</b>.</p>
     </template>
 </window-tutorial>
 <window-tutorial v-if="stage === 1" @closed="stage++" @tutorialexit="exitTutorial()">

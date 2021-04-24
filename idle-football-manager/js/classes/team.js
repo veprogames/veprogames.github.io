@@ -139,10 +139,10 @@ class Team {
     }
 
     refillPlayers(){
-        let availablePlayers = this.getInactivePlayers().filter(p => !p.hasRedCard());
+        let availablePlayers = this.getInactiveSortedPlayers().filter(p => !p.hasRedCard());
         while(this.getActivePlayers().length < 11 && availablePlayers.length > 0){
             availablePlayers[0].active = true;
-            availablePlayers = this.getInactivePlayers().filter(p => !p.hasRedCard());
+            availablePlayers = this.getInactiveSortedPlayers().filter(p => !p.hasRedCard());
         }
     }
 

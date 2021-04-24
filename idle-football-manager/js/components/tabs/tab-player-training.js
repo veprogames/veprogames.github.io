@@ -1,4 +1,5 @@
 app.component("tab-player-training", {
+    mixins: [mixinHelp],
     data(){
         return {
             training: game.training
@@ -10,7 +11,15 @@ app.component("tab-player-training", {
         }
     },
     template: `<div class="tab-player-training">
-    <h4 class="big-heading">Players in Training</h4>
+    <transition name="window-grow">
+        <window v-if="helpDialogActive" @closed="hideHelpDialog()">
+            <template v-slot:header><div class="icon-flex"><img src="images/icons/player-training.png"/> Training</div></template>
+            <template v-slot:body><p>Tired of always throwing players out after each season? You can now <b>unleash their potential</b> by training them.</p>
+            <p>Just move them to training from the "Team" tab and <b>select a training</b>. You can also <b>upgrade</b> multiple aspects of training to increase the potential even
+            more.</p></template>
+        </window>
+    </transition>
+    <h4 class="big-heading">Players in Training <button class="help" @click="showHelpDialog()"><img src="images/icons/help.png"/></button></h4>
     <player v-for="(p, i) in training.players" :player="p" :key="i"></player>
     <div v-for="i in training.getMaxPlayers() - training.players.length" class="placeholder"></div>
     <h4 class="big-heading">Training</h4>

@@ -26,6 +26,10 @@ class TVChannel{
         return reward.mul(this.moneyRate).mul(game.tv.upgrades.channelMoney.apply());
     }
 
+    getMoneyMultiplier(){
+        return this.bought ? this.moneyMultiplier : new Decimal(1);
+    }
+
     tick(dt){
         dt = Math.min(1 / 30, dt);
         if(this.matchRunning()){
