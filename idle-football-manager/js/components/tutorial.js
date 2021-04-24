@@ -12,7 +12,7 @@ app.component("tutorial", {
         }
     },
     template: `<div class="tutorial">
-<window-tutorial v-if="stage === 0" @closed="stage++" @tutorialexit="exitTutorial()">
+<window-tutorial v-if="stage === 0" @closed="stage++" @page="stage = $event" @tutorialexit="exitTutorial()">
     <template v-slot:header>
         <div class="icon-flex"><img src="images/icons/help.png"/> Tutorial</div>
     </template>
@@ -24,7 +24,7 @@ app.component("tutorial", {
         <p>You can <b>always restart</b> the Tutorial in the Settings Menu! You can also use it to <b>configure</b> the Game to your needs and to <b>backup your progress</b>.</p>
     </template>
 </window-tutorial>
-<window-tutorial v-if="stage === 1" @closed="stage++" @tutorialexit="exitTutorial()">
+<window-tutorial v-if="stage === 1" @closed="stage++" @page="stage = $event" @tutorialexit="exitTutorial()">
     <template v-slot:header><div class="icon-flex"><img src="images/icons/help.png"/> Your Team</div></template>
     <template v-slot:body><p>You can add up to 11 Players to your Team. The overall strength of your Team is determined by the sum of your
     Players stats. Your Teams strength is multiplied by <b>Synergy</b>.</p>
@@ -37,7 +37,7 @@ app.component("tutorial", {
         <team-logo :logo="logo"></team-logo>
     </template>
 </window-tutorial>
-<window-tutorial v-if="stage === 2" @closed="stage++" @tutorialexit="exitTutorial()">
+<window-tutorial v-if="stage === 2" @closed="stage++" @page="stage = $event" @tutorialexit="exitTutorial()">
     <template v-slot:header><div class="icon-flex"><img src="images/icons/help.png"/> Player Market</div></template>
     <template v-slot:body><p>This is the Place where you can buy <b>new Players</b> for your Team. The more expensive a player is, the more money you have
     to pay.</p>
@@ -46,7 +46,7 @@ app.component("tutorial", {
         <img alt="" src="images/icons/player-market.png"/>
     </template>
 </window-tutorial>
-<window-tutorial v-if="stage === 3" @closed="stage++" @tutorialexit="exitTutorial()">
+<window-tutorial v-if="stage === 3" @closed="stage++" @page="stage = $event" @tutorialexit="exitTutorial()">
     <template v-slot:header><div class="icon-flex"><img src="images/icons/help.png"/> Upgrades</div></template>
     <template v-slot:body><p>Upgrades are bought with Money and let you boost different aspects of the Game. <b>You need to have at least one Player in your Team</b>
     to be able to buy Upgrades.</p></template>
@@ -54,7 +54,7 @@ app.component("tutorial", {
         <img alt="" src="images/icons/upgrades.png"/>
     </template>
 </window-tutorial>
-<window-tutorial v-if="stage === 4" @closed="stage++" @tutorialexit="exitTutorial()">
+<window-tutorial v-if="stage === 4" @closed="stage++" @page="stage = $event" @tutorialexit="exitTutorial()">
     <template v-slot:header><div class="icon-flex"><img src="images/icons/help.png"/> League</div></template>
     <template v-slot:body><p>This is the main part of the Game. Each League has <b>ten divisions</b>, of which each has <b>18 Matchdays</b>.
     At the end of the Season, you can either <b>promote</b> to a higher division (green cells) or <b>relegate</b> to a lower division (red cells).</p>
@@ -63,7 +63,7 @@ app.component("tutorial", {
         <img alt="" src="images/icons/league.png"/>
     </template>
 </window-tutorial>
-<window-tutorial v-if="stage === 5" @closed="stage++" @tutorialexit="exitTutorial()">
+<window-tutorial v-if="stage === 5" @closed="exitTutorial()" @page="stage = $event" @tutorialexit="exitTutorial()">
     <template v-slot:header><div class="icon-flex"><img src="images/icons/help.png"/> Match</div></template>
     <template v-slot:body><p>In the Match tab, you can watch the Game live. <b>Adjust the Speed of the Game</b> to your liking. At the end of a Match,
     you get money based on if you won, drew or lost the game. The <b>reward changes based on the division</b> you are in.</p></template>

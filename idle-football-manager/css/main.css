@@ -255,6 +255,16 @@ p.game-error{
     margin: 1rem 0;
 }
 
+.window-tutorial .navigation{
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.window-tutorial .navigation button{
+    margin: 0 0.5rem;
+}
+
 /*Header*/
 
 header{
