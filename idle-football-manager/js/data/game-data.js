@@ -95,6 +95,9 @@ let game = {
         },
         players: {
             shiftToSell: false
+        },
+        tv: {
+            renderCanvas: true
         }
     }
 };

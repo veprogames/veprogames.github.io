@@ -53,16 +53,24 @@ app.component("tv-channel", {
     computed: {
         canAfford(){
             return game.money.gte(this.channel.price);
+        },
+        renderCanvas(){
+            return game.settings.tv.renderCanvas;
         }
     },
     mounted(){
-        this.ctx = this.$refs.canvas.getContext("2d");
-        requestAnimationFrame(this.render);
+        if(this.renderCanvas){
+            this.ctx = this.$refs.canvas.getContext("2d");
+            requestAnimationFrame(this.render);
+        }
     },
     template: `<div class="card tv-channel">
-<div class="tv">
+<div class="tv" v-if="renderCanvas">
     <canvas ref="canvas" width="240" height="160"></canvas>
     <img alt="" src="images/tv.png"/>
+</div>
+<div class="tv" v-else>
+    <img alt="" src="images/tv-filled.png"/>
 </div>
 <div v-if="!channel.bought">
     Locked <button :disabled="!canAfford" @click="channel.buy()">{{formatNumber(channel.price)}} $</button>

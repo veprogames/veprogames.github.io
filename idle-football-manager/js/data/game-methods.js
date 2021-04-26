@@ -147,6 +147,9 @@ let functions = {
             if(obj.settings.players){
                 game.settings.players.shiftToSell = loadVal(obj.settings.players.shiftToSell, false);
             }
+            if(obj.settings.tv){
+                game.settings.tv.renderCanvas = loadVal(obj.settings.tv.renderCanvas, false);
+            }
             game.settings.term = loadVal(obj.settings.term, "Football");
             if(obj.numberFormatter){
                 let notation = notations.find(n => n.name === obj.numberFormatter);

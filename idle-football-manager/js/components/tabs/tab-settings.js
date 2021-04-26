@@ -49,6 +49,9 @@ app.component("tab-settings", {
     computed: {
         team(){
             return game.team;
+        },
+        tvUnlocked(){
+            return game.tv.isUnlocked();
         }
     },
     template: `<div class="tab-settings">
@@ -69,6 +72,9 @@ app.component("tab-settings", {
         </div>
         <div>
             <label>Hold Shift to sell Players <input type="checkbox" v-model="settings.players.shiftToSell"/></label><br/>
+        </div>
+        <div v-if="tvUnlocked">
+            <label>Render TV Screens (decreases Performance) <input type="checkbox" v-model="settings.tv.renderCanvas"/></label><br/>
         </div>
     </div>
     <button @click="restartTutorial()">Restart Tutorial</button><br/>
