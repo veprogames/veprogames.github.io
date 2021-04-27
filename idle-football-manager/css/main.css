@@ -972,7 +972,21 @@ main{
         font-size: 13px;
     }
 
+    .match{
+        padding: 0.5rem;
+    }
+
+    .match .stats{
+        margin: 0;
+    }
+
     .match-view{
-        bottom: 2rem !important;
+        width: 65% !important;
+        bottom: 0 !important;
+    }
+
+    .window{
+        width: 500px;
+        min-height: 250px;
     }
 }
