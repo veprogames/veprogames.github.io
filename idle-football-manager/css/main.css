@@ -609,6 +609,11 @@ main{
 
 /*Match*/
 
+.match .time button{
+    display: block;
+    margin: auto;
+}
+
 .match .match-view{
     position: absolute;
     bottom: 5rem;
@@ -959,5 +964,15 @@ main{
 @media (max-width: 1279px){
     .team-management .strategies{
         flex-direction: column;
+    }
+}
+
+@media (max-width: 1024px){
+    body, button, input[type="text"], input[type="number"]{
+        font-size: 13px;
+    }
+
+    .match-view{
+        bottom: 2rem !important;
     }
 }
