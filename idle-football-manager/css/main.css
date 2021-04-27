@@ -972,6 +972,13 @@ main{
         font-size: 13px;
     }
 
+    .window{
+        width: 500px;
+        min-height: 250px;
+    }
+}
+
+@media(max-height: 680px){
     .match{
         padding: 0.5rem;
     }
@@ -983,10 +990,5 @@ main{
     .match-view{
         width: 65% !important;
         bottom: 0 !important;
-    }
-
-    .window{
-        width: 500px;
-        min-height: 250px;
     }
 }
