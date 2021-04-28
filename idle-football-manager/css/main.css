@@ -848,7 +848,7 @@ main{
 
 .tab-settings textarea{
     width: 70%;
-    height: 400px;
+    height: 200px;
     resize: none;
     margin-top: 1rem;
 }

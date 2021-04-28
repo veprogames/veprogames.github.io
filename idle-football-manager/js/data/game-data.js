@@ -20,7 +20,7 @@ let game = {
     playerMarket: new PlayerMarket(),
     moneyUpgrades:{
         matchSpeed: new MoneyUpgrade(level => Decimal.pow(3, level).mul(10000),
-            level => 180 * (200 / 180) ** level, {
+            level => 300 * (320 / 300) ** level, {
                 maxLevel: 12
             }),
         //-> 9x money per division, ~11x player price per division
