@@ -80,7 +80,7 @@ let game = {
         new Achievement("Ludicrous Speed", "Turn your Match Speed above x1,000", "images/icons/speed2.png", () => game.settings.match.speed >= 1000),
         new Achievement("U Got God", () => "Have a player with a Training Factor of over " + functions.formatNumber(1e6), "images/icons/player-training-2.png", () => game.team.players.concat(game.training.players).filter(p => p.trainingFactor.gt(1e6)).length > 0),
         new Achievement("The WORLD WORLD is watching", () => "Have a Stadium Capacity of at least " + functions.formatNumber(7.8e9 ** 2) + "<br/><i>imagine We had 7.8 Billion Earths, with 7.8 Billion people each.</i>", "images/icons/stadium.png", () => game.stadium.getCapacity().gte(7.8e9 ** 2)),
-        new Achievement("Around the World", "Enter the 3rd Country", "images/icons/country.png", () => game.country >= 3)
+        new Achievement("Around the World", "Enter the 3rd Country", "images/icons/country.png", () => game.country >= 2)
     ],
     tab: "tab-team",
     settings: {
