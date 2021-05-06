@@ -66,6 +66,7 @@ let functions = {
             });
 
             game.money = loadVal(obj.money, new Decimal(25000));
+            game.maxDivisionRank = loadVal(obj.maxDivisionRank, 0);
             game.country = loadVal(obj.country, 0);
             game.canEnterNextCountry = loadVal(obj.canEnterNextCountry, false);
 

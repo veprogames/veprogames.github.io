@@ -26,7 +26,7 @@ class PlayerTraining{
     }
 
     static get isUnlocked(){
-        return game.team.divisionRank >= 5 || game.country >= 1;
+        return game.maxDivisionRank >= 5 || game.country >= 1;
     }
 
     getMaxPlayers(){

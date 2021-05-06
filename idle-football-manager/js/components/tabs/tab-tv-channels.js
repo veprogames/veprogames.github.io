@@ -6,7 +6,16 @@ app.component("tab-tv-channels", {
             upgrades: game.tv.upgrades
         }
     },
+    methods: {
+        formatNumber: functions.formatNumber
+    },
+    computed: {
+        money(){
+            return game.money;
+        }
+    },
     template: `<div class="tab-tv-channels">
+    <p class="money">You have {{formatNumber(money)}} $</p>
     <transition name="window-grow">
         <window v-if="helpDialogActive" @closed="hideHelpDialog()">
             <template v-slot:header><div class="icon-flex"><img src="images/tv-filled.png"/> TV Channels</div></template>

@@ -5,7 +5,6 @@ class PlayerMarket {
 
     refresh() {
         this.players = [];
-        let rank = game.team.divisionRank;
         let statBase = 16;
         let priceBase = 11;
         let pow = Math.log(priceBase) / Math.log(statBase);

@@ -6,6 +6,6 @@ class Country{
     }
 
     static get isUnlocked(){
-        return game.team.divisionRank >= game.league.divisions.length - 1 || game.country >= 1;
+        return game.maxDivisionRank >= game.league.divisions.length - 1 || game.country >= 1;
     }
 }

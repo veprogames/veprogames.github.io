@@ -8,9 +8,16 @@ app.component("tab-player-training", {
     methods: {
         trainingSelected(t){
             return !t.paused;
+        },
+        formatNumber: functions.formatNumber
+    },
+    computed: {
+        money(){
+            return game.money;
         }
     },
     template: `<div class="tab-player-training">
+    <p class="money">You have {{formatNumber(money)}} $</p>
     <transition name="window-grow">
         <window v-if="helpDialogActive" @closed="hideHelpDialog()">
             <template v-slot:header><div class="icon-flex"><img src="images/icons/player-training.png"/> Training</div></template>

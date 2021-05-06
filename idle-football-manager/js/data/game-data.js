@@ -15,6 +15,7 @@ let game = {
         new Country("Country #3", `It's just an ordinary Country, as ordinary as it can be. There's nothing special about it. They
         <span title="For lack of creativity.">don't even have a unique Name.</span>`, new CountryFlag(["#81ac5c", "#abcdef", "#7e86a7"]))
     ],
+    maxDivisionRank: 0,
     country: 0,
     canEnterNextCountry: false,
     playerMarket: new PlayerMarket(),
@@ -36,7 +37,7 @@ let game = {
     stadium: new Stadium(),
     training: new PlayerTraining(),
     tv: {
-        isUnlocked: () => game.team.divisionRank >= 8 || game.country >= 1,
+        isUnlocked: () => game.maxDivisionRank >= 8 || game.country >= 1,
         channels: [
             new TVChannel("FootForce TV", new Decimal(1e12), 0.25 / 5400, new Decimal(1.5)),
             new TVChannel("GOALUnited", new Decimal(1.777e16), 0.4 / 5400, new Decimal(2)),

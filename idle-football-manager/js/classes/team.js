@@ -25,9 +25,9 @@ class Team {
         let players = [];
         let r = new Random(this.seed);
         let normRank = GeneratorUtils.getNormRank(this.divisionRank, this.country);
-        let minStat = Decimal.pow(16, normRank + r.nextDouble()).mul(2);
-        minStat = minStat.mul(new Decimal(18 / 16).pow(Math.max(0, normRank - 3)).add(1));
-        minStat = minStat.mul(new Decimal(24 / 18).pow(Math.max(0, normRank - 12)).add(1));
+        let minStat = Decimal.pow(16, normRank + r.nextDouble());
+        minStat = minStat.mul(new Decimal(17 / 16).pow(Math.max(0, normRank - 4)).add(1));
+        minStat = minStat.mul(new Decimal(20 / 17).pow(Math.max(0, normRank - 12)).add(1));
         minStat = minStat.mul(new Decimal(1.1).pow(Decimal.pow(1.01, Decimal.max(0, normRank - 50))));
         let maxStat = minStat.mul(1 + 0.5 * r.nextDouble());
         for(let i = 0; i < 11; i++) {

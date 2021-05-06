@@ -21,13 +21,13 @@ class League {
             if(promotingTeams[i]){
                 for(let t of promotingTeams[i]){
                     t.divisionRank++;
-                    this.divisions[i].teams.push(t)
+                    this.divisions[i].teams.push(t);
                 }
             }
             if(relegatingTeams[i]){
                 for(let t of relegatingTeams[i]){
                     t.divisionRank--;
-                    this.divisions[i].teams.push(t)
+                    this.divisions[i].teams.push(t);
                 }
             }
             for(let team of d.teams){
@@ -36,6 +36,7 @@ class League {
             d.matchDay = 0;
         }
         game.currentMatch = undefined;
+        game.maxDivisionRank = Math.max(game.maxDivisionRank, game.team.divisionRank);
         this.simulate();
     }
 }
