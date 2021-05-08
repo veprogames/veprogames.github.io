@@ -18,6 +18,9 @@ app.component("division", {
         },
         selectTeam(team){
             this.$emit("team-selected", team);
+        },
+        isOwnTeam(team){
+            return team === game.team;
         }
     },
     template: `<table class="division">
@@ -32,7 +35,7 @@ app.component("division", {
     <th>GD</th>
     <th>pts</th>
 </thead>
-<tr :class="{promotion: i < promotion, relegation: i > sortedTeams.length - relegation - 1}" v-for="(team, i) in sortedTeams" :key="i">
+<tr :class="{'own-team': isOwnTeam(team), promotion: i < promotion, relegation: i > sortedTeams.length - relegation - 1}" v-for="(team, i) in sortedTeams" :key="i">
     <td class="pos">{{i + 1}}</td>
     <td class="icon-flex team" :title="getStatsDisplay(team)"><team-logo :logo="team.logo"></team-logo> <span @click="selectTeam(team)">{{team.name}}</span></td>
     <td>{{team.getTotalGames()}}</td>
