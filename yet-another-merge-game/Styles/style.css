@@ -1,0 +1,386 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400|Work+Sans:400&display=swap');
+
+body{
+    font-size: 0.8rem;
+    line-height: 0.875rem;
+    background: linear-gradient(180deg, rgb(243, 243, 255), rgb(203, 203, 255));
+    font-family: "Work Sans", Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: "Montserrat", Arial, sans-serif;
+}
+
+button{
+    background-color: gainsboro;
+    border: 3px solid black;
+    font-family: "Montserrat", Arial, sans-serif;
+    font-weight: 500;
+
+    transition: 0.5s;
+}
+
+header{
+    background-color: #009dff;
+    height: 3vh;
+    padding: 0.5em;
+}
+
+header h3{
+    display: inline;
+    margin-right: 4em;
+}
+
+header span {
+    margin-left: 3em;
+    margin-right: 1em;
+    color: aqua;
+}
+
+header a {
+    margin-right: 1em;
+    text-decoration: none;
+    color: aliceblue;
+}
+
+canvas#mergedisplay{
+    width: 98.25%;
+    max-height: 93vh;
+    max-width: 124vh;
+    transition: 0.5s;
+}
+
+canvas#mergedisplay.tabs-shown{
+    max-height: 51vh;
+    max-width: 68vh;
+}
+
+header a:hover{
+    color: aqua;
+}
+
+button:hover:enabled{
+    transform: scale(1.1);
+}
+
+div.game-container.tabs-shown{
+    bottom: 0;
+}
+
+div.game-container{
+    position: fixed;
+    bottom: -41vh;
+    left: 0;
+    height: 45vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: #009dff;
+    transition: 0.5s;
+}
+
+div.game-container-side{
+    position: fixed;
+    left: -20vw;
+    top: 10vh;
+    width: 20vw;
+    height: 35vh;
+    overflow: hidden;
+    background-color: #009dff;
+    transition: 0.5s;
+}
+
+div.game-container-side.tabs-shown{
+    left: 0;
+}
+
+.center{
+    text-align: center;
+}
+
+img.inline{
+    display: inline;
+    width: 1.5em;
+    height: 1.5em;
+    margin-top: -1em;
+    transform: translateY(0.4em);
+}
+
+.title{
+    font-size: 200%;
+    font-weight: bold;
+}
+
+.bigtext{
+    font-size: 150%;
+}
+
+.bigbutton{
+    font-size: 125%;
+    padding: 4px;
+}
+
+#app{
+    height: 100vh;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+button.tab, button.numberformat{
+    margin: 4px;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 0.3em;
+}
+
+button.tab img{
+    width: 100%;
+    height: 100%;
+}
+
+.game-container-side .wrapper{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1rem;
+}
+
+.game-container-side .selected-tab{
+    font-size: 1.3rem;
+    height: 3.3rem;
+    padding-top: 1rem;
+}
+
+.tab-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+button.tab{
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+button.tab:disabled{
+    filter: opacity(0.5);
+}
+
+button.toggle-tabs{
+    font-size: 2vh;
+    width: 4vh;
+    height: 4vh;
+}
+
+.maxupg{
+    font-size: 100%;
+    margin: 8px;
+}
+
+table.upgrades{
+    width: 90%;
+    background-color: rgb(170, 245, 245);
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 6px;
+    margin: auto;
+    margin-top: 16px;
+}
+
+table.upgrades .buy{
+    width: 30%;
+}
+
+table.upgrades .buy button{
+    height: 50%;
+    background-color: aqua;
+    font-size: 150%;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    min-width: 10ch;
+}
+
+table.upgrades .buy button:disabled{
+    background-color: rgb(128, 136, 255);
+    color: black;
+    filter: brightness(0.7);
+}
+
+table.upgrades.prestige{
+    background-color: rgb(255, 195, 255);
+}
+
+table.upgrades.prestige .buy button{
+    background-color: rgb(255, 253, 144);
+}
+
+table.upgrades.isotopes{
+    background-color: rgb(106, 95, 255);
+}
+
+table.upgrades.isotopes .buy button{
+    background-color: rgb(255, 255, 255);
+}
+
+table.upgrades.molecules{
+    background-color: rgb(255, 36, 36);
+}
+
+table.upgrades.molecules .buy button{
+    background-color: rgb(255, 136, 0);
+}
+
+table.upgrades .buy button:disabled{
+    background-color: rgb(255, 140, 140);
+    color: black;
+    filter: brightness(0.7);
+}
+
+.prestige-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 3rem;
+}
+
+table.mergepedia{
+    width: 90%;
+    background-color: rgb(170, 175, 245);
+    border: 4px solid black;
+    border-radius: 10px;
+    font-size: 150%;
+}
+
+.mergepedia .merger-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 0 3rem;
+}
+
+.mergepedia .entry{
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    margin: 4px;
+    width: 10ch;
+    font-size: 90%;
+    overflow: hidden;
+}
+
+
+.mergepedia .entry>span{
+    font-weight: bold;
+    font-family: "Work Sans", Arial, sans-serif;
+    word-break: keep-all;
+    white-space: nowrap;
+}
+
+.mergepedia .entry.reached{
+    background-color: rgba(0, 119, 255, 0.2);
+}
+
+.mergepedia button{
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    margin: 8px;
+    padding: 4px;
+    font-size: 150%;
+    font-weight: bold;
+}
+
+.energycores{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 3rem;
+}
+
+div.energycore{
+    background-color: rgb(255, 255, 175);
+    border: 2px solid black;
+    border-radius: 4px;
+    margin: 8px;
+    padding: 10px;
+    min-width: 10rem;
+    min-height: 13rem;
+}
+
+div.energycore p{
+    margin: 0.5rem 0;
+}
+
+div.energycore > img{
+    width: 5rem;
+    height: 5rem;
+}
+
+div.energycore button{
+    background-color: rgb(255, 213, 135);
+    padding: 0.3rem;
+    font-size: 100%;
+    font-weight: bold;
+}
+
+div.quantumcores{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 0 3rem;
+}
+
+div.processorcore{
+    min-width: 4em;
+    height: 3em;
+    margin: 10px;
+    padding: 4px;
+    font-size: 200%;
+    background: url("../Images/tabs/quantumprocessor.png") center no-repeat;
+    background-size: cover;
+    position: relative;
+    padding-top: 3rem;
+    color: white;
+}
+
+div.processorcore>button{
+    border: none;
+    background-color: #d200d2;
+    width: 100%;
+    font-size: 75%;
+    position: absolute;
+    top: 8rem;
+    left: 0;
+    color: white;
+    padding: 0.5rem;
+}
+
+button.buyprocessor{
+    font-size: 130%;
+}
+
+.moleculeupgrades.production>button{
+    font-size: 110%;
+    background: orange;
+    border: 4px solid black;
+}
+
+.help-container{
+    padding: 0 3rem;
+}
+
+.settings-dropdowns{
+    display: flex;
+    width: 100%;
+    padding: 0 3rem;
+    justify-content: space-around;
+    margin: 1rem 0;
+}

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Yet another Merge Game...</title>
+
+        <link rel="stylesheet" href="Styles/style.css"/>
+        <link id="gamestyle" rel="stylesheet" href="Styles/style.standard.css"/>
+
+        <meta charset="utf-8"/>
+        <meta name="title" content="Merger"/>
+        <meta name="description"
+                content="A Merge Game with various upgrades and prestige."/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+        <meta name="keywords" content="indie, game, idle, incremental, merge, merge game"/>
+        <meta name="url" content="https://cook1eegames.feedia.co/Merger"/>
+        <meta name="og:title" content="Merger"/>
+        <meta name="og:type" content="website"/>
+        <meta name="og:url" content="https://cook1eegames.feedia.co/Merger"/>
+        <meta name="og:description"
+                content="A Merge Game with various upgrades and prestige."/>
+        <meta name="og:image" content="https://cook1eegames.feedia.co/Images/Previews/merger.png"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content="Merger"/>
+        <meta name="twitter:description"
+                content="A Merge Game with various upgrades and prestige."/>
+        <meta name="twitter:image" content="https://cook1eegames.feedia.co/Images/Previews/merger.png"/>
+        <meta name="twitter:site" content="@cook1eegames"/>
+        <meta name="twitter:creator" content="@cook1eegames"/>
+    </head>
+
+    <body>
+
+        <header>
+            <h3>Yet another Merge Game</h3>
+            <span>Social Stuff: </span>
+            <a target="_blank" href="https://discord.gg/75d7Jj5">Discord</a>
+        </header>
+
+        <div id="app">
+            <div class="center">
+                <canvas ref="mergedisplay" id="mergedisplay" width="1024" height="768" :class="{'tabs-shown': settings.tabsShown}"></canvas>
+            </div>
+            <div class="game-container-side" :class="{'tabs-shown': settings.tabsShown}">
+                <div class="wrapper">
+                    <div class="tab-container">
+                        <button class="tab" @mouseover="settings.selectedTab = t[2] ? t[1] : '???'" @mouseout="settings.selectedTab = ''" :disabled="!isTabUnlocked(t)" v-for="t in tabs" @click="settings.currentTab = t[0]; if(t[0] === 'settings') initSettings();">
+                            <img v-if="t[3] !== undefined" :src="'Images/' + t[3]"/>
+                            <span v-else>{{t[1].slice(0, 3)}}</span>
+                        </button>
+                    </div>
+                    <div class="selected-tab">
+                        {{settings.selectedTab}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-container" :class="{'tabs-shown': settings.tabsShown}">
+                <button class="toggle-tabs" @click="settings.tabsShown = !settings.tabsShown">X</button>
+                <span>Click to Hide / Show</span>
+                <button class="maxupg" v-if="prestige.highestQuantumFoam.gt(0)" @click="maxUpgrades(matter, upgrades)">Max All</button>
+                <button class="maxupg" v-if="prestige.highestQuantumFoam.gt(0)" @click="maxUpgrades(prestige.quantumFoam, prestige.upgrades)">Buy Max Quantum Foam Upgrades</button>
+                <div v-if="settings.currentTab === 'upgrades'" class="center">
+                    <table class="upgrades">
+                        <tr v-for="upg in upgrades">
+                            <td>
+                                {{upg.name}} {{upg.level + 1}}
+                            </td>
+                            <td>
+                                {{upg.desc}}<br/>
+                                <b>{{upg.getEffectDisplay()}}</b>
+                            </td>
+                            <td class="buy">
+                                <button :disabled="upg.buttonDisabled()" @click="upg.buy()">{{upg.getPriceDisplay()}}</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="center" v-if="settings.currentTab === 'prestige'">
+                    <div>
+                        <div class="prestige-info">
+                            <button style="font-size: 125%;" :disabled="getQuantumFoam(matterThisPrestige).lte(0)" @click="prestigeGame">Prestige to get
+                                {{formatNumber(getQuantumFoam(matterThisPrestige))}} Quantum Foam<br/>
+                                Each Quantum Foam adds a 1% Boost to Matter produced</button>
+                            <div v-if="getQFMilestoneInfo().nextMilestone !== undefined" style="transform: translateY(-40%);">
+                                Reach <merger style="transform: translate(0, 40%);" :level="getQFMilestoneInfo().nextMilestone[0]"></merger>
+                                to get <span class="title">{{formatNumber(getQFMilestoneInfo().nextMilestone[1], true)}}x</span> more Quantum Foam!
+                            </div>
+                        </div>
+                        <p>You have <span class="title">{{formatNumber(prestige.quantumFoam)}} [{{formatNumber(prestige.bankedQuantumFoam)}}] <img class="inline" src="Images/currencies/quantumfoam.png"/></span> → <span class="title">x{{formatNumber(getQuantumFoamBoost(), 2)}} Matter Production</span></p>
+                        <table class="upgrades prestige">
+                            <tr v-for="upg in prestige.upgrades">
+                                <td>
+                                    {{upg.name}} {{upg.level + 1}}
+                                </td>
+                                <td>
+                                    {{upg.desc}}<br/>
+                                    <b>{{upg.getEffectDisplay()}}</b>
+                                </td>
+                                <td class="buy">
+                                    <button :disabled="upg.buttonDisabled()" @click="upg.buy()">{{upg.getPriceDisplay()}}</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="center" v-if="settings.currentTab === 'mergepedia'">
+                    <div class="mergepedia">
+                        <div class="merger-list">
+                            <div class="center entry" v-for="n in 26" :key="'level' + (n - 1 + mergePediaMinEntry(mergePedia.page))"
+                                 :class="{reached: (n - 2 + mergePediaMinEntry(mergePedia.page)) < highestMergeObjectThisPrestige}"
+                                 v-if="n - 1 + mergePediaMinEntry(mergePedia.page) < mergePediaMaxEntry(mergePedia.page)">
+                                <merger :level="n - 1 + mergePediaMinEntry(mergePedia.page)"></merger><br/>
+                                <span>{{formatNumber(outputForMergeObject(n - 1 + mergePediaMinEntry(mergePedia.page)))}}</span>
+                            </div>
+                        </div><br/>
+                        <button :disabled="mergePedia.page === 0" @click="mergePedia.page = 0">&lt;&lt;</button>
+                        <button :disabled="mergePedia.page === 0" @click="mergePedia.page = Math.max(0, mergePedia.page - 1)">&lt;</button>
+                        <button :disabled="mergePediaOnMaxPage()" @click="mergePedia.page++">&gt;</button>
+                        <button :disabled="mergePediaOnMaxPage()" @click="mergePedia.page = mergePediaMaxPage()">&gt;&gt;</button>
+                    </div>
+                </div>
+                <div class="center" v-if="settings.currentTab === 'energycores'">
+                    <div class="energycores">
+                        <div v-for="core in energyCores">
+                            <div v-if="!core.locked" class="energycore">
+                                <p class="title">{{core.name}} +{{core.level}}</p>
+                                <img :src="'Images/'+core.img"/>
+                                <p>{{core.merges}} / {{core.getNeededMerges(core.level)}}</p>
+                                <p>x{{formatNumber(core.getBoost(core.level), 2)}} → x{{formatNumber(core.getBoost(core.level + 1), 2)}}</p>
+                                <button v-if="!core.isActive" @click="activateEnergyCore(core)">Select</button>
+                            </div>
+                            <div v-else class="energycore">
+                                <p>LOCKED</p>
+                                <button @click="core.buy()">Buy for {{formatNumber(core.price, true)}} <img class="inline" src="Images/currencies/quantumfoam.png"/></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="center" v-if="settings.currentTab === 'quantumprocessor'">
+                    <div class="quantumcores" style="margin-bottom: 3rem;">
+                        <div class="processorcore" v-for="core in quantumProcessor.cores">
+                            <b>x{{formatNumber(core.getCurrentBoost())}}</b>
+                            <button v-if="quantumProcessor.cores.length >= 1" @click="core.upgrade()">{{formatThousands(core.getCurrentPrice())}}<img class="inline" src="Images/currencies/isotopes.png"/></button>
+                        </div>
+                    </div><br/>
+                    Each Quantum Processing Core gives a 25x Boost to Matter produced.
+                    <span v-if="quantumProcessor.cores.length >= 1">
+                        Upgrade Cores by spending Isotopes to increase their boost.
+                        You have <span class="bigtext">{{formatThousands(isotopes.amount)}}<img class="inline" src="Images/currencies/isotopes.png"/></span>
+                    </span><br/>
+                    <button v-if="quantumProcessor.cores.length < 5" class="buyprocessor" @click="buyProcessorCore">Add Core<br/>{{formatNumber(getProcessorCorePrice())}}</button>
+                </div>
+                <div class="center" v-if="settings.currentTab === 'isotopes'">
+                    <p>You have <span class="title">{{formatThousands(isotopes.amount)}}<img class="inline" src="Images/currencies/isotopes.png"/></span></p>
+                    <table class="upgrades isotopes center">
+                        <tr v-for="upg in isotopes.upgrades">
+                            <td>
+                                {{upg.name}} {{upg.level + 1}}
+                            </td>
+                            <td>
+                                {{upg.desc}}<br/>
+                                {{upg.getEffectDisplay()}}
+                            </td>
+                            <td class="buy">
+                                <button @click="upg.buy()">{{upg.getPriceDisplay()}}</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="center" v-if="settings.currentTab === 'molecules' && false">
+                    <div v-if="!molecules.unlocked">
+                        <button class="bigbutton" @click="unlockMolecules">Unlock for {{formatThousands(molecules.unlockPrice)}} <img class="inline" src="Images/currencies/isotopes.png"/></button>
+                    </div>
+                    <div v-else>
+                        <p>You have <span class="title">{{formatNumber(molecules.amount)}}</span> Molecules.</p>
+                        <p>You get <span class="title">{{formatNumber(getMoleculeProduction())}}</span> Molecules every Second</p>
+                        <p class="bigtext">Upgrade your Molecule Income by spending resources</p>
+                        <table style="width: 100%;">
+                            <td class="moleculeupgrades production" v-for="upg in molecules.productionUpgrades">
+                                <button @click="upg.buy()" class="bigbutton">
+                                    {{upg.name}}<br/>
+                                    <span style="font-size: 150%;">x{{formatNumber(upg.getEffect(upg.level))}}</span><br/>
+                                    <span v-if="upg.name === 'Isotopes'">{{formatThousands(upg.getCurrentPrice())}}</span>
+                                    <span v-else>{{upg.getPriceDisplay()}}</span>
+                                </button>
+                            </td>
+                        </table><br/>
+                        <table class="upgrades molecules">
+                            <tr v-for="upg in molecules.upgrades">
+                                <td>
+                                    {{upg.name}} {{upg.level + 1}}
+                                </td>
+                                <td>
+                                    {{upg.desc}}<br/>
+                                    <b>{{upg.getEffectDisplay()}}</b>
+                                </td>
+                                <td class="buy">
+                                    <button :disabled="upg.buttonDisabled()" @click="upg.buy()">{{upg.getPriceDisplay()}}</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="center" v-if="settings.currentTab === 'settings'">
+                    <div class="settings-dropdowns">
+                        <div>
+                            <span class="title">Number Format</span>&nbsp;
+                            <select ref="select_format" @change="settings.currentNotation = notations[$event.target.selectedIndex]; settings.currentNotationIdx = $event.target.selectedIndex">
+                                <option v-for="n in notations">{{n.name}}</option>
+                            </select>&nbsp;
+                        </div>
+                        <div>
+                            <label>Custom Notation: <input type="text" placeholder="Your custom sequence" v-model="settings.customNotationSequence"/></label>
+                            <button @click="setCustomNotation">Apply</button><br/>
+                        </div>
+                        <div>
+                            <span class="title">Style</span>&nbsp;
+                            <select ref="select_style" @change="setStyle(styles[$event.target.selectedIndex][0])">
+                                <option v-for="s in styles">{{s[1]}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label>Resource Overview in Canvas: <input type="checkbox" v-model="settings.topBarShown"/></label><br/>
+                    <span class="title" style="margin: 0.5rem;">Save Management</span><br/><br/>
+                    <textarea rows="3" cols="150" v-model="exportedGame"></textarea><br/><br/>
+                    <button @click="exportGame">Export Game</button> <button @click="importGame">Import Game</button><br/><br/>
+                    <button class="bigbutton" style="background-color: #eb1346" @click="hardResetGame">WIPE ABSOLUTELY EVERYTHING</button>
+                </div>
+
+                <div v-if="settings.currentTab === 'help'">
+                    <div class="center">
+                        <button class="numberformat" v-for="(t, i) in helpTabs" v-if="isHelpTabUnlocked(t)" @click="settings.helpTab = i;">{{t[0]}}</button>
+                    </div>
+                    <div class="help-container">
+                        <div v-if="settings.helpTab === 0">
+                            <h2>Introduction</h2>
+                            <p>
+                                Your goal in this game is to combine Objects "Mergers" to produce as much
+                                Matter as possible. Each Merger produces five times more matter per second than the previous.
+                                Matter can be used on Upgrades that can increase the initial tier Mergers spawn on,
+                                how fast they spawn and how many can be on the screen at once.
+                            </p>
+                        </div>
+                        <div v-if="settings.helpTab === 1">
+                            <h2>Mergepedia</h2>
+                            The Mergepedia gives you an overview over what Mergers you have seen so far.
+                            <span v-if="prestige.count > 0">
+                                Mergers reached in the current
+                                Prestige run are highlighted.
+                            </span>
+                        </div>
+                        <div v-if="settings.helpTab === 2">
+                            <h2>Prestige</h2>
+                            After a certain point, it is harder and harder to Progress and unlock new Mergers.
+                            To solve that Problem, you can Prestige to get Quantum Foam. In that process, you lose
+                            all Progress made so far, but in exchange, each Quantum Foam increases you Matter Production by 1%.
+                            About 100-150 Quantum Foam Are recommended for the first Reset.
+                        </div>
+                        <div v-if="settings.helpTab === 3">
+                            <h2>Prestige Upgrades</h2>
+                            <p>
+                                Quantum Foam can be used on Prestige Upgrades. These can further boost
+                                your matter production, make Mergers move faster, increase the Quantum Foam yield
+                                or give you a headstart.
+                            </p>
+                        </div>
+                        <div v-if="settings.helpTab === 4">
+                            <h2>Energy Cores</h2>
+                            <p>
+                                Energy Cores are another way to boost your matter production. After buying them with
+                                Quantum Foam, you can level them up by selecting them. They gain 1 xp per merge. When they Level up,
+                                their boost to matter production rises.
+                            </p>
+                        </div>
+                        <div v-if="settings.helpTab === 5">
+                            <h2>Quantum Processor</h2>
+                            <p>
+                                The Quantum Processor is a powerful technology that can increase matter production dramatically.
+                                Each Processor Core multiplies matter production by 25.
+                            </p>
+                            <p v-if="quantumProcessor.cores.length >= 1">
+                                You can spend Isotopes to increase the Boost of each individual core. The Boost
+                                increases by 25 each level.
+                            </p>
+                        </div>
+                        <div v-if="settings.helpTab === 6">
+                            <h2>Isotopes</h2>
+                            <p>
+                                When two Mergers collide, there's a chance that they create an Isotope.
+                                These can be used to Upgrade the Chance that you get Isotopes and that 2 Mergers
+                                spawn at once. You can also use them to upgrade Quantum Processor Cores.
+                            </p>
+                        </div>
+                        <div v-if="false">
+                            <h2>Molecules</h2>
+                            <p>
+                                Molecules are a resource than can be used on Upgrades that give general Boosts, for example
+                                boosting Isotopes. Their production is determined based on the amount of merges since the last prestige
+                                and muliplieres that can be invested in by spending different resources.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="Scripts/vue.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/break_infinity.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@antimatter-dimensions/notations"></script>
+        <script type="text/javascript" src="Scripts/adcommunitynotations.js"></script>
+        <script src="Scripts/utils.js"></script>
+        <script src="Scripts/floatingtext.js"></script>
+        <script src="Scripts/mergeobject.js"></script>
+        <script src="Scripts/upgrade.js"></script>
+        <script src="Scripts/energycore.js"></script>
+        <script src="Scripts/processorcore.js"></script>
+        <script src="Scripts/main.js"></script>
+    </body>
+</html>
