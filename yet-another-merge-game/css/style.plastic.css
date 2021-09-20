@@ -1,0 +1,67 @@
+:root {
+    --color-text: black;
+    --color-text-inv: white;
+    --color-text-input: white;
+    --color-bg-top: rgb(121, 184, 255);
+    --color-bg-bottom: rgb(121, 184, 255);
+    --color-bg-input: #005fba;
+    --color-ui: #009dff;
+    --color-ui-fade: #0074c1;
+    --color-table: rgb(170, 245, 245);
+    --color-button: rgb(0, 100, 255);
+    --color-button-secondary: cyan;
+    --color-button-border: black;
+}
+
+body {
+    text-shadow: 1px 1px 2px black;
+}
+
+span, p, button {
+    text-shadow: 1px 1px 2px black;
+}
+
+button {
+    box-shadow: 0 0 0 1px black;
+    text-shadow: none;
+    font-weight: bold;
+    background: linear-gradient(to bottom, rgb(0, 150, 255) 0%, rgb(0, 150, 255) 49%,
+    rgb(0, 100, 255) 51%, rgb(0, 100, 255) 100%);
+}
+
+table.upgrades {
+    background: linear-gradient(to bottom, rgb(0, 255, 220) 0%, rgb(0, 255, 220) 49%,
+    rgb(0, 200, 190) 51%, rgb(0, 200, 190) 100%);
+    border: 3px solid black;
+    border-radius: 16px;
+    box-shadow: 0 0 0 2px white;
+}
+
+.mergepedia .entry {
+    background: linear-gradient(to bottom, rgb(0, 90, 255) 0%, rgb(0, 90, 255) 49%,
+    rgb(0, 30, 255) 51%, rgb(0, 30, 255) 100%);
+    border: 3px solid black;
+    box-shadow: 0 0 0 1px white;
+    color: white;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+.mergepedia .entry.reached {
+    background: linear-gradient(to bottom, rgb(0, 140, 255) 0%, rgb(0, 140, 255) 49%,
+    rgb(0, 110, 255) 51%, rgb(0, 110, 255) 100%);
+}
+
+div.energy-core {
+    background: linear-gradient(to bottom, rgb(255, 255, 0) 0%, rgb(255, 255, 0) 49%,
+    rgb(200, 200, 0) 51%, rgb(200, 200, 0) 100%);
+    border: 3px solid black;
+    box-shadow: 0 0 0 1px white;
+}
+
+.moleculeupgrades.production > button {
+    background: linear-gradient(to bottom, rgb(255, 95, 0) 0%, rgb(255, 95, 0) 49%,
+    rgb(255, 150, 0) 51%, rgb(255, 150, 0) 100%);
+    border: 3px solid black;
+    box-shadow: 0 0 0 1px white;
+}

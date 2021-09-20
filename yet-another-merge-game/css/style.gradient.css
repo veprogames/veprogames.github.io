@@ -1,0 +1,56 @@
+:root {
+    --color-text: black;
+    --color-text-inv: white;
+    --color-text-input: white;
+    --color-bg-top: rgb(220, 220, 255);
+    --color-bg-bottom: rgb(72, 145, 255);
+    --color-bg-input: #0076ec;
+    --color-ui: #009dff;
+    --color-ui-fade: #0074c1;
+    --color-table: rgb(170, 245, 245);
+    --color-button: gainsboro;
+    --color-button-secondary: cyan;
+    --color-button-border: black;
+}
+
+button {
+    background: linear-gradient(180deg, rgb(255, 255, 255), rgb(153, 153, 153));
+    border: 3px solid black;
+}
+
+button:hover:enabled {
+    filter: hue-rotate(45deg);
+}
+
+table.upgrades {
+    background: linear-gradient(180deg, rgb(184, 255, 255), rgb(128, 253, 253));
+}
+
+table.upgrades.prestige {
+    background: linear-gradient(180deg, rgb(255, 225, 255), rgb(255, 131, 255));
+}
+
+table.upgrades.isotopes {
+    background: linear-gradient(180deg, rgb(127, 110, 255), rgb(112, 35, 255));
+}
+
+table.upgrades.molecules {
+    background: linear-gradient(180deg, rgb(255, 0, 0), rgb(184, 0, 0));
+}
+
+table.mergepedia {
+    width: 90%;
+    background: linear-gradient(180deg, rgb(100, 167, 255), rgb(170, 175, 245));
+}
+
+.mergepedia .entry.reached {
+    background-color: rgba(60, 255, 0, 0.2);
+}
+
+div.energy-core {
+    background: radial-gradient(rgb(216, 216, 0), rgb(255, 255, 175));
+}
+
+.moleculeupgrades.production > button {
+    background: linear-gradient(180deg, orange, rgb(255, 238, 0));
+}

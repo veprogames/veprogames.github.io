@@ -1,0 +1,432 @@
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 400;
+    src: url("../fonts/montserrat/Montserrat-Regular.ttf") format("ttf"),
+    url("../fonts/montserrat/Montserrat-Regular.woff") format("woff"),
+    url("../fonts/montserrat/Montserrat-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Work Sans";
+    font-weight: 400;
+    src: url("../fonts/work-sans/WorkSans-Regular.ttf") format("ttf"),
+    url("../fonts/work-sans/WorkSans-Regular.woff") format("woff"),
+    url("../fonts/work-sans/WorkSans-Regular.woff2") format("woff2");
+}
+
+@keyframes glow {
+    0%{
+        filter: brightness(1);
+    }
+    50%{
+        filter: brightness(1.3);
+    }
+    100%{
+        filter: brightness(1);
+    }
+}
+
+:root{
+    --ui-scale: 1;
+}
+
+body, html, input, select, button{
+    font-size: calc(0.8rem * var(--ui-scale));
+}
+
+body {
+    line-height: 0.875rem;
+    background: linear-gradient(to bottom, var(--color-bg-top), var(--color-bg-bottom));
+    font-family: "Work Sans", Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    font-weight: 400;
+}
+
+body, button, div {
+    color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Montserrat", Arial, sans-serif;
+}
+
+button {
+    background-color: var(--color-button);
+    border: 2px solid var(--color-button-border);
+    font-family: "Montserrat", Arial, sans-serif;
+    font-weight: 500;
+
+    transition: transform 0.2s, filter 0.15s;
+    transition-timing-function: cubic-bezier(0.14, 0.35, 0.22, 2.2);
+}
+
+button.locked{
+    filter: opacity(0.5);
+}
+
+button:disabled{
+    filter: opacity(0.5);
+}
+
+button:hover:enabled:not(.locked) {
+    transform: scale(1.05);
+}
+
+button:active:enabled:not(.locked) {
+    transform: scale(1.1);
+}
+
+button.cant-afford, button.hard-reset{
+    background-color: rgb(255, 140, 140);
+    color: black;
+    filter: brightness(0.7);
+}
+
+select, textarea, input[type="text"], option{
+    background-color: var(--color-bg-input);
+    color: var(--color-text-input);
+    border-color: black;
+}
+
+select::placeholder, textarea::placeholder, input[type="text"]::placeholder, option{
+    color: var(--color-text-input);
+    filter: brightness(0.75);
+}
+
+header {
+    background-image: linear-gradient(75deg, var(--color-ui), var(--color-ui-fade));
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    height: 3em;
+}
+
+header > img {
+    display: inline-block;
+    height: 3em;
+    width: auto;
+    margin-right: 4em;
+}
+
+header span {
+    margin-left: 3em;
+    margin-right: 1em;
+    color: aqua;
+}
+
+header a {
+    display: flex;
+    align-items: center;
+    font-size: 2em;
+    text-decoration: none;
+    color: aliceblue;
+}
+
+header a:hover {
+    color: aqua;
+}
+
+header a img {
+    height: 1.5em;
+    margin-right: 0.25em;
+}
+
+.overlay{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.overlay.black{
+    background-color: black;
+}
+
+canvas#mergedisplay {
+    width: 98.25%;
+    max-height: 93vh;
+    max-width: 124vh;
+    transition: 0.5s;
+    transition-timing-function: ease-in-out;
+}
+
+canvas#mergedisplay.tabs-shown {
+    max-height: 51vh;
+    max-width: 68vh;
+}
+
+div.game-container.tabs-shown {
+    bottom: 0;
+}
+
+div.game-container {
+    position: fixed;
+    bottom: -41vh;
+    left: 0;
+    height: 45vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--color-ui);
+    transition: bottom 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+div.game-container-side {
+    position: fixed;
+    top: 8vh;
+    width: 20vw;
+    height: 40vh;
+    overflow: hidden;
+    background-color: var(--color-ui);
+    transition: left 0.3s, right 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+div.game-container-side.left{
+    left: -20vw;
+}
+
+div.game-container-side.right{
+    right: -20vw;
+}
+
+div.game-container-side.left.tabs-shown {
+    left: 0;
+}
+
+div.game-container-side.right.tabs-shown {
+    right: 0;
+}
+
+.key{
+    border: 2px solid black;
+    border-radius: 0.5em;
+    padding: 0.3em;
+    font-size: 80%;
+}
+
+#app {
+    height: 100vh;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+button.tab, button.number-format {
+    margin: 0.25em;
+    font-weight: bold;
+    border: 2px solid var(--color-button-border);
+    border-radius: 0.3em;
+    padding: 0.3em;
+}
+
+button.tab img {
+    width: 100%;
+    height: 100%;
+}
+
+.game-container-side .wrapper {
+    height: 100%;
+    align-items: center;
+    padding: 1rem;
+}
+
+.game-container-side .selected-tab {
+    text-align: center;
+    font-size: 150%;
+    line-height: 1.4em;
+    height: 3.3rem;
+    padding-top: 1rem;
+}
+
+button.tab {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+button.toggle-tabs {
+    font-size: 2vh;
+    width: 4vh;
+    height: 4vh;
+}
+
+.max-upgrades {
+    font-size: 110%;
+    margin: 0.5em;
+}
+
+table.upgrades {
+    width: 95%;
+    background-color: var(--color-table);
+    border: 2px solid black;
+    border-radius: 0.75em;
+    padding: 0.5em;
+    margin: 1em auto auto;
+}
+
+table.upgrades .title {
+    font-size: 140%;
+    text-align: left;
+}
+
+table.upgrades .buy {
+    width: 30%;
+}
+
+table.upgrades .buy button {
+    background-color: var(--color-button-secondary);
+    font-size: 150%;
+    font-weight: bold;
+    border: 2px solid var(--color-button-border);
+    border-radius: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    min-width: 10ch;
+}
+
+table.upgrades.prestige {
+    background-color: rgb(117, 0, 213);
+}
+
+table.upgrades.isotopes {
+    background-color: rgb(106, 95, 255);
+}
+
+table.upgrades.molecules {
+    background-color: rgb(51, 37, 80);
+}
+
+table.upgrades .buy button:disabled {
+    background-color: rgb(255, 140, 140);
+    filter: brightness(0.7);
+}
+
+.merger {
+    width: 6em;
+    height: 6em;
+}
+
+.mergepedia .entry {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 4px solid rgba(0, 0, 0, 0.4);
+    margin: 0.25em;
+    overflow: hidden;
+}
+
+.mergepedia .entry > span {
+    color: var(--color-text-inv);
+    font-weight: bold;
+    font-family: "Work Sans", Arial, sans-serif;
+    word-break: keep-all;
+    white-space: nowrap;
+}
+
+.mergepedia .entry.reached {
+    background-color: rgba(0, 119, 255, 0.2);
+}
+
+.mergepedia button {
+    width: 3em;
+    background-color: var(--color-button);
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 0.25em;
+    margin: 0.5em;
+    padding: 0.25em;
+    font-size: 150%;
+    font-weight: bold;
+}
+
+div.energy-core {
+    background-color: rgb(255, 255, 175);
+    border: 2px solid black;
+    border-radius: 0.25em;
+    margin: 0.5em;
+    padding: 0.5em;
+    min-width: 10rem;
+    min-height: 13rem;
+}
+
+div.energy-core p {
+    margin: 0.5rem 0;
+}
+
+div.energy-core > img {
+    width: 5rem;
+    height: 5rem;
+    animation: glow 3s infinite;
+}
+
+div.energy-core button {
+    background-color: rgb(255, 213, 135);
+    color: black;
+    padding: 0.3rem;
+    font-weight: bold;
+}
+
+div.processor-core {
+    min-width: 4em;
+    height: 5em;
+    margin: 1em;
+    padding: 0.25em;
+    font-size: 200%;
+    background: url("../images/tabs/quantumprocessor.png") center no-repeat;
+    background-size: cover;
+    position: relative;
+    color: white;
+}
+
+div.processor-core > button {
+    border: none;
+    background-color: #d200d2;
+    width: 100%;
+    font-size: 75%;
+    position: absolute;
+    top: 8rem;
+    left: 0;
+    color: white;
+    padding: 0.5rem;
+}
+
+button.buy-processor {
+    font-size: 130%;
+    width: 30%;
+}
+
+.molecule-selection{
+    min-width: 250px;
+    margin-top: -4em;
+}
+
+.molecule-selection > div.selection{
+    width: 100%;
+}
+
+.molecule{
+    background-color: rgb(15, 52, 103);
+    color: white;
+    min-width: 11em;
+    border: 4px solid black;
+    border-radius: 0.5em;
+}
+
+.molecule > img{
+    width: 7em;
+    height: 7em;
+}
+
+.tab-help{
+    line-height: 1.6em;
+}
+
+.tab-settings textarea{
+    max-width: 90%;
+}
+
+.ui-scale{
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    font-size: 16px;
+}

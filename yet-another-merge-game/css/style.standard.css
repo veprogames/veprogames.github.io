@@ -1,0 +1,18 @@
+:root {
+    --color-text: white;
+    --color-text-inv: black;
+    --color-text-input: white;
+    --color-bg-top: rgb(186, 230, 255);
+    --color-bg-bottom: rgb(186, 230, 255);
+    --color-bg-input: #003e80;
+    --color-ui: #005bbd;
+    --color-ui-fade: #003c82;
+    --color-table: #006ad9;
+    --color-button: gainsboro;
+    --color-button-secondary: white;
+    --color-button-border: black;
+}
+
+button, .energy-core{
+    color: var(--color-text-inv);
+}

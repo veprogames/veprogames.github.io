@@ -1,0 +1,62 @@
+:root {
+    --color-text: rgb(180, 180, 180);
+    --color-text-inv: black;
+    --color-text-input: rgb(206, 206, 206);
+    --color-bg-top: black;
+    --color-bg-bottom: black;
+    --color-bg-input: black;
+    --color-ui: black;
+    --color-ui-fade: rgb(31, 31, 31);
+    --color-table: black;
+    --color-button: black;
+    --color-button-secondary: gray;
+    --color-button-border: gray;
+}
+
+canvas#mergedisplay {
+    filter: brightness(0.5);
+}
+
+img[src*="svg"]{
+    filter: invert(1);
+}
+
+button {
+    box-shadow: inset 0 0 5px rgb(255, 255, 255);
+    border: none;
+}
+
+header h3 {
+    color: white;
+}
+
+table.upgrades, table.upgrades.prestige, table.upgrades.isotopes, table.upgrades.molecules {
+    background-color: var(--color-table);
+}
+
+table.upgrades .buy button, table.upgrades.prestige .buy button, table.upgrades.isotopes .buy button, table.upgrades.molecules .buy button {
+    background-color: rgb(0, 0, 0);
+}
+
+table.upgrades .buy button:disabled {
+    color: rgb(90, 90, 90);
+}
+
+.mergepedia .entry {
+    border: 4px solid rgba(199, 248, 255, 0.1);
+}
+
+.mergepedia .entry.reached {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+div.energy-core {
+    background-color: var(--color-ui);
+    color: var(--color-text);
+    box-shadow: inset 0 0 10px rgb(255, 255, 0);
+}
+
+.moleculeupgrades.production > button {
+    background: rgb(104, 104, 104);
+    color: white;
+}

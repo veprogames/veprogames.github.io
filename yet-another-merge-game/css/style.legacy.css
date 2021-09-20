@@ -1,0 +1,43 @@
+:root {
+    --color-text: black;
+    --color-text-inv: white;
+    --color-text-input: white;
+    --color-bg-top: rgb(243, 243, 255);
+    --color-bg-bottom: rgb(203, 203, 255);
+    --color-bg-input: #005d97;
+    --color-ui: #009dff;
+    --color-ui-fade: #0074c1;
+    --color-table: rgb(170, 245, 245);
+    --color-button: gainsboro;
+    --color-button-secondary: cyan;
+    --color-button-border: black;
+}
+
+table.upgrades.prestige {
+    background-color: rgb(255, 195, 255);
+}
+
+table.upgrades.prestige .buy button {
+    background-color: rgb(255, 253, 144);
+}
+
+table.upgrades.isotopes {
+    background-color: rgb(106, 95, 255);
+}
+
+table.upgrades.isotopes .buy button {
+    background-color: rgb(255, 255, 255);
+}
+
+table.upgrades.molecules {
+    background-color: rgb(255, 136, 136);
+}
+
+table.upgrades.molecules .buy button {
+    background-color: rgb(255, 137, 6);
+}
+
+table.upgrades .buy button:disabled {
+    background-color: rgb(255, 140, 140);
+    filter: brightness(0.7);
+}
