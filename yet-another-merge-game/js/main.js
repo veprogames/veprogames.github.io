@@ -44,13 +44,13 @@ function gameInit() {
     }
 
     inputManager.addAction("m", () => {
-        if (game.prestige.count > 0) functions.maxUpgrades(game.matter.amount, game.matter.upgrades);
+        if (game.prestige.hasPrestiged()) functions.maxUpgrades(game.matter.amount, game.matter.upgrades);
     });
     inputManager.addAction("q", () => {
-        if (game.prestige.count > 0) functions.maxUpgrades(game.prestige.quantumFoam, game.prestige.upgrades);
+        if (game.prestige.hasPrestiged()) functions.maxUpgrades(game.prestige.quantumFoam, game.prestige.upgrades);
     });
     inputManager.addAction("e", () => {
-        if (game.prestige.quantumFoam.gte(50000) || !game.energyCores[0].locked) game.energyCores.selectMostEfficientEnergyCore();
+        if (game.energyCores.isUnlocked()) game.energyCores.selectMostEfficientEnergyCore();
     });
     inputManager.addAction("i", () => {
         if (game.isotopes.isUnlocked()) functions.maxUpgrades(game.isotopes.amount, game.isotopes.upgrades);

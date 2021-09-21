@@ -17,7 +17,7 @@ Vue.component("utility-container", {
     },
     computed: {
         canBuyMax() {
-            return game.prestige.count > 0;
+            return game.prestige.hasPrestiged();
         },
         canSelectEnergyCore() {
             return !game.energyCores.cores[0].locked;

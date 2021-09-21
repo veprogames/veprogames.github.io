@@ -61,6 +61,10 @@ class ContentPrestige {
         return game.matter.amountThisPrestige.gt(1e15) || game.prestige.highestQuantumFoam.gt(0);
     }
 
+    hasPrestiged() {
+        return this.count > 0;
+    }
+
     addQuantumFoam(amount) {
         this.quantumFoam = this.quantumFoam.add(amount);
         this.bankedQuantumFoam = this.bankedQuantumFoam.add(amount);
