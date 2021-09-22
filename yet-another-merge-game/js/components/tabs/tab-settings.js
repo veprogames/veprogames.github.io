@@ -92,7 +92,7 @@ Vue.component("tab-settings", {
     </div>
     <label class="text-l ui-scale">UI Scale <input type="range" min="0.5" max="2" step="0.01" v-model.number="settings.uiScale"/></label>
     <span class="title" style="margin: 0.5rem;">Save Management</span><br/>
-    <p class="text-l">Browser Storage isn't the most reliable thing on Earth. And my coding skills neither. Make sure to export frequently!</p>
+    <p class="text-l">Browser Storage isn't the most reliable thing on Earth and Cleaning Tools might intervene. Make sure to export frequently!</p>
     <textarea rows="4" cols="150" v-model="exportedGame"></textarea><br/><br/>
     <button @click="exportGame()">Export Game</button> <button @click="importGame()">Import Game</button><br/><br/>
     <button class="button-l hard-reset" @click="hardResetGame">WIPE ABSOLUTELY EVERYTHING</button>
