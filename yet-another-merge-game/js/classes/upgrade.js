@@ -40,7 +40,7 @@ class Upgrade {
         }
 
         if (this.level === this.maxLevel) return true;
-        return currency.lte(this.getCurrentPrice());
+        return currency.lt(this.getCurrentPrice());
     }
 
     buy() {
