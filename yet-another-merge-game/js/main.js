@@ -27,8 +27,6 @@ function gameInit() {
     w = canvas.width;
     h = canvas.height;
 
-    SaveManager.loadGame();
-
     for (let k of Object.keys(ADNotations)) {
         if (!["BlindNotation", "BarNotation", "CustomNotation", "Notation", "Settings"].includes(k)) {
             let notation = new ADNotations[k]();
@@ -42,6 +40,8 @@ function gameInit() {
             notations.push(new ADCommunityNotations[k]());
         }
     }
+
+    SaveManager.loadGame();
 
     inputManager.addAction("m", () => {
         if (game.prestige.hasPrestiged()) functions.maxUpgrades(game.matter.amount, game.matter.upgrades);

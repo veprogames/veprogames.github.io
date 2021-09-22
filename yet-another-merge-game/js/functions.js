@@ -42,14 +42,6 @@ let functions =
         }
         return functions.formatNumber(n);
     },
-    setCustomNotation() {
-        if (game.settings.customNotationSequence.length >= 2) {
-            game.settings.currentNotation = new ADNotations.CustomNotation(game.settings.customNotationSequence);
-            game.settings.currentNotationIdx = -1;
-        } else {
-            alert("The Sequence must be at least 2 characters long!");
-        }
-    },
     createFloatingText(text, x, y, vy, cfg) {
         game.floatingTexts.push(new FloatingText(text, x, y, vy, cfg));
     },
