@@ -46,6 +46,9 @@ function gameInit() {
     inputManager.addAction("m", () => {
         if (game.prestige.hasPrestiged()) functions.maxUpgrades(game.matter.amount, game.matter.upgrades);
     });
+    inputManager.addAction("p", () => {
+        if (game.prestige.hasPrestiged()) game.prestige.prestige();
+    }, true);
     inputManager.addAction("q", () => {
         if (game.prestige.hasPrestiged()) functions.maxUpgrades(game.prestige.quantumFoam, game.prestige.upgrades);
     });

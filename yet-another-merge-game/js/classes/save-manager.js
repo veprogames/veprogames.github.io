@@ -122,6 +122,7 @@ class SaveManager {
             game.settings.clickParticles = L(obj.settings.clickParticles, true);
             game.settings.tabsShown = L(obj.settings.tabsShown, true);
             game.settings.mergepediaAnimations = L(obj.settings.mergepediaAnimations, true);
+            game.settings.prestigeConfirmation = L(obj.settings.prestigeConfirmation, true);
             game.settings.uiScale = L(obj.settings.uiScale, 1);
             document.querySelector(":root").style.setProperty("--ui-scale", game.settings.uiScale);
             game.highestMergeObject = L(obj.highestMergeObject, 0);

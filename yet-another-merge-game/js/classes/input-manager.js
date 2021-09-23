@@ -6,8 +6,9 @@ class InputManager {
         onkeydown = e => {
             if (!this.keyMap.includes(e.key)) {
                 this.keyMap.push(e.key);
-                for(let action of this.getActions(true)){
+                for (let action of this.getActions(true)) {
                     action.f();
+                    this.keyMap = this.keyMap.filter(k => k !== action.key); //fix funky stuff with alerts
                 }
             }
         }
@@ -22,15 +23,15 @@ class InputManager {
             console.error("callback is not a function");
             return;
         }
-        this.actions[key] = {f, onPressOnly};
+        this.actions[key] = { key, f, onPressOnly };
     }
 
-    getActions(onPressOnly){
+    getActions(onPressOnly) {
         return Object.keys(this.actions).filter(k => this.keyMap.includes(k)).map(k => this.actions[k]).filter(action => action.onPressOnly === onPressOnly);
     }
 
     tick() {
-        for(let action of this.getActions(false)){
+        for (let action of this.getActions(false)) {
             action.f();
         }
         /*for (let k of Object.keys(this.actions)) {

@@ -65,6 +65,26 @@ class ContentPrestige {
         return this.count > 0;
     }
 
+    prestige() {
+        let foamToGet = this.getQuantumFoam();
+
+        if ((foamToGet.gt(0) && !game.settings.prestigeConfirmation)
+            || (foamToGet.gt(0) && confirm("Prestiging will remove bought Matter Upgrades and the current Matter you have. Are you sure?"))) {
+            game.prestige.addQuantumFoam(foamToGet);
+
+            game.mergeObjects = [];
+            game.matter.amount = Upgrade.apply(game.prestige.upgrades.headStart);
+            game.matter.amountThisPrestige = new Decimal(0);
+            game.highestMergeObjectThisPrestige = 0;
+            for (let k of Object.keys(game.matter.upgrades)) {
+                game.matter.upgrades[k].level = 0;
+            }
+
+            this.count++;
+            game.mergesThisPrestige = 0;
+        }
+    }
+
     addQuantumFoam(amount) {
         this.quantumFoam = this.quantumFoam.add(amount);
         this.bankedQuantumFoam = this.bankedQuantumFoam.add(amount);

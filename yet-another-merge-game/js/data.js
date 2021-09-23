@@ -52,6 +52,7 @@ let game =
         clickParticles: true,
         topBarShown: true,
         mergepediaAnimations: true,
+        prestigeConfirmation: true,
         uiScale: 1
     },
     exportedGame: ""

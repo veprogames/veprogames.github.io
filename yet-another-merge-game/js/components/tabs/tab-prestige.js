@@ -6,22 +6,7 @@ Vue.component("tab-prestige", {
     },
     methods: {
         prestigeGame() {
-            let foamToGet = game.prestige.getQuantumFoam();
-
-            if (foamToGet.gt(0) && confirm("Prestiging will remove bought Matter Upgrades and the current Matter you have. Are you sure?")) {
-                game.prestige.addQuantumFoam(foamToGet);
-
-                game.mergeObjects = [];
-                game.matter.amount = Upgrade.apply(game.prestige.upgrades.headStart);
-                game.matter.amountThisPrestige = new Decimal(0);
-                game.highestMergeObjectThisPrestige = 0;
-                for (let k of Object.keys(game.matter.upgrades)) {
-                    game.matter.upgrades[k].level = 0;
-                }
-
-                game.prestige.count++;
-                game.mergesThisPrestige = 0;
-            }
+            game.prestige.prestige();
         }
     },
     computed: {
