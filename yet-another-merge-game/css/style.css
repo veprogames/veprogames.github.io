@@ -430,3 +430,8 @@ button.buy-processor {
     right: 8px;
     font-size: 16px;
 }
+
+.ui-scale input{
+    width: 200px;
+    height: 16px;
+}

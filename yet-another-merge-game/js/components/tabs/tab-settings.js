@@ -91,7 +91,7 @@ Vue.component("tab-settings", {
         <label>Click Particles: <input type="checkbox" v-model="settings.clickParticles"/></label>
         <label>Prestige Confirmation: <input type="checkbox" v-model="settings.prestigeConfirmation"/></label>
     </div>
-    <label class="text-l ui-scale">UI Scale <input type="range" min="0.5" max="2" step="0.01" v-model.number="settings.uiScale"/></label>
+    <label class="text-l flex-center-center ui-scale">UI Scale <input type="range" min="0.5" max="2" step="0.01" v-model.number="settings.uiScale"/></label>
     <span class="title" style="margin: 0.5rem;">Save Management</span><br/>
     <p class="text-l">Browser Storage isn't the most reliable thing on Earth and Cleaning Tools might intervene. Make sure to export frequently!</p>
     <textarea rows="4" cols="150" v-model="exportedGame"></textarea><br/><br/>
