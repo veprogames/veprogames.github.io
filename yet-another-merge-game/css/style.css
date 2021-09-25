@@ -426,9 +426,11 @@ button.buy-processor {
 
 .ui-scale{
     position: fixed;
-    bottom: 8px;
-    right: 8px;
+    bottom: 0;
+    right: 0;
     font-size: 16px;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .ui-scale input{
