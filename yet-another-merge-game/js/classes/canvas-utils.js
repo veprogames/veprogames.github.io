@@ -81,8 +81,8 @@ class CanvasUtils {
         }
         else { //assume image
             let px = Utils.clamp(progress, 0, 1) * foreground.width;
-            px = Math.min(px, foreground.width - 1); //prevent error on certain browsers?
-            ctx.drawImage(images.progress, 0, 0, px, foreground.height - 1, //crop (0, 0, progress, height) of image
+            px = Utils.clamp(px, 1, foreground.width - 1); //prevent error on certain browsers?
+            ctx.drawImage(images.progress, 0, 0, px, foreground.height, //crop (0, 0, progress, height) of image
                 x, y, imageWidth, h); //draw image
         }
     }
