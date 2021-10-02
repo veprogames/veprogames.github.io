@@ -13,7 +13,7 @@ class GameArena extends GameObject {
             1633190400000, 1633968000000);
         this.emitters = [];
         for (let i = 0; i < 8; i++) {
-            this.emitters.push(new ArenaEmitter(x, y, 0.09, mainColor, size / 2, 1, i / 8))
+            this.emitters.push(new ArenaEmitter(x, y, 0.09, mainColor, size / 2 + 0.045, 1, i / 8))
         }
     }
 
