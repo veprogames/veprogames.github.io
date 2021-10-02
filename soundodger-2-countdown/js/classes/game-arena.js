@@ -10,7 +10,7 @@ class GameArena extends GameObject {
         this.arena = new Arena(x, y, size, mainColor);
         this.player = new Player(x, y, 0.03, mainColor, size / 2);
         this.scoreCircle = new ScoreCircleTimed(x, y, size, circleColor, mainColor,
-            Date.parse("2021-10-02 18:00 UTC+2"), Date.parse("2021-10-11 9:00 PST"));
+            Date.parse("2021-10-02 18:00 UTC+2"), Date.parse("2021-10-11 8:00 PST"));
         this.emitters = [];
         for (let i = 0; i < 8; i++) {
             this.emitters.push(new ArenaEmitter(x, y, 0.09, mainColor, size / 2, 1, i / 8))
@@ -28,7 +28,7 @@ class GameArena extends GameObject {
     }
 
     render(ctx) {
-        ctx.drawImage(this.logo, W * (.5 - .1), H * (.25 - .07 / 2), W * .2, H * .13);
+        ctx.drawImage(this.logo, W * .5 - H * .125, H * (.25 - .07 / 2), H * .25, H * .13);
 
         ctx.fillStyle = "#404040";
         ctx.font = "bold " + (H * 0.06) + "px Helvetica, sans-serif";
