@@ -7,7 +7,9 @@ const mouse = new MouseManager();
 
 let date = Date.now();
 
-const objects = [new GameArena(0, 0, 0.7, { main: "#800000", circle: "#80000030" })];
+const gameArena = new GameArena(0, 0, 0.7, { main: "#800000", circle: "#80000030" });
+
+const objects = [gameArena];
 
 function resizeCanvas() {
     canvas.width = innerWidth * 2;
@@ -32,6 +34,8 @@ function update() {
         obj.tick(dt);
         obj.render(ctx);
     }
+
+    document.title = "Soundodger 2 in " + Utils.formatTime(gameArena.scoreCircle.getRemainingSec());
 
     requestAnimationFrame(update);
 }
