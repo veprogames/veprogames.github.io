@@ -28,6 +28,11 @@ class GameArena extends GameObject {
     }
 
     render(ctx) {
+        //render player last due to layering
+        for (let obj of this.getObjects().filter(obj => obj !== this.player)) {
+            obj.render(ctx);
+        }
+
         ctx.drawImage(this.logo, W * .5 - H * .125, H * (.25 - .07 / 2), H * .25, H * .13);
 
         ctx.fillStyle = "#404040";
@@ -36,8 +41,6 @@ class GameArena extends GameObject {
         ctx.textBaseline = "middle";
         ctx.fillText(Utils.formatTime(this.scoreCircle.getRemainingSec()), W * .5, H * .4);
 
-        for (let obj of this.getObjects()) {
-            obj.render(ctx);
-        }
+        this.player.render(ctx);
     }
 }
