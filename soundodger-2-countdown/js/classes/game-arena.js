@@ -10,7 +10,7 @@ class GameArena extends GameObject {
         this.arena = new Arena(x, y, size, mainColor);
         this.player = new Player(x, y, 0.03, mainColor, size / 2);
         this.scoreCircle = new ScoreCircleTimed(x, y, size, circleColor, mainColor,
-            Date.parse("2021-10-02 18:00 UTC+2"), Date.parse("2021-10-11 8:00 PST"));
+            1633190400000, 1633968000000);
         this.emitters = [];
         for (let i = 0; i < 8; i++) {
             this.emitters.push(new ArenaEmitter(x, y, 0.09, mainColor, size / 2, 1, i / 8))
