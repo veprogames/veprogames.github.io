@@ -5,8 +5,12 @@ class GameObject {
         this.t = 0;
     }
 
-    toScreen() {
-        return { x: (this.x + .5 * W / H) * H, y: (-this.y + .5) * H } //base on H, center is (0, 0)
+    toScreen(x, y) {
+        return GameObject.toScreen(this.x, this.y);
+    }
+
+    static toScreen(x2, y2) {
+        return { x: (x2 + .5 * W / H) * H, y: (-y2 + .5) * H } //base on H, center is (0, 0)
     }
 
     tick(dt) {

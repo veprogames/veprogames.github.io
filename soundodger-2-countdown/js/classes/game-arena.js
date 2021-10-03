@@ -21,9 +21,19 @@ class GameArena extends GameObject {
         return [this.arena, this.scoreCircle, this.player, ...this.emitters];
     }
 
+    setEmitterSpeedSmooth(speed) {
+        for (let e of this.emitters) {
+            e.setSpeedSmooth(speed);
+        }
+    }
+
     tick(dt) {
         for (let obj of this.getObjects()) {
             obj.tick(dt);
+        }
+
+        if (Math.random() < dt * 0.1) {
+            this.setEmitterSpeedSmooth(-5 + 10 * Math.random());
         }
     }
 
@@ -42,5 +52,13 @@ class GameArena extends GameObject {
         ctx.fillText(Utils.formatTime(this.scoreCircle.getRemainingSec()), W * .5, H * .4);
 
         this.player.render(ctx);
+
+
+        ctx.fillStyle = "#ff8000";
+        ctx.font = (H * 0.05) + "px 'Century Gothic', sans-serif";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "bottom";
+        ctx.fillText("Anticipation", W * .01, H * .93);
+        ctx.fillText("Countdown by: VeproGames", W * .01, H * .99);
     }
 }
