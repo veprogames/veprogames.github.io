@@ -7,6 +7,6 @@ class Emitter extends GameObject {
 
     render(ctx) {
         let { x, y } = this.toScreen();
-        CanvasUtils.circle(ctx, x, y, this.size / 2 * H, 0.0025 * H, "white", this.color);
+        CanvasUtils.circle(ctx, x, y, this.size / 2 * H, 0.005 * H, "white", this.color);
     }
 }

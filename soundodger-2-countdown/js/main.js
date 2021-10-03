@@ -7,7 +7,7 @@ const mouse = new MouseManager();
 
 let date = Date.now();
 
-const gameArena = new GameArena(0, 0, 0.7, { main: "#800000", circle: "#80000030" });
+const gameArena = new GameArena(0, 0, 0.7, { main: "#ff8000", circle: "#0080ff30" });
 
 const objects = [gameArena];
 

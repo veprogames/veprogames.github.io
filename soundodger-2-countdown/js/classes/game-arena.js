@@ -35,8 +35,8 @@ class GameArena extends GameObject {
 
         ctx.drawImage(this.logo, W * .5 - H * .125, H * (.25 - .07 / 2), H * .25, H * .13);
 
-        ctx.fillStyle = "#404040";
-        ctx.font = "bold " + (H * 0.06) + "px Helvetica, sans-serif";
+        ctx.fillStyle = "#a04000";
+        ctx.font = "bold " + (H * 0.06) + "px 'Century Gothic', sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(Utils.formatTime(this.scoreCircle.getRemainingSec()), W * .5, H * .4);
