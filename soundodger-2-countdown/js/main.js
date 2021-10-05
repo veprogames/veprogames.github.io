@@ -35,7 +35,9 @@ function update() {
         obj.render(ctx);
     }
 
-    document.title = "Soundodger 2 in " + Utils.formatTime(gameArena.scoreCircle.getRemainingSec());
+    let remaining = gameArena.scoreCircle.getRemainingSec();
+    let title = remaining >= 0 ? "Soundodger 2 in " + Utils.formatTime(remaining) : "Soundodger 2 is OUT!";
+    document.title = title;
 
     requestAnimationFrame(update);
 }
