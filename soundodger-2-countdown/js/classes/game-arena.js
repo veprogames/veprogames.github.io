@@ -132,7 +132,7 @@ class GameArena extends GameObject {
             ctx.font = (H * 0.03) + "px 'Century Gothic', sans-serif";
             ctx.textAlign = "right";
             ctx.textBaseline = "top";
-            ctx.fillText(this.getFactText(this.fact), W * .99, H * .01);
+            ctx.fillText(this.getFactText(this.fact), W * .99, H * .01, W * 0.8);
         }
     }
 }
