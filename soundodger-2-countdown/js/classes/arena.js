@@ -10,10 +10,10 @@ class Arena extends GameObject {
         ctx.strokeStyle = this.color;
         let { x, y } = this.toScreen();
 
-        let c1 = this.size / 2 * 1.44 ** (this.t % 0.5);
+        let c1 = this.size / 10 * 1.96 ** (this.t % 0.5);
 
-        for (let c = c1; c < 2; c *= 1.2) {
-            CanvasUtils.circle(ctx, x, y, c * H, this.border * .5 * H, "transparent", this.color);
+        for (let c = c1; c < 2; c *= 1.4) {
+            CanvasUtils.circle(ctx, x, y, (this.size / 2 - this.size / 10 + c) * H, this.border * .75 * H, "transparent", this.color);
         }
 
         CanvasUtils.circle(ctx, x, y, this.size / 2 * H, this.border * H, "transparent", this.color);

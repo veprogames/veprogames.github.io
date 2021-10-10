@@ -99,7 +99,7 @@ class GameArena extends GameObject {
                 obj.render(ctx);
             }
 
-            let period = Math.PI;
+            let period = Math.PI * 150 / 120; // 150 BPM (Attract Mode)
             CanvasUtils.image(ctx, this.logo, W * .5, H * .275, H * .25, H * .14,
                 Math.sin(this.t * period) * .1, 1, 1 + Math.abs(Math.sin(this.t * period * 2)) * .2);
 
