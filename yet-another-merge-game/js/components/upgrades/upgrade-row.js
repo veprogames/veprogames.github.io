@@ -8,8 +8,8 @@ Vue.component("upgrade-row", {
         {{upgrade.desc}}<br/>
         <b>{{upgrade.getEffectDisplay()}}</b>
     </td>
-    <td class="buy">
-        <button :disabled="upgrade.buttonDisabled()" @click="upgrade.buy()">{{upgrade.getPriceDisplay()}}</button>
+    <td>
+        <button class="buy" :disabled="upgrade.buttonDisabled()" @click="upgrade.buy()">{{upgrade.getPriceDisplay()}}</button>
     </td>
 </tr>`
 });

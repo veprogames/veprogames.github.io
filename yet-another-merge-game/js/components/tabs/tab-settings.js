@@ -6,11 +6,8 @@ Vue.component("tab-settings", {
             styles:
                 [
                     ["standard", "Standard"],
-                    ["legacy", "Legacy"],
-                    ["gradient", "Gradient"],
                     ["dark", "Dark"],
-                    ["amoled", "AMOLED"],
-                    ["plastic", "Plastic"]
+                    ["amoled", "AMOLED"]
                 ],
             exportedGame: ""
         }
@@ -29,8 +26,16 @@ Vue.component("tab-settings", {
             }
         },
         setStyle(name) {
-            document.querySelector("#gamestyle").href = "css/style." + name + ".css";
-            game.currentStyle = name;
+            functions.setStyle(name);
+        },
+        openWindow() {
+            VueUtils.createComponent(SaveManagerWindow);
+        },
+        openSupport() {
+            VueUtils.createComponent(SupportWindow);
+        },
+        openCredits() {
+            VueUtils.createComponent(CreditsWindowComponent);
         },
         exportGame() {
             this.exportedGame = SaveManager.getSaveCode();
@@ -40,62 +45,44 @@ Vue.component("tab-settings", {
             if (code !== null) {
                 SaveManager.loadGame(code);
             }
-        },
-        hardResetGame() {
-            if (confirm("Do you REALLY want to reset absolutely everything you have reached so far")) {
-                for (let i = 3; i > 0; i--) {
-                    if (!confirm("Click " + i.toFixed(0) + " more times to confirm")) {
-                        return;
-                    }
-                }
-
-                SaveManager.loadGame(initialGame);
-                SaveManager.saveGame();
-            }
         }
     },
     mounted() {
         this.$refs.select_format.selectedIndex = game.settings.currentNotationIdx !== -1 ? game.settings.currentNotationIdx : 0;
-        this.$refs.select_style.selectedIndex = this.styles.findIndex(s => s[0] === game.currentStyle);
     },
-    watch: {
-        "settings.uiScale": v => {
-            document.querySelector(":root").style.setProperty("--ui-scale", v);
-        }
-    },
-    template: `<div class="tab-settings center">
-    <div class="settings-dropdowns flex-around margin-v-l">
-        <div>
+    template: `<div class="tab-settings">
+    <div class="flex-around margin-v-l flex-wrap">
+        <div class="flex-vertical flex-gap">
             <label class="title">Number Format
                 <select ref="select_format" @change="setNotation($event.target.selectedIndex)">
                     <option v-for="n in notations">{{n.name}}</option>
                 </select>
             </label>
+            <div>
+                <label>Custom Notation: <input type="text" placeholder="Your custom sequence" v-model="settings.customNotationSequence"/></label>
+                <button @click="setCustomNotation()">Apply</button><br/>
+            </div>
         </div>
-        <div>
-            <label>Custom Notation: <input type="text" placeholder="Your custom sequence" v-model="settings.customNotationSequence"/></label>
-            <button @click="setCustomNotation()">Apply</button><br/>
-        </div>
-        <div>
-            <label class="title">Style
-                <select ref="select_style" @change="setStyle(styles[$event.target.selectedIndex][0])">
-                    <option v-for="s in styles">{{s[1]}}</option>
-                </select>
-            </label>
+        <div class="flex-center-center flex-vertical">
+            <p class="title">Style</p>
+            <div class="flex-center flex-wrap">
+                <button class="button-xl margin" v-for="s in styles" @click="setStyle(s[0])">{{s[1]}}</button>
+            </div>
         </div>
     </div>
-    <div class="flex-center-center flex-gap margin-l">
-        <span class="title">Options</span>
-        <label>Resource Overview in Canvas: <input type="checkbox" v-model="settings.topBarShown"/></label>
-        <label>Animations in Mergepedia: <input type="checkbox" v-model="settings.mergepediaAnimations"/></label>
-        <label>Click Particles: <input type="checkbox" v-model="settings.clickParticles"/></label>
-        <label>Prestige Confirmation: <input type="checkbox" v-model="settings.prestigeConfirmation"/></label>
+    <div class="flex-center-center flex-wrap flex-gap margin-l">
+        <ui-toggle v-model="settings.topBarShown">Resource Overview in Canvas</ui-toggle>
+        <ui-toggle v-model="settings.mergepediaAnimations">Mergepedia Animations</ui-toggle>
+        <ui-toggle v-model="settings.clickParticles">Click Particles</ui-toggle>
+        <ui-toggle v-model="settings.prestigeConfirmation">Prestige Confirmation</ui-toggle>
     </div>
-    <label class="text-l flex-center-center ui-scale">UI Scale <input type="range" min="0.5" max="2" step="0.01" v-model.number="settings.uiScale"/></label>
-    <span class="title" style="margin: 0.5rem;">Save Management</span><br/>
-    <p class="text-l">Browser Storage isn't the most reliable thing on Earth and Cleaning Tools might intervene. Make sure to export frequently!</p>
-    <textarea rows="4" cols="150" v-model="exportedGame"></textarea><br/><br/>
-    <button @click="exportGame()">Export Game</button> <button @click="importGame()">Import Game</button><br/><br/>
-    <button class="button-l hard-reset" @click="hardResetGame">WIPE ABSOLUTELY EVERYTHING</button>
+    <div class="flex-center-center">
+        <button @click="openWindow()" class="button-xl" style="margin: 0.5rem;">Save Management</button>
+        <p class="text-l">The Game auto-saves.<br/>Browser Storage isn't the most reliable thing on Earth and Cleaning Tools might intervene. Make sure to export frequently!</p>
+    </div>
+    <div class="footer flex-between padding-h-xl">
+        <button class="support" @click="openSupport()">Support Me ♥</button>
+        <button @click="openCredits()">Credits</button>
+    </div>
 </div>`
 });

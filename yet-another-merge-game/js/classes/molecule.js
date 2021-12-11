@@ -22,9 +22,7 @@ class Molecule {
 
     //includes any upgrade effects
     getMergesNeeded() {
-        let totalLvls = game.molecules.getTotalUpgradeLevels();
-        let reduction = 0.99 ** Math.min(100, totalLvls) / (1 + 0.0001 * Math.max(0, totalLvls - 100));
-        return Math.round(this.baseMergesNeeded * reduction);
+        return Math.round(this.baseMergesNeeded * game.molecules.getMergeReduction());
     }
 
     getPower() {

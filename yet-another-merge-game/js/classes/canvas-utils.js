@@ -38,7 +38,7 @@ class CanvasUtils {
                 energyCores: await loadImage("images/tabs/energycores.png"),
                 quantumProcessor: await loadImage("images/tabs/quantumprocessor.png"),
                 isotopes: await loadImage("images/currencies/isotopes.png"),
-                molecules: await loadImage("images/tabs/molecules.png")
+                molecules: await loadImage("images/currencies/molecules.png")
             },
             particles: {
                 speed: await loadImage("images/particles/speed.png")

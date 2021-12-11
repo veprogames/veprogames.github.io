@@ -3,7 +3,7 @@ class ContentMatter {
         this.amount = new Decimal(0);
         this.amountThisPrestige = new Decimal(0);
         this.upgrades = {
-            fasterSpawn: new Upgrade("Faster Spawn", "Mergers spawn faster",
+            fasterSpawn: new Upgrade("Faster Spawn", "The cooldown Between Merges spawning is reduced.",
                 level => {
                     let priceMult = level > 35 ? Decimal.pow(3, Math.pow(level - 35, 1.5)) : new Decimal(1);
                     return new Decimal(1e3).mul(Decimal.pow(3, Math.pow(level, 1.1))).mul(priceMult);
@@ -14,10 +14,10 @@ class ContentMatter {
                         .mul(Upgrade.apply(game.isotopes.upgrades.spawnSpeed));
                 },
                 {
-                    getEffectDisplay: effectDisplayTemplates.numberStandard("", "s", 2)
+                    getEffectDisplay: effectDisplayTemplates.time()
                 }
             ),
-            betterObjects: new Upgrade("Better Mergers", "Mergers spawn one Tier higher",
+            betterObjects: new Upgrade("Better Mergers", "Mergers spawn one Tier higher. After Upgrading, Mergers with a low Level get upgraded.",
                 level => {
                     let prices = [10e3, 50e3, 250e3, 1.5e6, 7.5e6, 35e6, 200e6, 1e9, 6e9, 33e9, 150e9, 750e9, 4e12, 20e12, 125e12, 500e12, 1e15];
                     if (level < prices.length) {
@@ -36,8 +36,8 @@ class ContentMatter {
                 },
                 {
                     getEffectDisplay: function () {
-                        return "#" + functions.formatNumber(this.level + 1, 0, 0, 1e6) + " → " +
-                            "#" + functions.formatNumber(this.level + 2, 0, 0, 1e6);
+                        return "#" + functions.formatNumber(this.level + 1, 3, 0, 1e6) + " → " +
+                            "#" + functions.formatNumber(this.level + 2, 3, 0, 1e6);
                     },
                     onBuy: level => {
                         for (let obj of game.mergeObjects) {
@@ -50,7 +50,7 @@ class ContentMatter {
                         game.highestMergeObject = Math.max(game.highestMergeObject, level);
                     }
                 }),
-            maxObjects: new Upgrade("Max Objects", "Increase the Max Amount of Objects",
+            maxObjects: new Upgrade("Max Objects", "Increase the Max Amount of Mergers that can be on screen at once.",
                 level => {
                     return (new Decimal(1e7).mul(Decimal.pow(10, level * level + level * 3))).pow(Decimal.pow(1.1, Math.max(level - 16, 0)));
                 },
@@ -61,7 +61,7 @@ class ContentMatter {
                     getEffectDisplay: effectDisplayTemplates.numberStandard("", "", 0),
                     maxLevel: 43
                 }),
-            matterOnMerge: new Upgrade("Matter on Merge", "Increase the Chance of getting bonus matter on Merge. (2 seconds of income)",
+            matterOnMerge: new Upgrade("Matter on Merge", "Increase the Chance of getting 2 Seconds of your total Matter per Second on Merge.",
                 level => new Decimal(1e18).mul(Decimal.pow(3e3, level)),
                 level => new Decimal(0.02 * level),
                 {

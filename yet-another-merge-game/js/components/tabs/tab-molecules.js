@@ -34,36 +34,23 @@ Vue.component("tab-molecules", {
         },
         nextMoleculeCost() {
             return !this.isLastMolecule ? this.molecules.molecules[this.moleculeIndex + 1].moleculesNeeded : new Decimal(0);
-        },
-        moleculePower() {
-            return game.molecules.getMoleculePower();
         }
     },
     template: `<div class="tab-molecules center">
-    <p>You have <span class="title">{{molecules.amount | fnum}} <img class="icon" alt="Molecules" src="images/tabs/molecules.png"/></span></p>
-    <div class="flex-center padding-h-xxl">
-        <div class="molecule-selection flex-around flex-center-v flex-vertical margin">
-            <div class="selection flex-around flex-center-v padding-v">    
-                <button @click="prevMolecule()" v-if="!isFirstMolecule" class="with-icon button-xl">
-                    <img src="images/icons/back.svg"></img>
-                </button>
-                <span v-else></span>
-                <button @click="nextMolecule()" v-if="nextMoleculeUnlocked" class="with-icon button-xl">
-                    <img src="images/icons/forward.svg"></img>
-                </button>
-                <span v-else-if="!isLastMolecule">🔒 {{nextMoleculeCost | fnum}} <img class="icon" alt="Molecules" src="images/tabs/molecules.png"/></span>
-                <span v-else></span>
-            </div>
+    <div class="flex-center flex-vertical">
+        <div class="flex-evenly flex-center-v gap-l">
+            <button @click="prevMolecule()" :disabled="isFirstMolecule" class="button-xxl">
+                <i class="fas fa-angle-left"></i>
+            </button>
             <molecule :molecule="molecules.currentMolecule"></molecule>
+            <button @click="nextMolecule()" v-if="nextMoleculeUnlocked" class="button-xxl">
+                <i class="fas fa-angle-right"></i>
+            </button>
+            <button disabled v-else-if="!isLastMolecule" class="text-xl">🔒<br/>{{nextMoleculeCost | fnum}} <img class="icon" alt="Molecules" src="images/currencies/molecules.png"/></button>
         </div>
-        <table class="upgrades molecules margin">
-            <tr>
-                <th>Each Upgrade multiplies the Merges needed per Molecule Level by x0.99 (softcapped)</th>
-                <th></th>
-                <th>Each Molecule Level adds +^0.0001 (max ^10) to its power, affecting all Molecules (multiplied together).<br/> Currently: ^{{moleculePower | fnum(2, 4)}}</th>
-            </tr>
-            <upgrade-row v-for="(upg, i) in molecules.upgrades" :key="i" :upgrade="upg"></upgrade-row>
-        </table>
+        <div class="upgrade-container">
+            <upgrade-molecule v-for="(u, i) in molecules.upgrades" :upgrade="u" :key="i"></upgrade-molecule>
+        </div>
     </div>
 </div>`
 });

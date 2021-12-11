@@ -6,21 +6,17 @@ Vue.component("tab-prestige", {
     },
     methods: {
         prestigeGame() {
-            game.prestige.prestige();
+            if (game.settings.prestigeConfirmation) {
+                VueUtils.createComponent(PrestigeWindowComponent);
+            }
+            else {
+                game.prestige.prestige();
+            }
         }
     },
     computed: {
-        quantumFoam() {
-            return game.prestige.quantumFoam;
-        },
-        bankedQuantumFoam() {
-            return game.prestige.bankedQuantumFoam;
-        },
         pendingFoam() {
             return game.prestige.getQuantumFoam();
-        },
-        foamBoost() {
-            return game.prestige.getQuantumFoamBoost();
         },
         nextMilestone() {
             return game.prestige.getQFMilestoneInfo().nextMilestone;
@@ -34,20 +30,17 @@ Vue.component("tab-prestige", {
     },
     template: `<div class="center">
     <div>
-        <div class="flex-between flex-center-v padding-h-xxl">
-            <button style="font-size: 125%;" :disabled="pendingFoam.lte(0)" @click="prestigeGame()">Prestige to get
-                <span class="text-xl">{{pendingFoam | fnum}}</span> Quantum Foam<br/>
-                Each Quantum Foam adds a 1% Boost to Matter produced</button>
+        <div class="flex-evenly flex-center-v padding-h-xxl margin">
+            <button class="text-l flex-center-center" :disabled="pendingFoam.lte(0)" @click="prestigeGame()">Prestige: 
+                <span class="with-icon text-xl"><img src="images/currencies/quantumfoam.png" alt="Quantum Foam: " />+{{pendingFoam | fnum}}</span></button>
             <div v-if="nextMilestone !== undefined" style="transform: translateY(-40%);">
                 Reach <merger style="transform: translate(0, 40%);" :level="nextMilestoneLevel"></merger>
                 to get <span class="title">{{nextMilestoneBoost | fnum(1, 1)}}x</span> more Quantum Foam!
             </div>
         </div>
-        <p>You have <span class="title">{{quantumFoam | fnum}} [{{bankedQuantumFoam | fnum}}] <img alt="Quantum Foam" class="icon" src="images/currencies/quantumfoam.png"/></span> 
-            → <span class="title">x{{foamBoost | fnum}} Matter Production</span></p>
-        <table class="upgrades prestige">
-            <upgrade-row v-for="(upg, i) in upgrades" :key="i" :upgrade="upg"></upgrade-row>
-        </table>
+        <div class="upgrade-container">
+            <upgrade-quantum-foam v-for="(upg, i) in upgrades" :key="i" :upgrade="upg"></upgrade-quantum-foam>
+        </div>
     </div>
 </div>`
 });

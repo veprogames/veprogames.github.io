@@ -10,6 +10,7 @@ let app;
 
 onload = e => {
     document.body.removeChild(document.getElementById("loading"));
+    ADNotations.Settings.exponentCommas.min = 1000;
     app = new Vue(
         {
             el: "#app",
@@ -166,6 +167,7 @@ function gameUpdate() {
     let baseHeight = h * 0.07;
     let barColor = gameBackground.getTopBarColor();
     let fontColor = gameBackground.getFontColor();
+    let fontFamily = CanvasUtils.getFontFamily();
 
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, w, h);
@@ -192,7 +194,7 @@ function gameUpdate() {
             ctx.globalAlpha = 1;
         }
         ctx.textBaseline = "middle";
-        ctx.font = (w * 0.035) + "px Work Sans, Arial, sans-serif";
+        ctx.font = (w * 0.035) + "px " + fontFamily;
         ctx.fillStyle = "black";
         for (let r of resourceDisplays) {
             r.render(ctx);

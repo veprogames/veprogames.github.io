@@ -68,8 +68,7 @@ class ContentPrestige {
     prestige() {
         let foamToGet = this.getQuantumFoam();
 
-        if ((foamToGet.gt(0) && !game.settings.prestigeConfirmation)
-            || (foamToGet.gt(0) && confirm("Prestiging will remove bought Matter Upgrades and the current Matter you have. Are you sure?"))) {
+        if (foamToGet.gt(0)) {
             game.prestige.addQuantumFoam(foamToGet);
 
             game.mergeObjects = [];

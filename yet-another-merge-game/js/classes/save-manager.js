@@ -108,6 +108,10 @@ class SaveManager {
             game.version = L(obj.version, 2);
 
             game.currentStyle = L(obj.currentStyle, "standard");
+            //fallback to default style
+            if (!["standard", "dark", "amoled"].includes(game.currentStyle)) {
+                game.currentStyle = "standard";
+            }
             functions.setStyle(game.currentStyle);
 
             game.clickAbility = L(obj.clickAbility, ABILITY_SPAWN_SPEED);
@@ -123,15 +127,13 @@ class SaveManager {
             game.settings.tabsShown = L(obj.settings.tabsShown, true);
             game.settings.mergepediaAnimations = L(obj.settings.mergepediaAnimations, true);
             game.settings.prestigeConfirmation = L(obj.settings.prestigeConfirmation, true);
-            game.settings.uiScale = L(obj.settings.uiScale, 1);
-            document.querySelector(":root").style.setProperty("--ui-scale", game.settings.uiScale);
             game.highestMergeObject = L(obj.highestMergeObject, 0);
             game.highestMergeObjectThisPrestige = L(obj.highestMergeObjectThisPrestige, 0);
             game.mergesThisPrestige = L(obj.mergesThisPrestige, 0);
 
             if (obj.matter) {
                 game.matter.amount = L(new Decimal(obj.matter.amount), new Decimal(0));
-                game.matter.amountThisPrestige = L(new Decimal(obj.matter.matterThisPrestige), new Decimal(0));
+                game.matter.amountThisPrestige = L(new Decimal(obj.matter.amountThisPrestige), new Decimal(0));
 
                 if (obj.matter.upgrades) {
                     for (let k of Object.keys(obj.matter.upgrades)) {

@@ -32,12 +32,14 @@ class MergeObject {
     }
 
     static calculateOutputForLevel(level) {
+        const social = localStorage.getItem("YetAnotherMergeGame_Support_YT") !== null ? 3 : 1;
         return Decimal.pow(Upgrade.apply(game.molecules.upgrades.mergerLevelExponent), level).mul(game.prestige.getQuantumFoamBoost())
             .mul(Upgrade.apply(game.prestige.upgrades.matterBoost))
             .mul(game.energyCores.getCoreBoost())
             .mul(game.quantumProcessor.getProcessorBoost())
             .mul(Upgrade.apply(game.isotopes.upgrades.matterBoost))
-            .mul(Upgrade.apply(game.molecules.upgrades.matterBoost));
+            .mul(Upgrade.apply(game.molecules.upgrades.matterBoost))
+            .mul(social);
     }
 
     hitBorder() {

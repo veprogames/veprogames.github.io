@@ -149,5 +149,16 @@ let effectDisplayTemplates =
                 return p + functions.formatNumber(e, digits, digits) + " % → " + p + functions.formatNumber(eN, digits, digits) + " %";
             }
         }
+    },
+    time: function () {
+        return function () {
+            let e = this.getEffect(this.level).toNumber();
+            if (this.level === this.maxLevel) {
+                return Utils.formatTime(e);
+            } else {
+                let eN = this.getEffect(this.level + 1).toNumber();
+                return Utils.formatTime(e) + " → " + Utils.formatTime(eN);
+            }
+        }
     }
 };

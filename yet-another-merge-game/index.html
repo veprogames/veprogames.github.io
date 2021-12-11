@@ -4,13 +4,23 @@
 <head>
     <title>Yet another Merge Game...</title>
 
-    <link rel="stylesheet" href="css/utils.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/media.css" />
-    <link id="gamestyle" rel="stylesheet" href="css/style.standard.css" />
+    <link id="gamestyle" rel="stylesheet/less" href="css/style.standard.less" />
+
+    <script>
+        less = {
+            logLevel: 0
+        };
+    </script>
+
+    <script src="js/lib/less.js"></script>
+    <!--<script src="js/lib/vue-dev.js"></script>-->
+    <script src="js/lib/vue-prod.js"></script>
 
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <meta name="theme-color" content="#2e99e6">
     <meta name="title" content="Yet another Merge Game" />
     <meta name="description" content="A Merge Game with various upgrades and prestige." />
@@ -51,11 +61,17 @@
         </div>
 
         <div class="game-container" :class="{'tabs-shown': settings.tabsShown}">
-            <button class="toggle-tabs with-icon" @click="settings.tabsShown = !settings.tabsShown"><img alt="X"
-                    src="images/icons/close.svg" /></button>
-            <span>Click to Hide / Show</span>
+            <div class="game-container-header flex-start flex-center-v flex-gap">
+                <button class="toggle-tabs" @click="settings.tabsShown = !settings.tabsShown">
+                    <i v-if="settings.tabsShown" class="fas fa-times"></i>
+                    <i v-else class="fas fa-caret-up"></i>
+                </button>
+                <help-button></help-button>
+                <resource-overview></resource-overview>
+            </div>
 
             <tab-upgrades v-if="settings.currentTab === 'upgrades'"></tab-upgrades>
+            <tab-abilities v-if="settings.currentTab === 'abilities'"></tab-abilities>
             <tab-prestige v-if="settings.currentTab === 'prestige'"></tab-prestige>
             <keep-alive>
                 <mergepedia v-if="settings.currentTab === 'mergepedia'"></mergepedia>
@@ -65,21 +81,18 @@
             <tab-isotopes class="center" v-if="settings.currentTab === 'isotopes'"></tab-isotopes>
             <tab-molecules v-if="settings.currentTab === 'molecules'"></tab-molecules>
             <tab-settings v-if="settings.currentTab === 'settings'"></tab-settings>
-            <keep-alive>
-                <tab-help v-if="settings.currentTab === 'help'"></tab-help>
-            </keep-alive>
         </div>
     </div>
 
-    <script src="js/lib/vue.js"></script>
     <script type="text/javascript" src="js/lib/break-infinity.min.js"></script>
     <script type="text/javascript" src="js/lib/adnotations.min.js"></script>
     <script type="text/javascript" src="js/lib/adcommunitynotations.min.js"></script>
 
-    <script src="js/utils.js"></script>
+    <script src="js/classes/utils.js"></script>
+    <script src="js/classes/vue-utils.js"></script>
     <script src="js/classes/random.js"></script>
 
-    <script src="js/filters.js"></script>
+    <script src="js/data/filters.js"></script>
 
     <script src="js/classes/save-manager.js"></script>
     <script src="js/classes/input-manager.js"></script>
@@ -102,28 +115,46 @@
     <script src="js/classes/game-background.js"></script>
     <script src="js/classes/resource-display.js"></script>
 
-    <script src="js/components/loading-screen.js"></script>
-    <script src="js/components/game-header.js"></script>
-    <script src="js/components/merger.js"></script>
-    <script src="js/components/mergepedia-entry.js"></script>
-    <script src="js/components/mergepedia.js"></script>
-    <script src="js/components/energy-core.js"></script>
-    <script src="js/components/processor-core.js"></script>
-    <script src="js/components/molecule.js"></script>
+    <script src="js/components/ui/loading-screen.js"></script>
+    <script src="js/components/ui/game-header.js"></script>
+    <script src="js/components/ui/progress-bar.js"></script>
+    <script src="js/components/ui/tab-container.js"></script>
+    <script src="js/components/ui/utility-container.js"></script>
+    <script src="js/components/ui/help-button.js"></script>
+    <script src="js/components/ui/ui-toggle.js"></script>
+    <script src="js/components/ui/resource-view.js"></script>
+    <script src="js/components/ui/resource-overview.js"></script>
+
+    <script src="js/components/windows/window.js"></script>
+    <script src="js/components/windows/help-windows.js"></script>
+    <script src="js/components/windows/window-prestige.js"></script>
+    <script src="js/components/windows/core-reset-window.js"></script>
+    <script src="js/components/windows/save-management-window.js"></script>
+    <script src="js/components/windows/hard-reset-window.js"></script>
+    <script src="js/components/windows/support-window.js"></script>
+    <script src="js/components/windows/credits-window.js"></script>
+
+    <script src="js/components/content/merger.js"></script>
+    <script src="js/components/content/mergepedia-entry.js"></script>
+    <script src="js/components/content/mergepedia.js"></script>
+    <script src="js/components/content/energy-core.js"></script>
+    <script src="js/components/content/processor-core.js"></script>
+    <script src="js/components/content/molecule.js"></script>
+
+    <script src="js/components/upgrades/upgrade.js"></script>
     <script src="js/components/upgrades/upgrade-row.js"></script>
-    <script src="js/components/tab-container.js"></script>
-    <script src="js/components/utility-container.js"></script>
+
     <script src="js/components/tabs/tab-upgrades.js"></script>
+    <script src="js/components/tabs/tab-abilities.js"></script>
     <script src="js/components/tabs/tab-prestige.js"></script>
     <script src="js/components/tabs/tab-energy-cores.js"></script>
     <script src="js/components/tabs/tab-quantum-processors.js"></script>
     <script src="js/components/tabs/tab-isotopes.js"></script>
     <script src="js/components/tabs/tab-molecules.js"></script>
     <script src="js/components/tabs/tab-settings.js"></script>
-    <script src="js/components/tabs/tab-help.js"></script>
 
-    <script src="js/data.js"></script>
-    <script src="js/functions.js"></script>
+    <script src="js/data/data.js"></script>
+    <script src="js/data/functions.js"></script>
     <script src="js/main.js"></script>
 </body>
 

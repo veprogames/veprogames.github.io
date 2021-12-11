@@ -22,7 +22,7 @@ class FloatingText {
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         let sizeMod = Math.min(1, Math.pow(this.lifeTime * 4, 1.5));
-        ctx.font = "bold " + (this.size * sizeMod) + "px Work Sans, Arial, sans-serif";
+        ctx.font = "bold " + (this.size * sizeMod) + "px 'Helvetica Rounded', Arial, sans-serif";
         ctx.fillText(this.text, this.x, this.y);
         ctx.globalAlpha = 1;
     }

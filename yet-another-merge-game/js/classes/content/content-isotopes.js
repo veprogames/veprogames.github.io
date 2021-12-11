@@ -3,7 +3,7 @@ class ContentIsotopes {
         this.amount = new Decimal(0);
         this.upgrades =
         {
-            isotopeChance: new IsotopeUpgrade("Isotope Chance", "Increase the Chance to get Isotopes",
+            isotopeChance: new IsotopeUpgrade("Isotope Chance", "Increase the Chance to get Isotopes when two Mergers collide.",
                 level => {
                     let price = new Decimal(1 + level);
                     if (level > 10) {
@@ -23,7 +23,7 @@ class ContentIsotopes {
                     getEffectDisplay: effectDisplayTemplates.percentStandard(),
                     maxLevel: 99
                 }),
-            doubleSpawn: new IsotopeUpgrade("Double Spawn", "Increase the Chance to spawn 2 Mergers",
+            doubleSpawn: new IsotopeUpgrade("Double Spawn", "Increase the Chance to spawn 2 Mergers at once instead of one.",
                 level => new Decimal(level + 5 + 10 * Math.floor(level / 10) + 15 * Math.floor(level / 20)),
                 level => new Decimal((level > 0 ? 0.1 : 0) + 0.02 * Math.max(0, level - 1)),
                 {

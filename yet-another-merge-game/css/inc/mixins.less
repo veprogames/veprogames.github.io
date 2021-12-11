@@ -1,0 +1,75 @@
+.create-button(@color){
+    @color-darkened: darken(@color, 8%);
+
+    background-image: linear-gradient(to bottom, @color 0%, @color 50%, @color-darkened 50%, @color-darkened 100%);
+    .create-text-outlined(@font-family-header);
+    
+    padding: 0.25em;
+    border: none;
+    border-radius: 1em;
+    font-family: @font-family-header;
+    font-weight: 700;
+    box-shadow: 0 0.25em darken(@color, 30%);
+
+    &:hover:enabled:not(.locked) {
+        transform: translateY(0.05em);
+        box-shadow: 0 0.2em darken(@color, 40%);
+    }
+
+    &:active:enabled:not(.locked) {
+        transform: translateY(0.15em);
+        box-shadow: 0 0.1em darken(@color, 50%);
+    }
+}
+
+.create-select(@color){
+    @color-darkened: darken(@color, 8%);
+    
+    background-image: linear-gradient(to bottom, @color 0%, @color 50%, @color-darkened 50%, @color-darkened 100%);
+    .create-text-outlined(@font-family-header);
+    
+    padding: 0.25em 0.5em;
+    clip-path: none;
+    border: none;
+    border-radius: 1em;
+    font-family: @font-family-header;
+    font-weight: 700;
+}
+
+.create-card(@color){
+    padding: 1.5em;
+    background-color: lighten(@color, 25%);
+    border-radius: 2em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1),
+        inset 0 -0.5em 0 0.5em fadeout(@color, 50%);
+}
+
+.create-text(@font, @inner, @outer, @width){
+    @diag: (@width / 1.4142); //use for corners so it becomes circular instead of rectangular
+    @shadow: (@width / 2);
+
+    font-family: @font;
+    color: @inner;
+    text-shadow: -@diag -@diag @shadow @outer,
+        0 -@width @shadow @outer,
+        @diag -@diag @shadow @outer,
+        -@width 0 @shadow @outer,
+        0 0 @shadow @outer,
+        @width 0 @shadow @outer,
+        -@diag @diag @shadow @outer,
+        0 @width @shadow @outer,
+        @diag @diag @shadow @outer;
+}
+
+.create-text-outlined(@font, @width: 0.12em, @inner: white, @outer: black){
+    .create-text(@font, @inner, @outer, @width);
+}
+
+.create-background-image(@size, @opacity, @left: 0, @top: 0){
+    position: absolute;
+    left: @left;
+    top: @top;
+    width: @size;
+    height: auto;
+    opacity: @opacity;
+}
