@@ -8,7 +8,7 @@ Vue.component("mergepedia-entry", {
         highestMergeObjectThisPrestige: () => game.highestMergeObjectThisPrestige,
         fontSize() {
             let c = Math.max(0, functions.formatNumber(this.production(this.level)).length - 8);
-            return (180 / (1 + 0.125 * c)) + "%";
+            return (150 / (1 + 0.125 * c)) + "%";
         }
     },
     props: ["level"],

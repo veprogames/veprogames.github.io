@@ -11,7 +11,7 @@ Vue.component("ui-toggle", {
             this.$emit("input", this.active);
         }
     },
-    template: `<button @click="onInput()" :class="{active: value}" class="ui-toggle text-xl text-outline flex-between">
+    template: `<button @click="onInput()" :class="{active: value}" class="ui-toggle text-outline flex-between">
         <slot></slot>
         <span v-if="value">On</span>
         <span v-else>Off</span>

@@ -13,7 +13,10 @@ Vue.component("molecule", {
     },
     template: `<div class="molecule flex-evenly flex-center-v padding gap">
     <img class="molecule-image" :src="molecule.image" alt="Molecule"/>
-    <h3>{{molecule.name}}<br/><span :style="{color: levelColor}">v{{molecule.level + 1 | ftnum}}</span></h3>
+    <div class="molecule-name">
+        <p class="text-l">{{molecule.name}}</p>
+        <p class="text-xl" :style="{color: levelColor}">v{{molecule.level + 1 | ftnum}}</p>
+    </div>
     <progress-bar class="margin" :value="molecule.merges / molecule.getMergesNeeded()">{{molecule.merges | ftnum}} / {{molecule.getMergesNeeded() | ftnum}}</progress-bar>
     <p class="margin-xs">Power<br/><img class="icon" src="images/currencies/molecules.png"/>
         <sup :style="{color: powerColor}" class="text-xl">{{power | fnum(4, 4)}}</sup></p>

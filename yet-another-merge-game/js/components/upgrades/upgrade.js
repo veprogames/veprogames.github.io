@@ -17,11 +17,11 @@ Vue.component("upgrade", {
             return this.upgrade.maxLevel !== Infinity;
         }
     },
-    template: `<div class="upgrade flex-vertical padding-l margin">
+    template: `<div class="upgrade flex-vertical margin">
         <div>
-            <h3>{{upgrade.name}} <span :style="{color: levelColor}">{{upgrade.level | ftnum}}</span>
+            <h5>{{upgrade.name}} <span :style="{color: levelColor}">{{upgrade.level | ftnum}}</span>
                 <span v-if="hasMaxLevel"> / <span :style="{color: levelColor}">{{upgrade.maxLevel | ftnum}}</span></span>
-            </h3>
+            </h5>
         </div>
         <div class="flex-between">
             <div class="info flex-center flex-vertical">

@@ -22,7 +22,7 @@ Vue.component("energy-core", {
 
         <progress-bar class="progress-bar-l" :value="progress">{{core.merges | ftnum}} / {{neededMerges | ftnum}}</progress-bar>
 
-        <div class="flex-center-center flex-gap boost">
+        <div class="flex-center-center flex-gap-h boost">
             <p>x{{core.getBoost(core.level) | fnum(false, 2)}}</p>
             <i class="fas fa-arrow-right"></i>
             <p>x{{core.getBoost(core.level + 1) | fnum(false, 2)}}</p>

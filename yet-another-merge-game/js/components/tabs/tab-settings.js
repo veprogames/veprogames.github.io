@@ -66,7 +66,7 @@ Vue.component("tab-settings", {
         <div class="flex-center-center flex-vertical">
             <p class="title">Style</p>
             <div class="flex-center flex-wrap">
-                <button class="button-xl margin" v-for="s in styles" @click="setStyle(s[0])">{{s[1]}}</button>
+                <button class="button-l margin" v-for="s in styles" @click="setStyle(s[0])">{{s[1]}}</button>
             </div>
         </div>
     </div>
@@ -77,7 +77,7 @@ Vue.component("tab-settings", {
         <ui-toggle v-model="settings.prestigeConfirmation">Prestige Confirmation</ui-toggle>
     </div>
     <div class="flex-center-center">
-        <button @click="openWindow()" class="button-xl" style="margin: 0.5rem;">Save Management</button>
+        <button @click="openWindow()" class="button-l" style="margin: 0.5rem;">Save Management</button>
         <p class="text-l">The Game auto-saves.<br/>Browser Storage isn't the most reliable thing on Earth and Cleaning Tools might intervene. Make sure to export frequently!</p>
     </div>
     <div class="footer flex-between padding-h-xl">
