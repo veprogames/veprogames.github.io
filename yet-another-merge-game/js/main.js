@@ -92,6 +92,7 @@ function gameInit() {
 
     CanvasUtils.loadImages().then(img => {
         game.loading = false;
+        less.refresh(); //workaround
         images = img;
         resourceDisplays = [
             new ResourceDisplay(images.currencies.quantumFoam, w * 0.025, h * 0.01,
