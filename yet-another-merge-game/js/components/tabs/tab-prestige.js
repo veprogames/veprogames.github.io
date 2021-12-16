@@ -7,7 +7,7 @@ Vue.component("tab-prestige", {
     methods: {
         prestigeGame() {
             if (game.settings.prestigeConfirmation) {
-                VueUtils.createComponent(PrestigeWindowComponent);
+                windowManager.createWindow(PrestigeWindowComponent);
             }
             else {
                 game.prestige.prestige();

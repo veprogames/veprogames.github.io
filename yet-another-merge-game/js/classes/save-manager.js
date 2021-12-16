@@ -118,6 +118,9 @@ class SaveManager {
 
             game.settings.customNotationSequence = L(obj.settings.customNotationSequence, "");
             game.settings.currentNotationIdx = L(obj.settings.currentNotationIdx, 0);
+            if (game.settings.customNotationSequence.length < 2 && game.settings.currentNotationIdx === -1) { //prevent broken notation
+                game.settings.currentNotationIdx = 0;
+            }
             if (game.settings.currentNotationIdx !== -1) {
                 game.settings.currentNotation = notations[game.settings.currentNotationIdx];
             } else {

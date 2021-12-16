@@ -150,8 +150,7 @@ button {
     
     &.toggle-tabs {
         font-size: 3vh;
-        width: 5vh;
-        height: 5vh;
+        width: 5vmax;
     }
 
     &.positive{
@@ -264,6 +263,10 @@ div.game-container {
     transition: bottom 0.3s;
     transition-timing-function: ease-in-out;
 
+    .tab-settings .footer{
+        bottom: -10vh;
+    }
+
     .game-container-header{
         position: sticky;
         top: 0;
@@ -273,6 +276,10 @@ div.game-container {
     &.tabs-shown {
         bottom: 0;
         overflow-y: scroll; // >:(
+            
+        .tab-settings .footer{
+            bottom: 1em;
+        }
     }
 }
 
@@ -369,31 +376,19 @@ table.upgrades {
         max-width: 90%;
     }
 
-    .ui-scale{
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        font-size: 16px;
-        padding: 8px;
-        background-color: rgba(0, 0, 0, 0.3);
-
-        input{
-            width: 200px;
-            height: 16px;
-        }
-    }
-
     .footer{
         position: fixed;
-        bottom: 1em;
         left: 0;
         width: 100%;
 
+        transition: bottom 500ms;
+
         button{
-            font-size: 200%;
+            font-size: 150%;
         }
 
         .support{
+            font-size: 200%;
             .create-button(rgb(255, 0, 183));
             animation: glow 5s infinite linear;
         }

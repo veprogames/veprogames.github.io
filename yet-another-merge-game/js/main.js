@@ -6,6 +6,8 @@ let resourceDisplays;
 
 let inputManager = new InputManager();
 
+const windowManager = new WindowManager();
+
 let app;
 
 onload = e => {

@@ -29,13 +29,13 @@ Vue.component("tab-settings", {
             functions.setStyle(name);
         },
         openWindow() {
-            VueUtils.createComponent(SaveManagerWindow);
+            windowManager.createWindow(SaveManagerWindow);
         },
         openSupport() {
-            VueUtils.createComponent(SupportWindow);
+            windowManager.createWindow(SupportWindow);
         },
         openCredits() {
-            VueUtils.createComponent(CreditsWindowComponent);
+            windowManager.createWindow(CreditsWindowComponent);
         },
         exportGame() {
             this.exportedGame = SaveManager.getSaveCode();

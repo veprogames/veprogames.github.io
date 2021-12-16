@@ -33,7 +33,7 @@ const SaveManagerWindow = WindowComponent.extend({
             }
         },
         openHardReset() {
-            VueUtils.createComponent(HardResetWindow);
+            windowManager.createWindow(HardResetWindow);
         },
         hardResetGame() {
             if (confirm("Do you REALLY want to reset absolutely everything you have reached so far")) {

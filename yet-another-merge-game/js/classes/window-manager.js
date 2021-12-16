@@ -7,9 +7,8 @@ class WindowManager {
         if (this.window === null) {
             const window = VueUtils.createComponent(component);
             this.window = window;
-            window.$on("closed", () => {
+            app.$once("window-closed", () => {
                 this.window = null;
-                console.log("closed");
             });
         }
     }

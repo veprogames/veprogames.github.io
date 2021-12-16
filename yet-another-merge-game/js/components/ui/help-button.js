@@ -15,7 +15,7 @@ Vue.component("help-button", {
     methods: {
         openHelp() {
             if (this.hasHelp) {
-                VueUtils.createComponent(this.menus[game.settings.currentTab]);
+                windowManager.createWindow(this.menus[game.settings.currentTab]);
             }
         }
     },

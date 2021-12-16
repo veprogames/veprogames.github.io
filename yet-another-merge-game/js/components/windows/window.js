@@ -52,6 +52,7 @@ const WindowComponent = Vue.extend({
         },
         close() {
             this.$emit("closed");
+            app.$emit("window-closed");
             VueUtils.destroyComponent(this);
         }
     },
