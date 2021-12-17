@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/icon"/>
+    <title>GD Update Viz:</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="keywords" content="indie, game, idle, data, viz, visualisation, geometry dash" />
+    
+    <meta name="theme-color" content="#ffffff">
+    <meta name="title" content="Geometry Dash Update Length Visualizer" />
+    <meta name="description" content="Visualize The Updates, drag stuff around!" />
+    <meta name="url" content="https://veprogames.github.io/gd-update-length-visualizer/" />
+    
+    <meta name="og:title" content="Geometry Dash Update Length Visualizer" />
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="https://veprogames.github.io/gd-update-length-visualizer/" />
+    <meta name="og:description" content="Visualize The Updates, drag stuff around!" />
+    <meta name="og:image" content="https://veprogames.github.io/gd-update-length-visualizer/cover.png" />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Geometry Dash Update Length Visualizer" />
+    <meta name="twitter:description" content="Visualize The Updates, drag stuff around!" />
+    <meta name="twitter:image" content="https://veprogames.github.io/gd-update-length-visualizer/cover.png" />
+    <meta name="twitter:site" content="@veprogames" />
+    <meta name="twitter:creator" content="@veprogames" />
+</head>
+
+<body>
+    <p style="font-family: Pusab;" class="preload">0</p>
+    <p style="font-family: 'Oxygene1';" class="preload">0</p>
+    <div id="app">
+        <v-stage ref="stage" :config="konva">
+            <konva-background></konva-background>
+            <v-layer>
+                <update-bar v-for="(u, i) in updateBars" :key="i" :updatebar="u"></update-bar>
+            </v-layer>
+            <v-layer>
+                <length-comparision :info="lengthComparision"></length-comparision>
+            </v-layer>
+            <v-layer>
+                <update-time-graph :data="updateGraph"></update-time-graph>
+            </v-layer>
+        </v-stage>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/konva@8/konva.min.js"></script>
+    <script src='https://unpkg.com/vue-konva/umd/vue-konva.min.js'></script>
+
+    <script src="js/update.js"></script>
+    <script src="js/background.js"></script>
+    <script src="js/update-bar.js"></script>
+    <script src="js/length-comparision.js"></script>
+    <script src="js/update-time-graph.js"></script>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+@font-face {
+    font-family: "Oxygene1";
+    src: url("../fonts/oxygene1/Oxygene1.woff") format("woff"),
+    url("../fonts/oxygene1/Oxygene1.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Pusab";
+    src: url("../fonts/pusab/Pusab.woff") format("woff"),
+    url("../fonts/pusab/Pusab.woff2") format("woff2");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    overflow: hidden;
+}
+
+.preload{
+    visibility: hidden;
+    position: absolute;
+    pointer-events: none;
+}
