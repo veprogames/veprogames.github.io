@@ -6,7 +6,7 @@ Vue.component("tab-quantum-processors", {
     },
     methods: {
         buyProcessorCore() {
-            windowManager.createWindowt(CoreResetWindowComponent);
+            windowManager.createWindow(CoreResetWindowComponent);
         }
     },
     computed: {
