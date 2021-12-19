@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="style.css"/>
+        <title>Infinite Eater</title>
+
+        <meta name="title" content="Infinite Eater"/>
+        <meta name="description"
+                content="Singleplayer agar.io with unlimited, exponential growth."/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+        <meta name="keywords" content="indie, game, incremental, agario, grow"/>
+        <meta name="url" content="https://cook1eegames.feedia.co/InfiniteEater2"/>
+        <meta name="og:title" content="Infinite Eater"/>
+        <meta name="og:type" content="website"/>
+        <meta name="og:url" content="https://cook1eegames.feedia.co/InfiniteEater2"/>
+        <meta name="og:description"
+                content="Singleplayer agar.io with unlimited, exponential growth."/>
+        <meta name="og:image" content="https://cook1eegames.feedia.co/Images/Previews/infiniteeater.png"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content="Infinite Eater"/>
+        <meta name="twitter:description"
+                content="Singleplayer agar.io with unlimited, exponential growth."/>
+        <meta name="twitter:image" content="https://cook1eegames.feedia.co/Images/Previews/infiniteeater.png"/>
+        <meta name="twitter:site" content="@cook1eegames"/>
+        <meta name="twitter:creator" content="@cook1eegames"/>
+    </head>
+    <body>
+
+        <div id="canvas"></div>
+
+        <div id="upgrades">
+            
+        </div>
+
+        <button onclick="clearGameData()" class="cleargame">Clear Game Data</button><br/>
+        <button onclick="exportGame()" class="saveload">Export Game</button>
+        <button onclick="importGame()" class="saveload">Import Game</button>
+
+        <script type="shader" id="shader_edible_v">
+            varying vec2 vTextureCoord;
+            varying vec2 vFilterCoord;
+            
+            void main()
+            {
+                
+            }
+        </script>
+
+        <script type="shader" id="shader_edible_f">
+            varying vec2 vTextureCoord;
+            uniform sampler2D imageSampler;
+
+            uniform float time;
+            uniform bool isBigger;
+
+            void main()
+            {
+                vec4 col = texture2D(imageSampler, vTextureCoord);
+                
+                if(isBigger)
+                {
+                    col.gb *= vec2(0.0, 0.0);
+                    col.r *= 1.0 + 0.5 * sin(time * 6.0);
+                }
+                else
+                {
+                    col.gb *= vec2(1.0, 1.0);
+                }
+                
+
+                gl_FragColor = col;
+            }
+        </script>
+
+        <script src="Scripts/jquery.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="Scripts/pixi.js"></script>
+        <script src="Scripts/break_infinity.js"></script>
+        <script src="Scripts/utils.js"></script>
+        <script src="Scripts/upgrade.js"></script>
+        <script src="Scripts/loader.js"></script>
+        <script src="Scripts/player.js"></script>
+        <script src="Scripts/edibleobject.js"></script>
+        <script src="Scripts/main.js"></script>
+    </body>
+</html>

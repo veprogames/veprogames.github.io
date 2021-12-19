@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300&display=swap');
+
+body
+{
+    margin: 0;
+    background-color: black;
+    color: black;
+    font-size: 1.2em;
+    font-family: "Work Sans", Arial, sans-serif;
+}
+
+button {
+	background-color: rgba(240, 240, 240);
+	border: none;
+	padding: 4px;
+}
+
+button{
+    margin: 0.25em;
+}
+
+button.gradient-change-amount{
+    width: 1.75em;
+    height: 1.75em;
+}
+
+button:hover{
+    background-color: white;
+}
+
+table td{
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+canvas{
+    width: 100vw;
+    height: 100vh;
+}
+
+input[type=number], input[type=range] {
+    width: 5em;
+    vertical-align: text-top;
+}
+
+input[type=number]{
+    border: none;
+    vertical-align: middle;
+}
+
+input[type=color]{
+    padding: 0;
+    background-color: aliceblue;
+    border: none;
+    width: 2.5em;
+    height: 2.5em;
+}
+
+.center{
+    text-align: center;
+}
+
+.sidebar{
+    position: fixed;
+    right: -10%;
+    top: 0;
+    width: 30%;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 1);
+    z-index: 1;
+    opacity: 0.3;
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    transition: 0.4s;
+}
+
+.sidebar:hover{
+    right: 0;
+    opacity: 1;
+}
+
+.sidebar div, .sidebar p, .sidebar h3{
+    margin: 0;
+}
+
+.sidebar div{
+    padding: 1em;
+}
+
+.sidebar div:nth-child(2n) {
+    background-color: #acd3eb;
+}
+
+.sidebar div:nth-child(2n + 1) {
+    background-color: #45a9f4;
+}

@@ -1,0 +1,157 @@
+@keyframes fade-in{
+    0%{
+        opacity: 0;
+        transform: scale(0);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+body{
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: rgb(135, 135, 145);
+    margin: 0;
+    padding: 0;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    font-weight: 100;
+}
+
+canvas{
+    border-radius: 6px;
+    box-shadow: 1px 1px 4px black;
+}
+
+div.shadercontainer{
+    animation: fade-in 0.5s;
+}
+
+div.shadercontainer.selected {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    width: 80vw;
+    height: 80vh;
+}
+
+div.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.65);
+    display: none;
+    z-index: 2;
+}
+
+p.title{
+    margin: 0;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 7vh;
+    font-variant: small-caps;
+    white-space: nowrap;
+}
+
+nav{
+    font-size: 120%;
+    text-align: center;
+    text-shadow: none;
+    color: rgb(22, 22, 22);
+}
+
+nav button{
+    background-color: rgb(107, 107, 255);
+    color: white;
+    border: none;
+    box-shadow: 1px 1px 3px black;
+}
+
+div.shadercontainer > p{
+    text-align: center;
+    margin: auto;
+    font-variant: small-caps;
+}
+
+div.shadercontainer > button.clickable{
+    background-color: rgb(107, 107, 255);
+    color: white;
+    border: none;
+    font-size: 24px;
+}
+
+div.shadercontainer > button.clickable.delete{
+    position: absolute;
+    left: 32px;
+    top: 24px;
+}
+
+div.shadercontainer > button.clickable.edit{
+    position: absolute;
+    left: 80px;
+    top: 24px;
+}
+
+div.shadercontainer canvas{
+    width: 100%;
+    text-align: center;
+}
+
+p.fullscreeninfo{
+    position: fixed;
+    bottom: 2vh;
+    right: 2vw;
+    text-align: right;
+    font-size: max(2vw, 2vh);
+    font-variant: small-caps;
+    color: whitesmoke;
+    z-index: 3;
+}
+
+.ide{
+    display: none;
+    clear: both;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90vw;
+    height: 90vh;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    border-radius: 6px;
+    background-color: whitesmoke;
+    box-shadow: 1px 1px 3px black;
+    text-shadow: none;
+    overflow-y: scroll;
+}
+
+.ide h1{
+    text-align: center;
+}
+
+.ide .codepurple{
+    color: rgb(188, 82, 250);
+    font-weight: bold;
+}
+
+.ide .CodeMirror{
+    margin-top: 30px;
+    width: 95%;
+}
+
+.ide button{
+    margin-top: 8px;
+    margin-left: 12px;
+	background-color: white;
+	border: none;
+	box-shadow: 1px 1px 2px black;
+	font-size: 113%;
+	border-radius: 8px;
+	padding: 5px;
+}

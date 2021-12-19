@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Infinite Canvas</title>
+    <link rel="stylesheet" href="css/main.css"/>
+
+    <meta name="description" content="Draw on a canvas with very deep Zoom."/>
+    <meta name="title" content="Infinite Canvas"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="indie, math, zoom, canvas, drawing, graphics, Infinite Canvas"/>
+    <meta name="url" content="https://cook1eegames.feedia.co/infinite-canvas"/>
+    <meta name="og:title" content="MandelGL"/>
+    <meta name="og:type" content="website"/>
+    <meta name="og:url" content="https://cook1eegames.feedia.co/infinite-canvas"/>
+    <meta name="og:description"
+          content="Draw on a canvas with very deep Zoom."/>
+    <meta name="og:image" content="https://cook1eegames.feedia.co/infinite-canvas/images/thumb.png"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Infinite Canvas"/>
+    <meta name="twitter:description"
+          content="Draw on a canvas with very deep Zoom."/>
+    <meta name="twitter:image" content="https://cook1eegames.feedia.co/infinite-canvas/images/thumb.png"/>
+    <meta name="twitter:site" content="@cook1eegames"/>
+    <meta name="twitter:creator" content="@cook1eegames"/>
+</head>
+<body>
+<main>
+    <canvas></canvas>
+    <div class="toolbar">
+        <div>
+            <h3>Colors</h3>
+            <label>Fill Color: <input type="color" data-prop="color" value="#000000"/></label><br/>
+            <label>Outline Color: <input type="color" data-prop="strokeColor" value="#000000"/></label><br/>
+            <label>Background Color: <input type="color" data-prop="bgColor" value="#ffffff"/></label><br/>
+            <button class="palette" data-palettecolor="#ff0000"></button>
+            <button class="palette" data-palettecolor="#ff8000"></button>
+            <button class="palette" data-palettecolor="#ffff00"></button>
+            <button class="palette" data-palettecolor="#80ff00"></button>
+            <button class="palette" data-palettecolor="#00ff00"></button>
+            <button class="palette" data-palettecolor="#00ff80"></button>
+            <button class="palette" data-palettecolor="#00ffff"></button>
+            <button class="palette" data-palettecolor="#0080ff"></button>
+            <button class="palette" data-palettecolor="#0000ff"></button>
+            <button class="palette" data-palettecolor="#8000ff"></button>
+            <button class="palette" data-palettecolor="#ff00ff"></button>
+            <button class="palette" data-palettecolor="#909090"></button>
+            <button class="palette" data-palettecolor="#c0c0c0"></button>
+            <button class="palette" data-palettecolor="#ffffff"></button>
+            <br/>
+            <button class="palette" data-palettecolor="#800000"></button>
+            <button class="palette" data-palettecolor="#804000"></button>
+            <button class="palette" data-palettecolor="#808000"></button>
+            <button class="palette" data-palettecolor="#408000"></button>
+            <button class="palette" data-palettecolor="#008000"></button>
+            <button class="palette" data-palettecolor="#008040"></button>
+            <button class="palette" data-palettecolor="#008080"></button>
+            <button class="palette" data-palettecolor="#004080"></button>
+            <button class="palette" data-palettecolor="#000080"></button>
+            <button class="palette" data-palettecolor="#400080"></button>
+            <button class="palette" data-palettecolor="#800080"></button>
+            <button class="palette" data-palettecolor="#000000"></button>
+            <button class="palette" data-palettecolor="#303030"></button>
+            <button class="palette" data-palettecolor="#606060"></button>
+        </div>
+        <div class="scroll">
+            <h3>Options</h3>
+            <label>Zoom Factor: <input type="number" min="1" max="100" step="0.1" value="1.5" data-prop="zoomFactor" checked/></label><br/>
+            <label>Fill Enabled: <input type="checkbox" data-prop="fill" checked/></label><br/>
+            <label>Outline Enabled: <input type="checkbox" data-prop="stroke"/></label><br/>
+            <label>Auto Save: <input type="checkbox" data-prop="autoSave" checked/></label><br/>
+            <label>Outline Thickness: <input type="number" data-prop="strokeSize" value="0.005" step="0.005" min="0.001" max="0.1"/></label><br/>
+            <label>Alpha: <input type="number" data-prop="alpha" value="1" step="0.1" min="0" max="1"/></label><br/>
+            <button id="move_shape_top">Move Shape to Top</button>
+            <button id="clear_canvas">Clear Everything</button>
+            <button id="reset_cam">Reset Camera</button>
+            <button id="move_center">Move To Center</button>
+            <br/>
+            <button id="download">Download Canvas</button><br/>
+            <textarea id="import_text" rows="6"></textarea><br/>
+            <button id="import">Import Canvas</button>
+        </div>
+        <div data-toolview="0">
+            <h3>Circle</h3>
+            <label>Brush Radius: <input type="number" data-prop="circle.radius" value="0.1" step="0.05" min="0.01" max="0.5"/></label><br/>
+        </div>
+        <div data-toolview="1">
+            <h3>Rectangle</h3>
+            <label>Brush Size X: <input type="number" data-prop="rectangle.w" value="0.1" step="0.05" min="0.01" max="0.5"/></label><br/>
+            <label>Brush Size Y: <input type="number" data-prop="rectangle.h" value="0.1" step="0.05" min="0.01" max="0.5"/></label>
+        </div>
+        <div data-toolview="2">
+            <h3>Polygon</h3>
+            <label>Close Polygons: <input type="checkbox" data-prop="polygon.isClosed"/></label>
+            <label>Smooth: <input type="checkbox" data-prop="polygon.isSmooth"/></label>
+        </div>
+        <div data-toolview="3">
+            <h3>Text</h3>
+            <label>Text Size: <input type="number" data-prop="text.size" value="0.05" step="0.05" min="0.01" max="0.5"/></label><br/>
+            <label>Font: <input type="text" id="setting_font" data-prop="text.font" value="Montserrat"/></label><br/>
+            <button class="align" data-textalign="lt">Left<br/>Top</button><button class="align" data-textalign="ct">Center<br/>Top</button><button class="align" data-textalign="rt">Right<br/>Top</button><br/>
+            <button class="align" data-textalign="lm">Left<br/>Middle</button><button class="align" data-textalign="cm">Center<br/>Middle</button><button class="align" data-textalign="rm">Right<br/>Middle</button><br/>
+            <button class="align" data-textalign="lb">Left<br/>Bottom</button><button class="align" data-textalign="cb">Center<br/>Bottom</button><button class="align" data-textalign="rb">Right<br/>Bottom</button>
+        </div>
+        <div data-toolview="4" class="scroll">
+            <h3>Image</h3>
+            <div class="image-select">
+
+            </div>
+            <label>Width: <input type="number" data-prop="image.w" value="0.2" step="0.05" min="0.01" max="0.5"/></label><br/>
+            <label>Height: <input type="number" data-prop="image.h" value="0.2" step="0.05" min="0.01" max="0.5"/></label><br/>
+            <label>Rotation: <input type="range" data-prop="image.rotation" value="0" step="any" min="0" max="6.28318530718"/></label><br/>
+            <label>Blur: <input type="range" data-prop="image.blur" value="0" step="any" min="0" max="1"/></label><br/>
+            <label>Hue Rotation: <input type="range" data-prop="image.hue" value="0" step="any" min="0" max="360"/></label><br/>
+            <label>Brightness: <input type="number" data-prop="image.brightness" value="100" step="10" min="0" max="400"/> %</label><br/>
+            <label>Contrast: <input type="number" data-prop="image.contrast" value="100" step="10" min="0" max="400"/> %</label><br/>
+            <label>Saturation: <input type="number" data-prop="image.saturation" value="100" step="10" min="0" max="400"/> %</label><br/>
+        </div>
+        <div data-toolview="5" class="scroll">
+            <label>Type: <input type="range" min="0" max="1" step="1" value="0" data-prop="gradient.type"/></label><br/>
+            <label>Rotation: <input type="range" data-prop="gradient.rotation" value="0" step="any" min="0" max="6.28318530718"/></label><br/>
+            <h4>Templates</h4>
+            <div id="gradient_templates">
+
+            </div>
+            <button id="random_gradient">Randomize</button>
+            <h4>Edit</h4>
+            <div id="gradient_div"></div>
+            <button id="add_gradient_color">Add Color</button>
+        </div>
+        <div data-toolview="6"></div>
+        <div data-toolview="7">
+            <label>Multi Select: <input type="checkbox" data-prop="select.multiSelect"/></label>
+        </div>
+        <div>
+            <h3>Tool</h3>
+            <button class="tool" data-tool="0"><img src="images/tools/ellipse.png" alt="circle"/></button>
+            <button class="tool" data-tool="1"><img src="images/tools/rectangle.png" alt="rectangle"/></button>
+            <button class="tool" data-tool="2"><img src="images/tools/polygon.png" alt="polygon"/></button>
+            <button class="tool" data-tool="3"><img src="images/tools/text.png" alt="text"/></button>
+            <button class="tool" data-tool="4"><img src="images/tools/image.png" alt="image"/></button>
+            <button class="tool" data-tool="5"><img src="images/tools/gradient.png" alt="gradient"/></button>
+            <button class="tool" data-tool="6"><img src="images/tools/eraser.png" alt="eraser"/></button>
+            <button class="tool" data-tool="7"><img src="images/tools/select.png" alt="select"/></button>
+        </div>
+        <div>
+            <br/>
+            <button id="minimize">Minimize</button>
+        </div>
+    </div>
+</main>
+
+<script src="js/vue.js"></script>
+<script src="js/decimal.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/vec2.js"></script>
+<script src="js/preload.js"></script>
+<script src="js/camera.js"></script>
+<script src="js/shape.js"></script>
+<script src="js/gradientmanager.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

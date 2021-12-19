@@ -1,0 +1,48 @@
+body{
+    text-align: center;
+}
+
+.upgrade{
+    background: linear-gradient(180deg, rgb(237, 243, 255), rgb(205, 205, 255));
+    margin: 8px;
+    text-align: center;
+    font-size: 18px;
+    border: 2px solid black;
+    box-shadow: 2px 2px 2px black;
+    border-radius: 16px;
+}
+
+.upgrade > button{
+    font-size: 120%;
+    border-radius: 8px;
+    border: 2px solid black;
+    margin: 6px;
+
+    transition: 0.5s;
+}
+
+.upgrade > button:hover{
+    transform: scale(1.2, 1.05);
+}
+
+.upgrade > .title{
+    font-size: 130%;
+    font-weight: bold;
+}
+
+.upgrade > .effect{
+    font-weight: bold;
+}
+
+.cleargame{
+    font-size: 150%;
+    background: linear-gradient(180deg, red, rgb(255, 109, 109));
+    border: none;
+    margin-top: 100px;
+}
+
+.saveload{
+    font-size: 150%;
+    background: linear-gradient(180deg, rgb(255, 255, 255), rgb(155, 155, 155));
+    border: none;
+}

@@ -1,0 +1,466 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;900&family=Work+Sans:wght@200&display=swap');
+
+:root{
+    --text-main: #ffffff;
+}
+
+*, html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #101010;
+    font-size: 16px;
+    color: var(--text-main);
+    font-family: Montserrat, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: "Work Sans", Helvetica, Arial, sans-serif;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+}
+
+nav a, nav a:hover {
+    text-decoration: none;
+    text-underline: none;
+    margin: 0 0.4rem;
+}
+
+a, .animated-underline{
+    text-decoration: none;
+    color: rgba(251, 252, 254, 0.8);
+    background-image: linear-gradient(to right, var(--text-main), var(--text-main));
+    background-position-y: 100%;
+    background-size: 0 1px;
+    background-repeat: no-repeat;
+
+    transition: background-size 800ms, 300ms;
+    transition-timing-function: ease-in-out;
+}
+
+a:hover, .animated-underline:hover{
+    text-decoration: none;
+    color: rgba(251, 252, 254, 0.95);
+    background-size: 100% 1px;
+}
+
+header {
+    background-image: linear-gradient(45deg, #202020, black);
+    padding: 1.5rem 1rem;
+
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+header > div > a{
+    display: flex;
+    align-items: center;
+    font-size: 200%;
+    background: none;
+}
+
+header div img{
+    height: 1em;
+    border-radius: 50%;
+    margin-right: 0.2em;
+}
+
+footer ul, header ul{
+    list-style: none;
+}
+
+header ul{
+    margin: 0;
+}
+
+footer ul.social li, header li{
+    display: inline;
+}
+
+img.bg{
+    position: absolute;
+    z-index: -1;
+}
+
+/*Game*/
+
+#game{
+    padding-left: 1rem;
+}
+
+#game, #game .win{
+    opacity: 0;
+
+    transition: opacity 1.5s;
+    transition-timing-function: ease-in-out;
+}
+
+#game.active, #game .win.active{
+    opacity: 1;
+}
+
+#game .win{
+    margin-top: 1.5rem;
+    letter-spacing: 0.15rem;
+}
+
+#game p{
+    display: inline-block;
+    margin: 1rem 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+/*About Me*/
+
+.about-me{
+    position: relative;
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    padding: 10rem 1rem 5rem;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.about-me img.bg{
+    left: 0;
+    top: 0;
+    width: 100%;
+    filter: brightness(0.6);
+}
+
+.about-me .dev-logo{
+    width: 9em;
+    height: 9em;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid white;
+    margin: 0.75rem;
+}
+
+.about-me .description{
+    width: 50%;
+    text-align: right;
+    font-size: 200%;
+    font-weight: 700;
+}
+
+.about-me p{
+    padding: 3rem 0.5rem;
+}
+
+.about-me p.title{
+    font-weight: 900;
+    font-size: 150%;
+}
+
+.about-me p.games{
+    font-weight: 300;
+    letter-spacing: 0.15rem;
+    font-size: 60%;
+    margin-top: 7rem;
+}
+
+/*Game Wrapper*/
+
+.game-wrapper{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: black;
+    overflow: hidden;
+    z-index: 2;
+    padding: 15rem 0;
+}
+
+.game-description{
+    padding: 2rem;
+}
+
+.game-wrapper .logo{
+    padding: 2rem;
+    width: 45%;
+    max-width: 500px;
+    min-width: 300px;
+}
+
+.game-wrapper .bg{
+    width: 100%;
+    filter: brightness(0.4);
+}
+
+.bg.s{
+    display: none;
+}
+
+.game-wrapper .links{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 2rem 0;
+}
+
+.game-wrapper .links a{
+    font-size: 130%;
+    font-weight: 300;
+    padding: 0.5rem;
+    letter-spacing: 0.15rem;
+}
+
+.game-wrapper .links a.newgrounds{
+    background-image: linear-gradient(to right, #eeb211, #d98419);
+}
+
+.game-wrapper .links a.github{
+    background-image: linear-gradient(to right, #eeeeee, #909090);
+}
+
+.game-wrapper .links a.crazygames{
+    background-image: linear-gradient(to right, #8b54de, #3c1e6e);
+}
+
+.game-wrapper .links a.kongregate{
+    background-image: linear-gradient(to right, #e30000, #7e1010);
+}
+
+.game-wrapper .links a:hover{
+    border-color: white;
+}
+
+.game-wrapper .game-description{
+    display: flex;
+}
+
+.game-description div{
+    width: 50%;
+}
+
+.game-description div p{
+    padding: 3rem 0;
+}
+
+.game-description p.title{
+    font-size: 250%;
+    font-weight: 900;
+}
+
+.game-description p.subtitle{
+    font-size: 150%;
+    font-weight: 700;
+}
+
+.game-description .features{
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding-left: 1rem;
+}
+
+.game-description .features li{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-right: 0.5rem;
+}
+
+.game-description .features img{
+    height: 1.5em;
+    display: inline;
+    margin-right: 0.5rem;
+
+    transition: transform 300ms, filter 300ms;
+    transition-timing-function: ease-in-out;
+}
+
+#game_imr + .game-description .features img:hover{
+    transform: rotate(-45deg);
+}
+
+#game_omegalayers + .game-description .features img:hover{
+    transform: rotate(180deg);
+    filter: hue-rotate(180deg);
+}
+
+.game-wrapper .play{
+    letter-spacing: 0.15rem;
+    padding-bottom: 0;
+    padding-left: 2rem;
+}
+
+/*Other Projects*/
+
+article.other-projects{
+    padding: 15rem 2rem;
+    background-color: black;
+    position: relative;
+    overflow: hidden;
+}
+
+.other-projects h2{
+    text-align: left;
+    font-weight: 900;
+    font-size: 300%;
+    font-family: "Montserrat", Helvetica, Arial, sans-serif;
+    margin-bottom: 4rem;
+}
+
+.other-projects img.bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.other-projects-list{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.other-projects-list div{
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    width: 33.3%;
+    margin: 2rem 0;
+}
+
+.other-projects-list img.preview {
+    border-radius: 50%;
+    border: 2px solid white;
+    height: 2em;
+}
+
+.other-projects-list a, .other-projects-list span {
+    font-weight: 200;
+    letter-spacing: 0.15rem;
+    font-size: 120%;
+    margin-left: 1em;
+}
+
+.other-projects-list span{
+    transition: none;
+}
+
+footer{
+    background-color: black;
+    padding-top: 4rem;
+}
+
+footer h4{
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+footer .items{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+footer .items > *{
+    margin: 0.5rem 1.5rem;
+}
+
+footer .items img{
+    height: 2em;
+    display: inline;
+}
+
+.social a{
+    background: none;
+}
+
+@media (max-width: 800px){
+    .about-me{
+        flex-direction: column;
+    }
+
+    .about-me .description{
+        width: 100%;
+        text-align: left;
+    }
+
+    .other-projects-list div{
+        width: 50%;
+    }
+
+    .game-wrapper .game-description{
+        flex-direction: column;
+    }
+
+    .game-description .features{
+        padding: 0;
+    }
+
+    .game-description div{
+        width: 90%;
+    }
+}
+
+@media (max-width: 640px){
+    .bg{
+        display: none;
+    }
+
+    .bg.s{
+        display: block;
+    }
+}
+
+@media (max-width: 450px){
+    header{
+        flex-direction: column;
+    }
+
+    header ul li{
+        display: block;
+        font-size: 120%;
+        margin: 1rem 0;
+    }
+
+    .about-me .description{
+        font-size: 150%;
+    }
+
+    .game-wrapper .links{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .game-wrapper .links a{
+        padding: 0.4rem;
+        font-size: 120%;
+    }
+
+    .game-description div{
+        width: 100%;
+    }
+
+    .other-projects-list{
+        flex-direction: column;
+    }
+
+    .other-projects-list div{
+        width: 100%;
+    }
+
+    footer .items{
+        justify-content: left;
+    }
+}
