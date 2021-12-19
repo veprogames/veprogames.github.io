@@ -22,7 +22,7 @@ class Molecule {
 
     //includes any upgrade effects
     getMergesNeeded() {
-        return Math.round(this.baseMergesNeeded * game.molecules.upgrades.fasterMolecules.apply() * game.molecules.getMergeReduction());
+        return Math.round(this.baseMergesNeeded * game.molecules.upgrades.fasterMolecules.getEffect() * game.molecules.getMergeReduction());
     }
 
     getPower() {
