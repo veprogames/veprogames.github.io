@@ -62,7 +62,7 @@ class ContentMolecules {
 
     getMergeReduction() {
         let totalLvls = this.getTotalUpgradeLevels();
-        return (0.99 ** Math.min(100, totalLvls) / (1 + 0.0001 * Math.max(0, totalLvls - 100))) * this.upgrades.fasterMolecules.getEffect().toNumber();
+        return this.upgrades.fasterMolecules.getEffect(this.upgrades.fasterMolecules.level).mul(0.99 ** Math.min(100, totalLvls) / (1 + 0.0001 * Math.max(0, totalLvls - 100)));
     }
 
     load(obj) {
