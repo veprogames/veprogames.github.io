@@ -4,12 +4,13 @@ class WindowManager {
     }
 
     createWindow(component) {
-        if (this.window === null) {
-            const window = VueUtils.createComponent(component);
-            this.window = window;
-            app.$once("window-closed", () => {
-                this.window = null;
-            });
-        }
+        if (this.window !== null) {
+            this.window = null;
+        };
+        const window = VueUtils.createComponent(component);
+        this.window = window;
+        app.$once("window-closed", () => {
+            this.window = null;
+        });
     }
 }
