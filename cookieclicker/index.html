@@ -1,0 +1,316 @@
+﻿<html>
+
+<head>
+  <title>Cookie Clicker</title>
+  <link id="gameStyle" rel="stylesheet" href="style.css"/>
+
+  <meta charset="utf-8"/>
+
+    <meta name="title" content="Cookie Clicker"/>
+    <meta name="description"
+            content="A Game like Cookie Clicker with some other mechanics."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="indie, math, idle, incremental, game"/>
+    <meta name="url" content="https://cook1eegames.feedia.co/cookieclicker"/>
+    <meta name="og:title" content="Cookie Clicker"/>
+    <meta name="og:type" content="website"/>
+    <meta name="og:url" content="https://cook1eegames.feedia.co/cookieclicker"/>
+    <meta name="og:description"
+            content="A Game like Cookie Clicker with some other mechanics."/>
+    <meta name="og:image" content="https://cook1eegames.feedia.co/Images/Previews/cookieclicker.png"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Cookie Clicker"/>
+    <meta name="twitter:description"
+            content="A Game like Cookie Clicker with some other mechanics."/>
+    <meta name="twitter:image" content="https://cook1eegames.feedia.co/Images/Previews/cookieclicker.png"/>
+    <meta name="twitter:site" content="@cook1eegames"/>
+    <meta name="twitter:creator" content="@cook1eegames"/>
+</head>
+
+<body>
+  <div id="game">
+
+    <div id="game-headbar">
+      <span class="displaystat">You have <span class="bigtext">&#x1f36a;{{NumberFormatter.format(cookies, settings.numberFormatType)}}</span></span>
+      <span class="displaystat bigtext">{{NumberFormatter.format(cps, settings.numberFormatType)}} &#x1f36a;/s</span>
+      <button class="bigbutton" v-on:click="clickCookie">+ &#x1f36a;{{NumberFormatter.format(cpc, settings.numberFormatType)}}</button>
+      <button class="bigbutton" style="font-size: 0.5em;" v-on:click="window.open('http://www.numberengineer.com', '_blank')">Play more Incremental Games</button><br />
+      <button class="bigbutton" style="font-size: 0.5em;" v-on:click="window.open('https://discord.gg/nrDdZjW', '_blank')">Join my Discord Server</button><br/>
+      <button class="tabButton" v-for="(tab, index) in settings.tabs" v-if="cookiesTotal > tab[1]" v-on:click="settings.currentTab = tab[0]">{{tab[0]}}</button>
+    </div>
+
+    <!--generators-->
+    <div v-if="settings.currentTab === 'Generators'">
+      <div class="center"><button class="bigbutton" v-on:click="maxAllBuildings" v-if="prestigeCount >= 1">Max All Buildings</button></div>
+      <table id="table-buildings" class="bigtable">
+        <tr style="font-weight: bold">
+          <td>Name</td>
+          <td style="width: 10%;" class="center">Price</td>
+          <td style="width: 10%;" class="center">Level</td>
+          <td class="center">CPS</td>
+          <td class="center">Buy</td>
+        </tr>
+        <tr v-for="(building, index) in buildings" v-if="cookies >= building.price || buildings[Math.max(0, index - 1)].level >= 1 || building.level >= 1 || index == 0">
+          <td>{{building.name}}</td>
+          <td style="width: 10%;" class="center">&#x1f36a;{{NumberFormatter.format(building.price, settings.numberFormatType)}}</td>
+          <td style="width: 10%;" class="center">{{building.level}}</td>
+          <td class="center">{{NumberFormatter.format(building.cps, settings.numberFormatType)}} &#x27a1; {{NumberFormatter.format(building.calculateCps(building.level + 1), settings.numberFormatType)}}</td>
+          <td class="center">
+            <button v-bind:disabled="cookies <= building.price" v-on:click="building.buy()">BUY</button>
+            <button v-bind:disabled="cookies <= building.price" v-on:click="building.buyMax()">MAX</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+
+    <!--upgrades-->
+    <div v-if="settings.currentTab === 'Upgrades'">
+      <label>Show bought Upgrades<input type="checkbox" v-model="settings.showBoughtUpgrades" /></label>
+      <button class="bigbutton" v-on:click="buyAllUpgrades()">Buy All Upgrades</button>
+
+      <table id="table-upgrades" class="bigtable">
+        <tr style="font-weight: bold">
+          <td>Name</td>
+          <td class="center">Affects</td>
+          <td class="center">Price</td>
+          <td class="center">Effect</td>
+          <td class="center">Buy</td>
+        </tr>
+        <tr v-for="upgrade in upgrades" v-if="!(!settings.showBoughtUpgrades && upgrade.bought)" v-bind:class="upgrade.bought ? 'upgradebought' : 'upgradeavailable'">
+          <td>{{upgrade.name}}</td>
+          <td class="center">{{game.buildings[upgrade.buildingIndex].name}}</td>
+          <td class="center">&#x1f36a;{{NumberFormatter.format(upgrade.price, settings.numberFormatType)}}</td>
+          <td class="center">x{{NumberFormatter.format(upgrade.effect, settings.numberFormatType, true)}}</td>
+          <td class="center">
+            <button v-if="!upgrade.bought" v-bind:disabled="cookies <= upgrade.price" v-on:click="upgrade.buy()">BUY</button>
+            <span v-if="upgrade.bought">&#x2714;</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!--lab-->
+    <div v-if="settings.currentTab === 'Lab'">
+      <div class="center"><span class="title textoutlinewhite">The Lab</span></div>
+      <button style="font-size: 1em; width: 100%;" v-for="key in Object.keys(game.labUpgrades)" v-on:click="labUpgrades[key].buy()">
+        <div v-if="labUpgrades[key].prices[labUpgrades[key].level] < cookiesTotal * 10000 || labUpgrades[key].level > 0">
+          <span class="bigtext autumn">{{labUpgrades[key].name}}</span><br />
+          <span>{{labUpgrades[key].description}}</span><br />
+          <div class="bigtext">
+            <span class="autumn" v-if="labUpgrades[key].level < labUpgrades[key].prices.length">&#x2716;{{NumberFormatter.format(labUpgrades[key].getEffect(labUpgrades[key].level), settings.numberFormatType, true)}} => &#x2716;{{NumberFormatter.format(labUpgrades[key].getEffect(labUpgrades[key].level + 1), settings.numberFormatType, true)}}</span>
+            <span class="autumn" v-if="labUpgrades[key].level == labUpgrades[key].prices.length">&#x2716;{{NumberFormatter.format(labUpgrades[key].getEffect(labUpgrades[key].level), settings.numberFormatType, true)}}</span><br />
+            <span class="autumn" v-if="labUpgrades[key].level < labUpgrades[key].prices.length">&#x1f36a;{{NumberFormatter.format(labUpgrades[key].prices[labUpgrades[key].level], settings.numberFormatType)}}</span>
+            <span class="autumn" v-if="labUpgrades[key].level == labUpgrades[key].prices.length"><img class="inlineimage" src="Images/tick.png" /></span>
+          </div>
+        </div>
+        <div v-else>
+          <span class="bigtext">???</span><br />
+          <span>Play further to reveal this Upgrade!</span>
+        </div>
+      </button>
+    </div>
+
+    <!--prestige-->
+    <div v-if="settings.currentTab === 'Prestige'">
+      <div class="center">
+        <div class="center"><span class="title textoutlinewhite">Prestige</span></div>
+        <p>This will reset all Progress made so far in return for powerful upgrades</p>
+        <button class="bigbutton" style="height: 150px;" v-if="getPrestigePointsOnReset(cookies) >= 1" v-on:click="prestigeGame">Prestige to get {{NumberFormatter.format(getPrestigePointsOnReset(cookies), settings.numberFormatType)}} Prestige Points</button>
+        <p v-else>You need {{NumberFormatter.format(1e33, settings.numberFormatType)}} Cookies to Prestige</p>
+        <p>You have <span class="bigtext">{{NumberFormatter.format(prestigePoints, settings.numberFormatType)}}</span> Prestige Points</p>
+        <br />
+        <button class="bigbutton" v-on:click="respecPrestigeUpgrades">Respec all Upgrades</button>
+        <p>You will get back all of your spent prestige points! Respec often to optimize your strategy.</p>
+      </div>
+
+      <table id="table_prestigeupgrades">
+        <tr>
+          <td></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.generatorBoost"></prestigeupgrade></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.clickBonusFlat"></prestigeupgrade></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.labSynergy"></prestigeupgrade></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.betterPrestigeFormula"></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.blackHolePower"></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.idleGeneratorBoost"></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.activeGeneratorBoost"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.idlePrestigeBoost"></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.activePrestigeBoost"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.exponentialBoost"></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.priceDecrease"></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.upgradePriceDecrease"></prestigeupgrade></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.generatorBoostBoost"></prestigeupgrade></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.equationBoost"></prestigeupgrade></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><prestigeupgrade v-bind:upgrade="prestigeUpgrades.labPower"></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+
+    <!--math machine-->
+    <div v-if="settings.currentTab === 'Math Machine'" class="center">
+      <div class="center"><span class="title textoutlinewhite">The Math Machine</span></div>
+
+      <p>Can you solve <span class="text-huge">{{mathMachine.currentEquation}}</span> ?</p>
+
+      <input style="font-size: 1em;" v-model="mathMachine.currentInput" /><br/>
+
+      <p v-if="mathMachine.lastReward > 0" class="text-big">Good Job, you got &#x1f36a;{{NumberFormatter.format(mathMachine.lastReward, settings.numberFormatType)}}</p>
+    
+      <p>You solved <span class="text-big">{{mathMachine.equationsSolved}}</span> Problems, translated to a boost of <span class="text-big">x{{NumberFormatter.format(gameComputed.mathMachine.equationBonus(), settings.numberFormatType, true)}}</span></p> 
+    </div>
+
+    <!--math machine-->
+    <div v-if="settings.currentTab === 'Automation'" class="center">
+      <div class="center"><span class="title textoutlinewhite">Automation</span></div>
+
+      <button class="bigbutton" style="width: 12em; height: 4em;" v-on:click="buyAutomaton('cookies')">Get &#x1f551; 1<br/>&#x1f36a; {{NumberFormatter.format(getAutomatorPrices["cookies"], settings.numberFormatType)}}</button>
+      <button class="bigbutton" style="width: 12em; height: 4em;" v-on:click="buyAutomaton('prestigePoints')">Get &#x1f551; 1<br/>{{NumberFormatter.format(getAutomatorPrices["prestigePoints"], settings.numberFormatType)}} Prestige Points</button> <br/>
+
+      <button class="bigbutton" style="width: 16em; height: 4em;" v-on:click="respecAutomators">Respec Automators (Free)</button>
+
+      <table class="automationtable">
+        <tr>
+          <td><automator v-bind:automator="game.automators.autoClick"></automator></td>
+          <td></td>
+          <td><automator v-bind:automator="game.automators.autoBuyBuildings"></automator></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td style="font-size: 2em;">You have &#x1f551; {{game.automatons}}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><automator v-bind:automator="game.automators.autoBuyUpgrades"></automator></td>
+          <td><automator v-bind:automator="game.automators.autoBuyLab"></automator></td>
+          <td>
+            <automator v-bind:automator="game.automators.autoPrestige"></automator><br/>
+            <span>At <input type="number" style="height: 1.5em; width: 4em; font-size: 1.2em;" v-model="pointsForAutoPrestige" /> Prestige Points</span>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+
+    <!--stats-->
+    <div v-if="settings.currentTab === 'Statistics'">
+      <div class="center"><span class="title textoutlinewhite">Statistics</span></div>
+      <p>You have <span class="bigtext">{{NumberFormatter.format(cookies, settings.numberFormatType)}}</span> Cookies.</p>
+      <p>You get <span class="bigtext">{{NumberFormatter.format(cps, settings.numberFormatType)}}</span> Cookies per Second.</p>
+      <p>You get <span class="bigtext">{{NumberFormatter.format(cpc, settings.numberFormatType)}}</span> Cookies per Click.</p>
+      <p>You made <span class="bigtext">{{NumberFormatter.format(cookiesTotal, settings.numberFormatType)}}</span> Cookies so far.</p><br />
+
+      <p>You have clicked <span class="bigtext">{{clicks}}</span> times.</p><br />
+
+      <p>You have played for <span class="bigtext">{{formatTime((Date.now() - firstPlayed) / 1000)}}</span>.</p><br />
+
+      <p>You have <span class="bigtext">{{NumberFormatter.format(prestigePoints, settings.numberFormatType)}}</span> Prestige Points.</p>
+      <p>You prestiged <span class="bigtext">{{prestigeCount}}</span> times.</p>
+      <p>You spent <span class="bigtext">{{formatTime(timeInPrestige)}}</span> in this Prestige run.</p><br />
+    </div>
+
+    <!--milestones-->
+    <div v-if="settings.currentTab === 'Milestones'">
+      <div class="center"><span class="title textoutlinewhite">Milestones</span></div>
+      <div class="milestone" v-for="m in milestones">
+        <span v-if="m.unlocked"><span class="text-big">&#x1f36a;{{NumberFormatter.format(m.cookiesNeeded, settings.numberFormatType)}} </span><br/> {{m.text}}</span>
+        <span v-else>???</span>
+      </div>
+    </div>
+
+    <!--options-->
+    <div v-if="settings.currentTab === 'Options'">
+      <div class="center"><span class="title textoutlinewhite">Save Management</span></div>
+      <button class="bigbutton" v-on:click="exportGame">Export Game</button>
+      <button class="bigbutton" v-on:click="importGame">Import Game</button>
+      <div v-if="settings.currentExportCode !== ''">
+        <span>Keep it in a safe place!</span><br />
+        <textarea cols="100" rows="25" v-bind:value="settings.currentExportCode"></textarea>
+      </div> <br />
+
+      <div class="center"><h2>Number Formatting</h2></div>
+      <button class="bigbutton" style="height: 96px;" v-for="(type, index) of settings.numberFormatTypes" v-on:click="settings.numberFormatType=index">{{type}} (e.g. {{NumberFormatter.format(Math.pow(10, 20 + 20 * Math.sin((timeStamp - firstPlayed) / 5000)), index)}})</button>
+
+      <div class="center"><h2>Style</h2></div>
+      <button class="bigbutton" v-for="s in settings.styles" v-on:click="setGameStyle(s.name)" style="height: 5em; font-size: 0.6em;"><span style="font-size: 1.5em;">{{s.title}}</span><br/>{{s.desc}}</button>
+
+      <br />
+      <img src="Images/cookieegames.png" />
+    </div>
+
+  </div>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126251684-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-126251684-2');
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="Scripts/utils.js"></script>
+  <script src="Scripts/numberformatter.js"></script>
+  <script src="Scripts/building.js"></script>
+  <script src="Scripts/upgrade.js"></script>
+  <script src="Scripts/labupgrade.js"></script>
+  <script src="Scripts/prestige.js"></script>
+  <script src="Scripts/milestone.js"></script>
+  <script src="Scripts/automator.js"></script>
+  <script src="Scripts/main.js"></script>
+</body>
+
+</html>

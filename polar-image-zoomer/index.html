@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Polar Image Zoomer</title>
+    <link rel="stylesheet" href="css/main.css"/>
+
+    <meta name="title" content="Polar Image Zoomer"/>
+    <meta name="description"
+            content="Converts an image from a logarithmic polar representation to a cartesian (standard x,y) representation. Zoom very deep!"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="indie, math, polar, zoom"/>
+    <meta name="url" content="https://cook1eegames.feedia.co/polar-image-zoomer"/>
+    <meta name="og:title" content="Polar Image Zoomer"/>
+    <meta name="og:type" content="website"/>
+    <meta name="og:url" content="https://cook1eegames.feedia.co/polar-image-zoomer"/>
+    <meta name="og:description"
+            content="Converts an image from a logarithmic polar representation to a cartesian (standard x,y) representation. Zoom very deep!"/>
+    <meta name="og:image" content="https://cook1eegames.feedia.co/polar-image-zoomer/img/image.png"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Polar Image Zoomer"/>
+    <meta name="twitter:description"
+            content="Converts an image from a logarithmic polar representation to a cartesian (standard x,y) representation. Zoom very deep!"/>
+    <meta name="twitter:image" content="https://cook1eegames.feedia.co/polar-image-zoomer/img/image.png"/>
+    <meta name="twitter:site" content="@cook1eegames"/>
+    <meta name="twitter:creator" content="@cook1eegames"/>
+</head>
+<body>
+<header>
+    <h1>Polar Image Zoomer</h1>
+    <nav>
+        <ul>
+            <li><a href="https://cook1eegames.feedia.co">Home</a></li>
+            <li><a id="togglescroll">Toggle Page Scrolling</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <article>
+        <canvas width="1024" height="576"></canvas>
+        <input id="sl_zoom" step="any" value="0" type="range"/><br/>
+        Approximate Magnification: <span id="mag"></span><br/>
+        Select Image <input type="file" accept="image/png, image/jpeg, image/jpg"/>
+    </article>
+    <article>
+        <p>
+
+            This Application converts an image from a logarithmic polar representation to a cartesian (standard x,y) representation.
+            Try creating an image and putting some horizontal and vertical lines into it. The wider the image is in relation to its height,
+            the deeper you can zoom. If the image is higher, the quality will increase.<br/>
+            If the result looks distorted, scale the base image along the x axis (increase the image width).
+        </p>
+
+    </article>
+</main>
+
+<script type="x-shader/x-vertex" id="vertcode">
+    #version 100
+
+    attribute vec2 a_position;
+    attribute vec2 a_texcoord;
+
+    varying vec2 v_texcoord;
+
+    void main()
+    {
+        gl_Position = vec4(a_position, 0.0, 1.0);
+
+        v_texcoord = a_texcoord;
+    }
+</script>
+
+<script type="x-shader/x-vertex" id="fragcode">
+    #version 100
+
+    precision mediump float;
+
+    uniform vec2 iResolution;
+    uniform vec2 tSize;
+    uniform float zoom;
+
+    varying vec2 v_texcoord;
+    uniform sampler2D texture;
+
+    void main()
+    {
+        float pi = 3.1415926;
+        vec2 abs_coord = vec2(gl_FragCoord.x / iResolution.x, gl_FragCoord.y / iResolution.y);
+
+        vec2 coord = v_texcoord;
+
+        vec2 centered = abs_coord - vec2(.5, .5);
+        centered.x *= -iResolution.x / iResolution.y;
+        float angle = -atan(centered.y, centered.x);
+        float dist = sqrt(centered.x * centered.x + centered.y * centered.y);
+
+        coord.x = clamp(-(log(dist) / log(10.0)) / (pi * 0.75 * (tSize.x / tSize.y)) + zoom / (tSize.x / tSize.y), 0.0, 1.0);
+        coord.y = (angle + pi) / 2.0 / pi;
+
+        gl_FragColor = texture2D(texture, coord);
+        /*if(coord.x <= 0.0 || coord.x >= 1.0)
+        {
+            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        }*/
+    }
+</script>
+
+<script src="js/gl.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

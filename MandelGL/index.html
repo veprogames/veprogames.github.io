@@ -1,0 +1,279 @@
+<html>
+
+<head>
+    <title>MandelGL</title>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Explore the Mandelbrot Set in real time."/>
+    <link rel="stylesheet" href="style.css"/>
+
+    <meta name="title" content="MandelGL"/>
+    <meta name="description"
+            content="Explore the Mandelbrot Set in real time."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="indie, math, zoom, real time, mandelbrot, fractal"/>
+    <meta name="url" content="https://cook1eegames.feedia.co/MandelGL"/>
+    <meta name="og:title" content="MandelGL"/>
+    <meta name="og:type" content="website"/>
+    <meta name="og:url" content="https://cook1eegames.feedia.co/MandelGL"/>
+    <meta name="og:description"
+            content="Explore the Mandelbrot Set in real time."/>
+    <meta name="og:image" content="https://cook1eegames.feedia.co/Images/Previews/mandelgl.png"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="MandelGL"/>
+    <meta name="twitter:description"
+            content="Explore the Mandelbrot Set in real time."/>
+    <meta name="twitter:image" content="https://cook1eegames.feedia.co/Images/Previews/mandelgl.png"/>
+    <meta name="twitter:site" content="@cook1eegames"/>
+    <meta name="twitter:creator" content="@cook1eegames"/>
+</head>
+
+<body>
+
+<div class="center">
+    <canvas id="cnv" width="1024" height="576"></canvas>
+</div>
+
+<div id="app">
+    <div class="sidebar" @mouseenter="sidebarFocused = true" @mouseleave="sidebarFocused = false">
+        <div>
+            <h3>Location</h3>
+            <p>Zoom: {{formatNumber(1 / camRange)}}x</p>
+            <p>X: {{camPos[0].toFixed(7)}}<br/>
+                Y: {{camPos[1].toFixed(7)}}</p>
+            <p>Max Iterations: <input type="number" min="4" max="4096" step="1" v-model="maxIterations"/></p>
+        </div>
+        <div>
+            <h3>Colors</h3>
+            <label>Color Speed
+                <input type="number" step="1" min="1" max="128" v-model="colorSpeed" @input="setColorSpeed(colorSpeed)"/></label>
+            <h4>Color Scheme</h4>
+            <button class="gradient" v-for="(n, i) in colorSchemeNames" @click="colorScheme = i; setColorScheme(i);">{{n}}</button>
+            <br/>
+            <label>Cycling Speed
+                <input type="number" value="0" step="0.1" v-model="colorCyclingSpeed"/></label>
+        </div>
+        <div>
+            <h3>Resolution</h3>
+            <p>
+                x
+                <input type="number" min="100" step="100" v-model="resolution[0]" @input="setResolution(resolution[0], resolution[1])"/>
+                y
+                <input type="number" min="100" step="100" v-model="resolution[1]" @input="setResolution(resolution[0], resolution[1])"/><br/>
+            </p>
+            <button @click="detectResolution">Detect Resolution</button>
+            <button @click="multiplyResolution(0.5)">x0.5</button>
+            <button @click="multiplyResolution(2)">x2</button>
+        </div>
+        <div>
+            <h3>Fractal</h3>
+            <h4>Type</h4>
+            <button v-for="(t, i) in fractalTypes" @click="setType(i)">{{t}}</button>
+            <h4>Power</h4>
+            <input type="range" min="2" max="4" step="1" v-model="power" @input="setPower(power)"/> {{power}}
+            <h4>Start Value</h4>
+            X <input type="range" min="-1.5" max="1.5" step="any" v-model="startZ[0]" @input="setStartZ(startZ[0], startZ[1])"/>
+            <input type="number" v-model="startZ[0]" @input="setStartZ(startZ[0], startZ[1])"/><br/>
+            Y <input type="range" min="-1.5" max="1.5" step="any" v-model="startZ[1]" @input="setStartZ(startZ[0], startZ[1])"/>
+            <input type="number" v-model="startZ[1]" @input="setStartZ(startZ[0], startZ[1])"/>
+        </div>
+        <div>
+            <h3>Colors</h3>
+            <label>Smooth
+                <input type="checkbox" v-model="smoothColors" v-on:change="setSmoothColors(smoothColors)"/></label><br/>
+            <label>High Bailout <input type="checkbox" v-model="bailout" @change="setBailout(bailout)"/></label><br/>
+            <label>Inner Color
+                <input type="color" v-model="innerColor" v-on:input="setInnerColor(stringToColor(innerColor))"/></label>
+            <h4>Custom</h4>
+            <input type="color" v-for="c, idx in gradientColors" v-model="gradientColors[idx]" @input="setGradient(gradientColors)"/><br/>
+            <button class="gradient-change-amount" @click="removeGradientColor()">-</button>
+            <button class="gradient-change-amount" @click="addGradientColor()">+</button>
+            <button @click="generateRandomGradient()">Randomize</button><br/>
+            <button v-for="g in gradients" @click="loadGradient(g)">{{g.name}}</button>
+        </div>
+        <div>
+            <h3>Extra</h3>
+            <label>Vignette <input type="checkbox" v-model="vignette" v-on:change="setVignette(vignette)"/></label><br/>
+            <label>Drag Mode <input type="checkbox" v-model="dragMode"/></label><br/>
+            <label>Smooth Zoom
+                <input type="checkbox" v-model="smoothZoom" v-on:change="camTargetRange = camRange"/></label><br/>
+            <label>Zoom Speed
+                <input type="number" min="1" max="100" step="0.25" v-model="zoomSpeed"/>x per Second</label>
+        </div>
+        <div>
+            <h3>Experimental</h3>
+            <h4>Saturation</h4>
+            <p>Set to 1 to deactivate</p>
+            <input type="range" min="0" max="10" step="0.001" v-model="saturation" v-on:input="setSaturation(saturation)"/>
+            <input type="number" min="0" max="10" v-model="saturation" v-on:input="setSaturation(saturation)"/>
+        </div>
+        <div>
+            <h3>Help</h3>
+            <p>Normal Mode: Left/Right Click to Zoom, Mouse Wheel to set maximum Iterations</p>
+            <p>Drag Mode: Left/Right Click to Drag, Mouse Wheel to Zoom</p>
+        </div>
+    </div>
+
+
+</div>
+
+
+<!--SHADERS-->
+<script id="vertexshader" type="x-shader/x-vertex">
+#version 100
+
+attribute vec2 coordinates;
+
+void main()
+{
+    gl_Position = vec4(coordinates, 0.0, 1.0);
+}
+</script>
+
+<script id="fragmentshader" type="x-shader/x-fragment">
+#version 100
+precision highp float;
+
+uniform vec2 resolution;
+uniform float time;
+
+uniform int maxIterations;
+uniform highp vec2 camPos;
+uniform float camRange;
+
+uniform float colorOffset;
+uniform float colorSpeed;
+uniform bool highBailout;
+uniform bool smoothColors;
+uniform int colorScheme;
+uniform vec3 innerColor;
+uniform float saturation;
+
+uniform vec3 gradientColors[16];
+uniform int gradientColorCount;
+
+uniform vec2 startZ;
+uniform int power;
+uniform int type;
+
+uniform bool vignette;
+
+vec3 getColor(int idx)
+{
+    for(int i = 0; i < 16; i++)
+    {
+        if(i == idx) return gradientColors[i];
+    }
+}
+
+vec3 getColorInGradient(float t)
+{
+    float amount = float(gradientColorCount);
+    int idx = int(t * amount);
+    int nextidx = idx + 1 >= gradientColorCount ? 0 : idx + 1;
+    vec3 intpl = mix(getColor(idx), getColor(nextidx), mod(t * amount, 1.0));
+    return intpl;
+}
+
+highp vec2 squareVec(highp vec2 v)
+{
+	return vec2(v.x * v.x - v.y * v.y, 2.0 * v.x * v.y);
+}
+
+//interesting:
+//return vec2(v.x * v.x * v.x - v.x * v.y * v.y, 2.0 * v.x * v.x * v.y + v.y * v.x * v.x + 2.0 * v.x * v.y * v.y - v.y * v.y * v.y);
+//hardcoded formulas to improve performance
+highp vec2 powComplex(highp vec2 v, int pow)
+{
+    if(pow == 2) return squareVec(v);
+    if(pow == 3)
+    {
+        //a³ + 2a²b + ab² + ba² + 2ab² + b³
+        return vec2(v.x * v.x * v.x - v.x * v.y * v.y - 2.0 * v.x * v.y * v.y, 2.0 * v.x * v.x * v.y + v.y * v.x * v.x - v.y * v.y * v.y);
+    }
+    if(pow == 4) return squareVec(squareVec(v));
+}
+
+highp float vecLen(highp vec2 v)
+{
+    return sqrt(v.x * v.x + v.y * v.y);
+}
+
+vec3 itrToColor(float itr)
+{
+    float normalizedItr = (itr + colorOffset) / colorSpeed;
+
+    if(colorScheme == 0)
+    {
+        return vec3(1.0, 1.0, 1.5) * sin(normalizedItr);
+    }
+    if(colorScheme == 1)
+    {
+        return vec3(1.0, 2.5, 1.5) * sin(normalizedItr);
+    }
+    if(colorScheme == 2)
+    {
+        return vec3(sin(normalizedItr),
+                        sin(normalizedItr + 0.6),
+                        sin(normalizedItr + 1.2));
+    }
+    if(colorScheme == 3)
+    {
+        return mod(normalizedItr, 2.0) > 1.0 ? vec3(1, 1, 1) : vec3(0, 0, 0);
+    }
+    if(colorScheme == 4)
+    {
+        float amount = float(gradientColorCount) + 0.0;
+        return getColorInGradient(mod(normalizedItr / amount, 1.0));
+    }
+    return vec3(1, 1, 1); 
+}
+
+void main()
+{
+    int itr = 0;
+    
+    float aspect = float(resolution.x) / float(resolution.y);
+    
+    highp vec2 z = startZ;
+    highp vec2 c = (gl_FragCoord.xy - resolution.xy / 2.0) / resolution * camRange * vec2(aspect, 1.0) + camPos;
+    float bailout = highBailout ? 128.0 : 4.0;
+
+    for(int i = 0; i > -1; i++)
+    {
+        if(type == 0)
+        {
+            z = powComplex(z, power) + c;
+        }
+        else if(type == 1)
+        {
+            z = powComplex(vec2(abs(z.x), -abs(z.y)), power) + c;
+        }
+        itr++;
+        if(z.x * z.x + z.y * z.y > bailout || itr >= maxIterations) break;
+    }
+    
+    float intplItr = float(itr) - log(log(vecLen(z)) / log(float(power))) / log(float(power));
+    
+    //itr or intplItr for either smooth or float colring
+    vec3 color = itr == maxIterations ? innerColor : itrToColor(smoothColors ? intplItr : float(itr));
+    
+    if(vignette)
+    {
+        vec2 delta = gl_FragCoord.xy - resolution / 2.0;
+        float distToCenter = sqrt(delta.x * delta.x + delta.y * delta.y);
+        color *= clamp(1.0 - distToCenter / resolution.x * (1.9 + 0.05 * sin(time * 15.0)), 0.0, 1.0);
+    }
+    
+    if(saturation != 1.0)
+        color = vec3(pow(color.r, saturation), pow(color.g, saturation), pow(color.b, saturation));
+    
+    gl_FragColor = vec4(color, 1);
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="Scripts/main.js"></script>
+
+</body>
+
+</html>
