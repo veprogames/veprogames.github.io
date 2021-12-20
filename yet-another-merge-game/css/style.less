@@ -37,6 +37,18 @@
 
 body, html, input, select, button{
     font-size: 14px;
+
+    @media (orientation: landscape) and (max-width: 1280px){
+        font-size: 10px;
+    }
+
+    @media (orientation: landscape) and (max-width: 800px){
+        font-size: 8px;
+    }
+
+    @media (orientation: landscape) and (max-width: 400px){
+        font-size: 6px;
+    }
     
     font-kerning: none;
     font-variant-numeric: lining-nums tabular-nums;
