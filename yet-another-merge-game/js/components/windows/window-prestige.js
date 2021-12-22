@@ -1,4 +1,5 @@
 const PrestigeWindowComponent = WindowComponent.extend({
+    name: "PrestigeWindowComponent",
     methods: {
         prestige() {
             game.prestige.prestige();

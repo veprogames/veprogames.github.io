@@ -1,14 +1,15 @@
 class WindowManager {
     constructor() {
-        this.window = null;
+        this.windows = [];
     }
 
     createWindow(component) {
-        if (this.window === null) {
-            const window = VueUtils.createComponent(component);
-            this.window = window;
+        const name = component.options.name;
+        if (!this.windows.includes(name)) {
+            VueUtils.createComponent(component);
+            this.windows.push(name);
             app.$once("window-closed", () => {
-                this.window = null;
+                this.windows = this.windows.filter(window => window !== name);
             });
         }
     }

@@ -1,4 +1,5 @@
 const HelpMatterComponent = WindowComponent.extend({
+    name: "HelpMatterComponent",
     template: `<window icon="images/tabs/help.png" title="Introduction">
         <p>
             Your goal in this game is to combine Objects "Mergers" to produce as much
@@ -11,6 +12,7 @@ const HelpMatterComponent = WindowComponent.extend({
 });
 
 const HelpPrestigeComponent = WindowComponent.extend({
+    name: "HelpPrestigeComponent",
     template: `<window icon="images/tabs/help.png" title="Prestige">
         <p>
             After a certain point, it is harder and harder to Progress and unlock new Mergers.
@@ -28,6 +30,7 @@ const HelpPrestigeComponent = WindowComponent.extend({
 });
 
 const HelpMergepediaComponent = WindowComponent.extend({
+    name: "HelpMergepediaComponent",
     computed: {
         prestigeUnlocked() {
             return game.prestige.count > 0;
@@ -45,6 +48,7 @@ const HelpMergepediaComponent = WindowComponent.extend({
 });
 
 const HelpEnergyCoresComponent = WindowComponent.extend({
+    name: "HelpEnergyCoresComponent",
     template: `<window icon="images/tabs/help.png" title="Energy Cores">
         <p>
             <span class="text-xl"><img class="icon" src="images/tabs/energycores.png"/> Energy Cores</span> are another way to boost your matter production. After buying them with
@@ -55,6 +59,7 @@ const HelpEnergyCoresComponent = WindowComponent.extend({
 });
 
 const HelpQuantumProcessorComponent = WindowComponent.extend({
+    name: "HelpQuantumProcessorComponent",
     computed: {
         processorCoresBought() {
             return game.quantumProcessor.cores.length > 0;
@@ -73,6 +78,7 @@ const HelpQuantumProcessorComponent = WindowComponent.extend({
 });
 
 const HelpIsotopesComponent = WindowComponent.extend({
+    name: "HelpIsotopesComponent",
     template: `<window icon="images/tabs/help.png" title="Isotopes">
         <p>
             When two Mergers collide, there's a chance that they create an <span class="text-xl"><img class="icon" src="images/currencies/isotopes.png">Isotope</span>.
@@ -83,6 +89,7 @@ const HelpIsotopesComponent = WindowComponent.extend({
 });
 
 const HelpMoleculesComponent = WindowComponent.extend({
+    name: "HelpMoleculesComponent",
     template: `<window icon="images/tabs/help.png" title="Molecules">
         <p>
             <span class="text-xl"><img class="icon" src="images/currencies/molecules.png"/> Molecules</span> are a very powerful way to progress in the Game.

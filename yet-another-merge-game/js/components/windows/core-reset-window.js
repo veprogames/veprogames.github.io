@@ -1,4 +1,5 @@
 const CoreResetWindowComponent = WindowComponent.extend({
+    name: "CoreResetWindowComponent",
     methods: {
         buyProcessorCore() {
             if (this.canBuy) {

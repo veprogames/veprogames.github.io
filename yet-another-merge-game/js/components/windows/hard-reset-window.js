@@ -1,4 +1,5 @@
 const HardResetWindow = WindowComponent.extend({
+    name: "HardResetWindow",
     data() {
         return {
             confirmation: "",

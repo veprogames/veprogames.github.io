@@ -1,4 +1,5 @@
 const CreditsWindowComponent = WindowComponent.extend({
+    name: "CreditsWindowComponent",
     template: `<window title="Credits">
         <div class="text-xl">
             <p><i class="fas fa-gamepad"></i> Game made by: VeproGames</p>

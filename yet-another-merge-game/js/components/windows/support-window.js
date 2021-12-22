@@ -1,4 +1,5 @@
 const SupportWindow = WindowComponent.extend({
+    name: "SupportWindow",
     methods: {
         openYT() {
             window.open("https://www.youtube.com/channel/UCiQP-YPI3WYY241iJe9mgRQ", "_blank");

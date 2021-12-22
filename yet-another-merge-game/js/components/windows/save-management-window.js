@@ -1,4 +1,5 @@
 const SaveManagerWindow = WindowComponent.extend({
+    name: "SaveManagerWindow",
     data() {
         return {
             exportString: ""
