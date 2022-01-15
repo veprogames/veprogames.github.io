@@ -16,11 +16,52 @@ class MergeObject {
             time: 1
         };
         this.output = this.calculateOutput();
+        this.calculateHandler = this.calculateOutput.bind(this); //needed for removeEventListener to work
+        this.setupEvents();
+        this.interval = setInterval(() => {
+            if(game.isotopes.upgrades.autoQuantumFoam.level >= 1){
+                this.calculateOutput();
+            }
+        }, 1000); //recalculating once per second si enough?! simplest solution
+    }
+
+    assignEvents(destruct = false){
+        const method1 = destruct ? "removeLevelChangedListener" : "addLevelChangedListener";
+        const method2 = destruct ? "removeEventListener" : "addEventListener";
+
+        for(const upg of [game.molecules.upgrades.mergerLevelExponent, game.prestige.upgrades.matterBoost, game.isotopes.upgrades.matterBoost,
+            game.molecules.upgrades.matterBoost, game.prestige.upgrades.socialBoost]){
+                upg[method1](this.calculateHandler);
+            }
+        for(const core of game.energyCores.cores){
+            core[method1](this.calculateHandler);
+        }
+        for(const core of game.quantumProcessor.cores){
+            core[method1](this.calculateHandler);
+        }
+        globalEvents[method2]("subscribeyt", this.calculateHandler);
+    }
+
+    setupEvents(){
+        this.assignEvents();
+    }
+
+    destructEvents(){
+        this.assignEvents(true);
     }
 
     setVelocity(x, y) {
         this.vx = x;
         this.vy = y;
+    }
+
+    setLevel(level){
+        this.level = level;
+        this.recalculateOutput();
+    }
+
+    nextLevel(){
+        this.setLevel(this.level + 1);
     }
 
     addClickSpeedMulti(amount) {
@@ -31,8 +72,17 @@ class MergeObject {
         return MergeObject.calculateOutputForLevel(this.level);
     }
 
+    recalculateOutput(){
+        this.output = this.calculateOutput();
+    }
+
+    static getBaseProduction(level){
+        return Decimal.pow(5, level);
+    }
+
     static calculateOutputForLevel(level) {
-        const social = localStorage.getItem("YetAnotherMergeGame_Support_YT") !== null ? 3 : 1;
+        const social = localStorage.getItem("YetAnotherMergeGame_Support_YT") !== null ? 
+            game.prestige.upgrades.socialBoost.apply() : 1;
         return Decimal.pow(Upgrade.apply(game.molecules.upgrades.mergerLevelExponent), level).mul(game.prestige.getQuantumFoamBoost())
             .mul(Upgrade.apply(game.prestige.upgrades.matterBoost))
             .mul(game.energyCores.getCoreBoost())
@@ -97,6 +147,33 @@ class MergeObject {
         ctx.fill();
     }
 
+    static renderMergerNumber(ctx, x, y, r, sizeMod, level){
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        if (level >= 250) {
+            ctx.fillStyle = "white";
+        }
+        if (level <= 1000) {
+            ctx.font = "700 " + (r * 0.6 * sizeMod * (level >= 99 ? 0.75 : 1)) + "px Montserrat, Arial, sans-serif";
+            ctx.fillText("#" + Math.round(level + 1), x, y);
+        } else {
+            ctx.font = "700 " + (r * 0.65 * sizeMod) + "px Montserrat, Arial, sans-serif";
+            ctx.fillText("#", x, y - r * 0.2);
+            ctx.font = "700 " + (r * 0.43 * sizeMod) + "px Montserrat, Arial, sans-serif";
+            ctx.fillText(functions.formatNumber(Math.round(level + 1), 0, 0, 100000), x, y + r * 0.35, r * 0.9);
+        }
+    }
+
+    static renderMergerSimple(ctx, x, y, r, level, lifeTime, showNumber = true){
+        let sizeMod = Math.min(1, lifeTime * 4);
+        r *= sizeMod * 1.25;
+        ctx.drawImage(images.merger, x - r, y - r, r * 2, r * 2);
+
+        if (showNumber) {
+            MergeObject.renderMergerNumber(ctx, x, y, r / 1.25, 1, level);
+        }
+    }
+
     static renderMerger(ctx, x, y, r, level, lifeTime, showNumber = true) {
         level = Math.round(level);
         let random = new Random(level);
@@ -136,27 +213,26 @@ class MergeObject {
         ctx.textBaseline = "middle";
 
         if (showNumber) {
-            if (level >= 250) {
-                ctx.fillStyle = "white";
-            }
-            if (level <= 1000) {
-                ctx.font = "700 " + (r * 0.6 * sizeMod * (level >= 99 ? 0.75 : 1)) + "px Montserrat, Arial, sans-serif";
-                ctx.fillText("#" + Math.round(level + 1), x, y);
-            } else {
-                ctx.font = "700 " + (r * 0.65 * sizeMod) + "px Montserrat, Arial, sans-serif";
-                ctx.fillText("#", x, y - r * 0.2);
-                ctx.font = "700 " + (r * 0.43 * sizeMod) + "px Montserrat, Arial, sans-serif";
-                ctx.fillText(functions.formatNumber(Math.round(level + 1), 0, 0, 100000), x, y + r * 0.35, r * 0.9);
-            }
+            MergeObject.renderMergerNumber(ctx, x, y, r, sizeMod, level);
         }
     }
 
     draw(ctx) {
-        MergeObject.renderMerger(ctx, this.x, this.y, this.radius, this.level, this.lifeTime);
+        if(game.settings.lowPerformanceMode){
+            MergeObject.renderMergerSimple(ctx, this.x, this.y, this.radius, this.level, this.lifeTime);
+        }
+        else{
+            MergeObject.renderMerger(ctx, this.x, this.y, this.radius, this.level, this.lifeTime);
+        }
+    }
+
+    destroy(){
+        clearInterval(this.interval);
+        this.destructEvents();
+        game.mergeObjects = game.mergeObjects.filter(val => val !== this);
     }
 
     tick(delta) {
-        this.output = this.calculateOutput();
         this.lifeTime += delta;
 
         if (delta > 0) //prevent negative matter(NaN)
@@ -171,18 +247,22 @@ class MergeObject {
             this.y += this.vy * moveSpeedMulti * delta * this.clickSpeedMulti;
         }
 
-        this.spawnText.cd += delta;
-        if (this.spawnText.cd >= this.spawnText.time) {
-            this.spawnText.cd = 0;
-            functions.createFloatingText(functions.formatNumber(this.output), this.x, this.y - this.radius, h * 0.2);
+        if(!game.settings.lowPerformanceMode){
+            this.spawnText.cd += delta;
+            if (this.spawnText.cd >= this.spawnText.time) {
+                this.spawnText.cd = 0;
+                functions.createFloatingText(functions.formatNumber(this.output), this.x, this.y - this.radius, h * 0.2);
+            }
         }
 
-        if (this.hitBorder().x) {
+        const hitBorder = this.hitBorder();
+
+        if (hitBorder.x) {
             this.vx *= -1;
             this.x = Utils.clamp(this.x, this.radius, w - this.radius);
         }
 
-        if (this.hitBorder().y) {
+        if (hitBorder.y) {
             this.vy *= -1;
             this.y = Utils.clamp(this.y, this.radius, h - this.radius);
         }
@@ -193,7 +273,7 @@ class MergeObject {
             if (this.collidesWith(obj) && this !== obj) {
                 if (Math.round(this.level) === Math.round(obj.level)) {
                     this.lifeTime = 0;
-                    this.level++;
+                    this.nextLevel();
                     game.highestMergeObject = Math.round(Math.max(this.level, game.highestMergeObject));
                     game.highestMergeObjectThisPrestige = Math.round(Math.max(this.level, game.highestMergeObjectThisPrestige));
                     game.mergesThisPrestige++;
@@ -204,7 +284,7 @@ class MergeObject {
                     this.vx = Math.cos(a) * v;
                     this.vy = Math.sin(a) * v;
 
-                    game.mergeObjects = game.mergeObjects.filter(val => val !== obj);
+                    obj.destroy();
                     if (game.quantumProcessor.cores.length >= 1 && Math.random() < Upgrade.apply(game.isotopes.upgrades.isotopeChance).toNumber()) {
                         let amount = Upgrade.apply(game.molecules.upgrades.moreIsotopes).toNumber();
                         game.isotopes.amount = game.isotopes.amount.add(amount);

@@ -127,9 +127,12 @@ class SaveManager {
                 game.settings.currentNotation = new ADNotations.CustomNotation(game.settings.customNotationSequence);
             }
             game.settings.clickParticles = L(obj.settings.clickParticles, true);
+            game.settings.topBarShown = L(obj.settings.topBarShown, true);
             game.settings.tabsShown = L(obj.settings.tabsShown, true);
             game.settings.mergepediaAnimations = L(obj.settings.mergepediaAnimations, true);
             game.settings.prestigeConfirmation = L(obj.settings.prestigeConfirmation, true);
+            game.settings.maxFps = L(obj.settings.maxFps, 60);
+            game.settings.lowPerformanceMode = L(obj.settings.lowPerformanceMode, false);
             game.highestMergeObject = L(obj.highestMergeObject, 0);
             game.highestMergeObjectThisPrestige = L(obj.highestMergeObjectThisPrestige, 0);
             game.mergesThisPrestige = L(obj.mergesThisPrestige, 0);
@@ -140,19 +143,12 @@ class SaveManager {
 
                 if (obj.matter.upgrades) {
                     for (let k of Object.keys(obj.matter.upgrades)) {
-                        game.matter.upgrades[k].level = obj.matter.upgrades[k].level;
+                        game.matter.upgrades[k].setLevel(obj.matter.upgrades[k].level);
                     }
                 }
             }
             else {
                 game.matter = new ContentMatter();
-            }
-
-            game.mergeObjects = [];
-            for (let m of obj.mergeObjects) {
-                let mergeObject = new MergeObject(m.x, m.y, m.level);
-                mergeObject.setVelocity(m.vx, m.vy);
-                game.mergeObjects.push(mergeObject);
             }
 
             if (obj.energyCores && obj.energyCores.cores) {
@@ -178,7 +174,7 @@ class SaveManager {
 
                 if (obj.prestige.upgrades) {
                     for (let k of Object.keys(obj.prestige.upgrades)) {
-                        game.prestige.upgrades[k].level = obj.prestige.upgrades[k].level;
+                        game.prestige.upgrades[k].setLevel(obj.prestige.upgrades[k].level);
                     }
                 }
             }
@@ -201,7 +197,7 @@ class SaveManager {
             if (obj.isotopes) {
                 game.isotopes.amount = L(new Decimal(obj.isotopes.amount), new Decimal(0));
                 for (let k of Object.keys(obj.isotopes.upgrades)) {
-                    game.isotopes.upgrades[k].level = obj.isotopes.upgrades[k].level;
+                    game.isotopes.upgrades[k].setLevel(obj.isotopes.upgrades[k].level);
                 }
             }
             else {
@@ -214,6 +210,16 @@ class SaveManager {
             else {
                 game.molecules = new ContentMolecules();
             }
+
+            game.mergeObjects = [];
+            for (let m of obj.mergeObjects) {
+                let mergeObject = new MergeObject(m.x, m.y, m.level);
+                mergeObject.setVelocity(m.vx, m.vy);
+                game.mergeObjects.push(mergeObject);
+                globalEvents.addEventListener("gameinit", () => mergeObject.recalculateOutput(), {once: true});
+            }
+
+            globalEvents.dispatchGameLoad();
         }
     }
 }

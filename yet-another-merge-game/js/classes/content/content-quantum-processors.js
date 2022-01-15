@@ -11,7 +11,7 @@ class ContentQuantumProcessors {
         let len = this.cores.length;
 
         if (len < 5) {
-            return [1e12, 1e16, 1e22, 1e29, 1e40][len];
+            return [100e9, 1e16, 1e22, 1e29, 1e40][len];
         }
     }
 

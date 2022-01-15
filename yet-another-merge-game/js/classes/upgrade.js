@@ -1,5 +1,5 @@
 class Upgrade {
-    constructor(name, desc, getPrice, getEffect, config) {
+    constructor(name, desc, getPrice, getEffect, config = {}) {
         this.name = name;
         this.desc = desc;
         this.level = 0;
@@ -7,14 +7,80 @@ class Upgrade {
         this.getEffect = getEffect;
         this.type = "normal";
         this.getEffectDisplay = config && config.getEffectDisplay ? config.getEffectDisplay : effectDisplayTemplates.numberStandard();
-        if (config && config.onBuy !== undefined) {
+        if (config.onBuy !== undefined) {
             this.onBuy = config.onBuy;
         }
-        this.maxLevel = (config !== undefined && config.maxLevel !== undefined) ? config.maxLevel : Infinity;
+        this.maxLevel = (config.maxLevel !== undefined) ? config.maxLevel : Infinity;
+
+        this.effect = new Decimal(0);
+        this.effectNext = new Decimal(0);
+        this.price = new Decimal(0);
+        this.evt = new EventTarget();
+
+        this.updateOn = config.updateOn;
+
+        globalEvents.addEventListener("gamepreinit", () => {
+            const updateOn = config && config.updateOn ? config.updateOn() : null;
+            if(updateOn){
+                for(let upg of updateOn) {
+                    upg.addLevelChangedListener(() => {
+                        this.updateStats();
+                    });
+                }
+            }
+        }, {once: true});
+
+        globalEvents.addEventListener("gameinit", () => {
+            this.updateStatsRecursive();
+        }, {once: true});
+
+        globalEvents.addEventListener("gameload", () => {
+            this.updateStatsRecursive();
+        });
+    }
+
+    setLevel(level) {
+        this.level = level;
+        this.updateStats();
+        this.evt.dispatchEvent(new Event("levelchanged"));
+    }
+
+    nextLevel(){
+        this.setLevel(this.level + 1);
+    }
+
+    updateEffect(){
+        this.effect = this.getEffect(this.level);
+        this.effectNext = this.getEffect(this.level + 1);
+    }
+
+    updatePrice(){
+        this.price = this.getPrice(this.level);
+    }
+
+    updateStats(){
+        this.updateEffect();
+        this.updatePrice();
+    }
+
+    updateStatsRecursive(){
+        const upgs = this.updateOn ? this.updateOn() : null;
+        if(upgs){
+            for(const upg of upgs) upg.updateStatsRecursive();
+        }
+        this.updateStats();
+    }
+
+    addLevelChangedListener(l){
+        this.evt.addEventListener("levelchanged", l);
+    }
+
+    removeLevelChangedListener(l){
+        this.evt.removeEventListener("levelchanged", l);
     }
 
     getCurrentPrice() {
-        return this.getPrice(this.level);
+        return this.price;
     }
 
     getPriceDisplay() {
@@ -78,7 +144,7 @@ class Upgrade {
                 default:
                     break;
             }
-            this.level++;
+            this.nextLevel();
             this.onBuy(this.level);
         }
     }
@@ -87,8 +153,12 @@ class Upgrade {
 
     }
 
+    apply() {
+        return this.effect;
+    }
+
     static apply(upg) {
-        return upg.getEffect(upg.level);
+        return upg.effect;
     }
 }
 
@@ -128,11 +198,11 @@ let effectDisplayTemplates =
         }
 
         return function () {
-            let e = this.getEffect(this.level);
+            let e = this.effect;
             if (this.level === this.maxLevel) {
                 return p + functions.formatNumber(e, digits, digitsLim) + s;
             } else {
-                let eN = this.getEffect(this.level + 1);
+                let eN = this.effectNext;
                 return p + functions.formatNumber(e, digits, digitsLim) + s + " → " + p + functions.formatNumber(eN, digits, digitsLim) + s;
             }
         }
@@ -141,22 +211,22 @@ let effectDisplayTemplates =
         let p = prefix !== undefined ? prefix : "";
 
         return function () {
-            let e = this.getEffect(this.level).mul(100);
+            let e = this.effect.mul(100);
             if (this.level === this.maxLevel) {
                 return p + functions.formatNumber(e, digits, digits) + " %";
             } else {
-                let eN = this.getEffect(this.level + 1).mul(100);
+                let eN = this.effectNext.mul(100);
                 return p + functions.formatNumber(e, digits, digits) + " % → " + p + functions.formatNumber(eN, digits, digits) + " %";
             }
         }
     },
     time: function () {
         return function () {
-            let e = this.getEffect(this.level).toNumber();
+            let e = this.effect.toNumber();
             if (this.level === this.maxLevel) {
                 return Utils.formatTime(e);
             } else {
-                let eN = this.getEffect(this.level + 1).toNumber();
+                let eN = this.effectNext.toNumber();
                 return Utils.formatTime(e) + " → " + Utils.formatTime(eN);
             }
         }

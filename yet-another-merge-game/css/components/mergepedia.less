@@ -6,9 +6,14 @@
         font-size: 150%;
     }
 
-    .mergers{
-        height: 250px;
-        overflow-y: scroll;
+    table{
+        border-spacing: 0;
+        width: 100%;
+        font-size: 130%;
+
+        @media (max-width: 540px) {
+            font-size: 75%;
+        }
     }
 
     .page-number{
@@ -16,7 +21,13 @@
         .create-text-outlined(@font-family-header);
 
         @media(orientation: portrait){
-            display: block;
+            font-size: 150%;
+        }
+    }
+
+    .navigation{
+        @media (orientation: portrait) {
+            flex-wrap: wrap;
         }
     }
 
@@ -25,8 +36,8 @@
         overflow: hidden;
 
         .merger {
-            width: 6em;
-            height: 6em;
+            width: 4em;
+            height: 4em;
         }
 
         span{
@@ -39,6 +50,14 @@
 
         &.reached{
             background-color: lighten(@color-ui, 30%);
+        }
+    }
+
+    .entry:nth-child(2n){
+        background-color: lighten(@color-ui, 15%);
+
+        &.reached{
+            background-color: lighten(@color-ui, 25%);
         }
     }
 }

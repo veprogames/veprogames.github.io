@@ -28,7 +28,7 @@ Vue.component("resource-overview", {
             return game.molecules.amount;
         },
         highestMerger() {
-            return game.highestMergeObject;
+            return game.highestMergeObject + 1;
         },
         moleculePower() {
             return game.molecules.getMoleculePower();

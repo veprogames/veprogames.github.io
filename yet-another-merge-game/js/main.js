@@ -4,10 +4,6 @@ let dateDt = Date.now();
 let gameBackground = new GameBackground();
 let resourceDisplays;
 
-let inputManager = new InputManager();
-
-const windowManager = new WindowManager();
-
 let app;
 
 onload = e => {
@@ -23,6 +19,8 @@ onload = e => {
 }
 
 function gameInit() {
+    globalEvents.dispatchPreInit();
+
     let canvas = document.getElementById("mergedisplay");
     ctx = canvas.getContext("2d");
     canvas.height = innerHeight;
@@ -113,9 +111,12 @@ function gameInit() {
         ];
         requestAnimationFrame(gameUpdate);
     });
+
+    globalEvents.dispatchInit();
 }
 
 function gameUpdate() {
+    globalEvents.dispatchUpdate();
     let delta = Math.max(0, (Date.now() - dateDt) / 1000);
     dateDt = Date.now();
 
@@ -233,5 +234,5 @@ function gameUpdate() {
         p.render(ctx);
     }
 
-    requestAnimationFrame(gameUpdate);
+    setTimeout(gameUpdate, 1000 / game.settings.maxFps);
 }

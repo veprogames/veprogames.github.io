@@ -249,17 +249,24 @@ canvas.merger{
 
 canvas#mergedisplay {
     width: auto;
-    max-height: 93vh;
-    max-width: 124vh;
-    transition: 0.5s;
+    max-height: 87vh;
+    max-width: 100vw;
+    transition: 0.3s;
     transition-timing-function: ease-in-out;
 
     &.tabs-shown {
-        max-height: 43vh;
+        max-height: 41vh;
+
+        @media (orientation: portrait) {
+            height: auto;
+            max-width: 0;
+        }
     }
 
     @media (orientation: portrait) {
-        display: none;
+        display: block;
+        height: auto;
+        max-width: 100vw;
     }
 }
 

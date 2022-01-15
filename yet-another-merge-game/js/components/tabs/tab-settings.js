@@ -70,11 +70,15 @@ Vue.component("tab-settings", {
             </div>
         </div>
     </div>
+    <div class="flex-center-center">
+        <label>Max FPS: <input type="range" v-model="settings.maxFps" min="5" max="120" step="5"/> {{settings.maxFps}}</label>
+    </div>
     <div class="flex-center-center flex-wrap flex-gap margin-l">
         <ui-toggle v-model="settings.topBarShown">Resource Overview in Canvas</ui-toggle>
         <ui-toggle v-model="settings.mergepediaAnimations">Mergepedia Animations</ui-toggle>
         <ui-toggle v-model="settings.clickParticles">Click Particles</ui-toggle>
         <ui-toggle v-model="settings.prestigeConfirmation">Prestige Confirmation</ui-toggle>
+        <ui-toggle v-model="settings.lowPerformanceMode">Low Performance Mode</ui-toggle>
     </div>
     <div class="flex-center-center">
         <button @click="openWindow()" class="button-l" style="margin: 0.5rem;">Save Management</button>

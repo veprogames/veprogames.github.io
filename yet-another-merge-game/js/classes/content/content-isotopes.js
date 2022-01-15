@@ -49,6 +49,12 @@ class ContentIsotopes {
                 {
                     maxLevel: 10,
                     getEffectDisplay: effectDisplayTemplates.percentStandard("", 1)
+                }),
+            socialBoost: new IsotopeUpgrade("Social Power", "Social Boost is raised to a power", 
+                level => new Decimal(2022),
+                level => new Decimal(1 + level), {
+                    maxLevel: 1,
+                    getEffectDisplay: effectDisplayTemplates.numberStandard("^", "", 0)
                 })
         };
     }

@@ -105,5 +105,8 @@ const HelpMoleculesComponent = WindowComponent.extend({
             Each Molecule Level adds +^0.0001 to its power, affecting all Molecules. Individual power values can't be greater than 10. Those Powers are multiplied together to calculate the final molecule power.
             For example, if you had 5 Molecules on Level 10000 each, each Molecules Value would be raised by (2^5 = 32), e. g. 1e10 -> 1e320.
         </p>
+        <p>
+            Each click on the Merge Area will give you (Molecule Value) Molecules.
+        </p>
     </window>`
 });

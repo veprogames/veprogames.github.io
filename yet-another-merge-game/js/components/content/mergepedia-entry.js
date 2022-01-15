@@ -2,19 +2,24 @@ Vue.component("mergepedia-entry", {
     methods: {
         production(level) {
             return MergeObject.calculateOutputForLevel(level);
+        },
+        baseProduction(level) {
+            return MergeObject.getBaseProduction(level);
         }
     },
     computed: {
-        highestMergeObjectThisPrestige: () => game.highestMergeObjectThisPrestige,
-        fontSize() {
-            let c = Math.max(0, functions.formatNumber(this.production(this.level)).length - 8);
-            return (150 / (1 + 0.125 * c)) + "%";
-        }
+        highestMergeObjectThisPrestige: () => game.highestMergeObjectThisPrestige
     },
     props: ["level"],
-    template: `<div class="center entry"
+    template: `<tr class="center entry"
      :class="{reached: level <= highestMergeObjectThisPrestige}">
-    <merger :level="level"></merger><br/>
-    <span :style="{fontSize}">{{production(level) | fnum}}</span>
-</div>`
-});
+    <td class="flex-center-center">
+        <merger :level="level"></merger> <span>(# {{(level + 1) | ftnum}})</span>
+    </td>
+    <td>
+        <span>{{production(level) | fnum}}</span>
+    </td>
+    <td>
+        <span>{{baseProduction(level) | fnum}}</span>
+    </td>
+</tr>`});

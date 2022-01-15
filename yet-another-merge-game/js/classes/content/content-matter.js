@@ -14,12 +14,13 @@ class ContentMatter {
                         .mul(Upgrade.apply(game.isotopes.upgrades.spawnSpeed));
                 },
                 {
-                    getEffectDisplay: effectDisplayTemplates.time()
+                    getEffectDisplay: effectDisplayTemplates.time(),
+                    updateOn: () => [game.prestige.upgrades.fasterMergers, game.isotopes.upgrades.spawnSpeed]
                 }
             ),
             betterObjects: new Upgrade("Better Mergers", "Mergers spawn one Tier higher. After Upgrading, Mergers with a low Level get upgraded.",
                 level => {
-                    let prices = [10e3, 50e3, 250e3, 1.5e6, 7.5e6, 35e6, 200e6, 1e9, 6e9, 33e9, 150e9, 750e9, 4e12, 20e12, 125e12, 500e12, 1e15];
+                    let prices = [5e3, 20e3, 100e3, 400e3, 1.2e6, 6e6, 40e6, 200e6, 1e9, 5e9, 25e9, 175e9, 700e9, 4e12, 30e12, 150e12, 1e15];
                     if (level < prices.length) {
                         return new Decimal(prices[level]);
                     }
@@ -42,7 +43,7 @@ class ContentMatter {
                     onBuy: level => {
                         for (let obj of game.mergeObjects) {
                             if (obj.level < level) {
-                                obj.level = level;
+                                obj.setLevel(level);
                                 obj.lifeTime = 0;
                             }
                         }

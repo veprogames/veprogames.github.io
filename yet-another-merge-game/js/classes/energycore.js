@@ -10,6 +10,7 @@ class EnergyCore //merge things to level it up, get an increasing multiplier
         this.isActive = false;
         this.getBoost = getBoost;
         this.img = img;
+        this.evt = new EventTarget();
     }
 
     setActive(b) {
@@ -31,7 +32,16 @@ class EnergyCore //merge things to level it up, get an increasing multiplier
         if (this.merges >= this.getNeededMerges()) {
             this.merges = 0;
             this.level++;
+            this.evt.dispatchEvent(new Event("levelchanged"));
         }
+    }
+
+    addLevelChangedListener(l){
+        this.evt.addEventListener("levelchanged", l);
+    }
+
+    removeLevelChangedListener(l){
+        this.evt.removeEventListener("levelchanged", l);
     }
 
     buy() {

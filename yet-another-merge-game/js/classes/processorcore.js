@@ -1,6 +1,7 @@
 class ProcessorCore {
     constructor() {
         this.level = 0;
+        this.evt = new EventTarget();
     }
 
     getBoost(level) {
@@ -20,10 +21,19 @@ class ProcessorCore {
         return this.getBoost(this.level);
     }
 
+    addLevelChangedListener(l){
+        this.evt.addEventListener("levelchanged", l);
+    }
+
+    removeLevelChangedListener(l){
+        this.evt.removeEventListener("levelchanged", l);
+    }
+
     upgrade() {
         if (game.isotopes.amount.gte(this.getCurrentPrice())) {
             game.isotopes.amount = game.isotopes.amount.sub(this.getCurrentPrice());
             this.level++;
+            this.evt.dispatchEvent(new Event("levelchanged"));
         }
     }
 }

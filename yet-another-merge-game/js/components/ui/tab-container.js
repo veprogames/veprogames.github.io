@@ -4,7 +4,7 @@ Vue.component("tab-container", {
             tabs: [
                 ["upgrades", "Upgrades", "true", "currencies/matter.png", ""],
                 ["abilities", "Click Abilities", "true", "tabs/abilities.png", ""],
-                ["prestige", "Prestige", "game.prestige.isUnlocked()", "currencies/quantumfoam.png", "Reach 1e15 Matter"],
+                ["prestige", "Prestige", "game.prestige.isUnlocked()", "currencies/quantumfoam.png", "Reach 1e12 Matter"],
                 ["energycores", "Energy Cores", "game.prestige.highestQuantumFoam.gte(50000)", "tabs/energycores.png", "Have 50,000 Quantum Foam"],
                 ["quantumprocessor", "Quantum Processor", "game.quantumProcessor.isUnlocked()", "tabs/quantumprocessor.png", "Have 100e9 Quantum Foam"],
                 ["isotopes", "Isotopes", "game.isotopes.isUnlocked()", "currencies/isotopes.png", "Get a Quantum Processor Core"],

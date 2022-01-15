@@ -11,10 +11,10 @@ const CoreResetWindowComponent = WindowComponent.extend({
                 game.prestige.quantumFoam = new Decimal(0);
                 game.prestige.bankedQuantumFoam = new Decimal(0);
                 for (let k of Object.keys(game.matter.upgrades)) {
-                    game.matter.upgrades[k].level = 0;
+                    game.matter.upgrades[k].setLevel(0);
                 }
                 for (let k of Object.keys(game.prestige.upgrades)) {
-                    game.prestige.upgrades[k].level = 0;
+                    game.prestige.upgrades[k].setLevel(0);
                 }
                 this.close();
             }

@@ -42,7 +42,8 @@ class CanvasUtils {
             },
             particles: {
                 speed: await loadImage("images/particles/speed.png")
-            }
+            },
+            merger: await loadImage("images/merger/merger.png")
         }
     }
 

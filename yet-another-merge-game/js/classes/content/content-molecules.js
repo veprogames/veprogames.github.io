@@ -79,7 +79,7 @@ class ContentMolecules {
         }
         for (let k of Object.keys(obj.upgrades)) {
             if (this.upgrades[k]) {
-                this.upgrades[k].level = L(obj.upgrades[k].level, 0);
+                this.upgrades[k].setLevel(L(obj.upgrades[k].level, 0));
             }
         }
     }

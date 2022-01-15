@@ -9,7 +9,7 @@ Vue.component("loading-screen", {
             opacity: 1,
             ctx: null,
             bg: "black",
-            mergerLevel: Math.floor(Math.random() * 100)
+            mergerLevel: -1
         }
     },
     methods: {
@@ -33,10 +33,10 @@ Vue.component("loading-screen", {
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, w, h);
 
-            ctx.fillStyle = "#ffffff05";
+            ctx.fillStyle = "#ffffd005";
             let r = new Random(1);
             for (let i = 0; i < 50; i++) {
-                let y = r.nextDouble() * h;
+                let y = r.nextDouble() * h + 0.004 * i * Math.sin(this.t) * h;
                 let x = (-0.5 + (r.nextDouble() * 2 + this.t * r.nextDouble() * 0.2) % 2) * w;
                 ctx.beginPath();
                 ctx.arc(x, y, h * 0.5, 0, 2 * Math.PI);
@@ -46,11 +46,15 @@ Vue.component("loading-screen", {
 
             CanvasUtils.drawText(ctx, "Yet another Merge Game", w / 2, h * 0.1, h * 0.1, "white");
             CanvasUtils.drawText(ctx, "Loading...", w / 2, h * 0.9, h * 0.07, "white");
-            CanvasUtils.drawText(ctx, "v1.1 (LESS&MORE)", w - 8, h - 8, h * 0.03, "white", "right", "bottom");
+            CanvasUtils.drawText(ctx, "v1.2 (LESS&MORE)", w - 8, h - 8, h * 0.03, "white", "right", "bottom");
 
-            MergeObject.renderMerger(ctx, w / 2, h / 2, h * 0.2, this.mergerLevel, this.t + 10);
+            if(this.mergerLevel !== -1){
+                MergeObject.renderMerger(ctx, w / 2, h / 2, h * 0.2, this.mergerLevel, this.t + 10);
+            }
 
-            requestAnimationFrame(this.update);
+            if(this.opacity > 0){
+                setTimeout(this.update, 1000 / 30);
+            }
         }
     },
     mounted() {
@@ -59,6 +63,7 @@ Vue.component("loading-screen", {
         canvas.height = innerHeight;
         this.ctx = canvas.getContext("2d");
         this.background = this.getBackgroundColor();
+        globalEvents.addEventListener("gameinit", () => this.mergerLevel = Math.floor(Math.random() * game.highestMergeObject), {once: true});
         requestAnimationFrame(this.update);
     },
     template: `<canvas :style={opacity} class="overlay" ref="cnv"></canvas>`

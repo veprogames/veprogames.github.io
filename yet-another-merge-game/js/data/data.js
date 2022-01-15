@@ -1,3 +1,9 @@
+const globalEvents = new GlobalEventHandler();
+
+const inputManager = new InputManager();
+
+const windowManager = new WindowManager();
+
 const ABILITY_SPAWN_SPEED = 0, ABILITY_MERGER_MOVE_SPEED = 1;
 
 let notations = [
@@ -52,7 +58,9 @@ let game =
         clickParticles: true,
         topBarShown: true,
         mergepediaAnimations: true,
-        prestigeConfirmation: true
+        prestigeConfirmation: true,
+        maxFps: 60,
+        lowPerformanceMode: false
     },
     exportedGame: ""
 };
