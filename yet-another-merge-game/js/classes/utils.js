@@ -16,11 +16,15 @@ class Utils {
         return (s * 1e6).toFixed(2) + "μs";
     }
 
-    static dist(x1, y1, x2, y2) {
+    static squaredDist(x1, y1, x2, y2) {
         let dx = x2 - x1;
         let dy = y2 - y1;
 
-        return Math.sqrt(dx * dx + dy * dy);
+        return dx * dx + dy * dy;
+    }
+
+    static dist(x1, y1, x2, y2) {
+        return Math.sqrt(this.squaredDist(x1, y1, x2, y2));
     }
 
     static clamp(val, min, max) {

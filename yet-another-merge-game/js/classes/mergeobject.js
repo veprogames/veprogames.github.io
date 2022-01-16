@@ -22,7 +22,7 @@ class MergeObject {
             if(game.isotopes.upgrades.autoQuantumFoam.level >= 1){
                 this.calculateOutput();
             }
-        }, 1000); //recalculating once per second si enough?! simplest solution
+        }, 1000); //recalculating once per second is enough?! simplest solution
     }
 
     assignEvents(destruct = false){
@@ -100,7 +100,7 @@ class MergeObject {
     }
 
     collidesWith(mergeObj) {
-        return Utils.dist(this.x, this.y, mergeObj.x, mergeObj.y) < this.radius + mergeObj.radius;
+        return Utils.squaredDist(this.x, this.y, mergeObj.x, mergeObj.y) < (this.radius + mergeObj.radius)**2;
     }
 
     static getColor(level) {
@@ -270,8 +270,8 @@ class MergeObject {
         this.clickSpeedMulti = Math.max(1, this.clickSpeedMulti / 3 ** delta);
 
         for (let obj of game.mergeObjects) {
-            if (this.collidesWith(obj) && this !== obj) {
-                if (Math.round(this.level) === Math.round(obj.level)) {
+            if (Math.round(this.level) === Math.round(obj.level)) {
+                if (this !== obj && this.collidesWith(obj)) {
                     this.lifeTime = 0;
                     this.nextLevel();
                     game.highestMergeObject = Math.round(Math.max(this.level, game.highestMergeObject));
