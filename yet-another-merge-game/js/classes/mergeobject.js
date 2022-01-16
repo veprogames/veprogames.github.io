@@ -151,7 +151,7 @@ class MergeObject {
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = "black";
-        if (level >= 250) {
+        if (level >= 149) {
             ctx.fillStyle = "white";
         }
         if (level <= 1000) {
