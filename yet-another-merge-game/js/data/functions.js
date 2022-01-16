@@ -33,7 +33,9 @@ let functions =
         }
         precLim = forcePrecLim !== false ? forcePrecLim : prec;
         if (x.lt(lim)) {
-            numberLocale.maximumFractionDigits = precLim;
+            if(numberLocale.resolvedOptions().maximumFractionDigits !== precLim) {
+                numberLocale = new Intl.NumberFormat("en-US", { minimumFractionDigits: 0, maximumFractionDigits: precLim });
+            }
             return numberLocale.format(x.toNumber());
         }
         return game.settings.currentNotation.formatDecimal(x, prec);

@@ -88,6 +88,16 @@ function gameInit() {
 
     onbeforeunload = SaveManager.saveGame;
 
+    const iPadFix = () => {
+        const mergeDisplay = document.querySelector("#mergedisplay");
+        const header = document.querySelector("header");
+        const container = document.querySelector(".game-container");
+
+        mergeDisplay.style.height = `${container.offsetTop - header.clientHeight + 1}px`;
+    };
+
+    window.addEventListener("resize", iPadFix);
+
     CanvasUtils.loadImages().then(img => {
         game.loading = false;
         less.refresh(); //workaround
@@ -109,6 +119,9 @@ function gameInit() {
                 () => functions.formatNumber(game.molecules.amount, false, 0),
                 () => game.molecules.isUnlocked())
         ];
+    
+        iPadFix();
+        
         requestAnimationFrame(gameUpdate);
     });
 
