@@ -112,7 +112,6 @@ function gameInit() {
         requestAnimationFrame(gameUpdate);
 
         let $ = document.querySelector.bind(document);
-        debugger;
         function updateCanvasHeight() {
             // Ensures there isn't gap below it and it doesn't extend past parent
             // Make sure there is no transition https://stackoverflow.com/a/16575811

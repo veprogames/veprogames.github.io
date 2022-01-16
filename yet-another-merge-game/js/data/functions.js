@@ -20,6 +20,7 @@ let functions =
         game.currentStyle = name;
         less.refresh();
     },
+    numberFormat: {},
     formatNumber(x, forcePrec = false, forcePrecLim = 0, lim = 1000000) {
         x = new Decimal(x);
         let prec, precLim;
@@ -32,8 +33,13 @@ let functions =
             prec = x.lt(1000) ? 0 : 2;
         }
         precLim = forcePrecLim !== false ? forcePrecLim : prec;
+
+        if (!this.numberFormat[precLim]) {
+            this.numberFormat[precLim] = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0, maximumFractionDigits: precLim });
+        }
+
         if (x.lt(lim)) {
-            return x.toNumber().toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: precLim });
+            return this.numberFormat[precLim].format(x.toNumber());
         }
         return game.settings.currentNotation.formatDecimal(x, prec);
     },
