@@ -110,6 +110,19 @@ function gameInit() {
                 () => game.molecules.isUnlocked())
         ];
         requestAnimationFrame(gameUpdate);
+
+        let $ = document.querySelector.bind(document);
+        debugger;
+        function updateCanvasHeight() {
+            // Ensures there isn't gap below it and it doesn't extend past parent
+            // Make sure there is no transition https://stackoverflow.com/a/16575811
+            canvas.classList.add('notransition');
+            canvas.style["max-height"] = window.innerHeight -
+                $("header").offsetHeight - $(".game-container").offsetHeight + 1 + "px";
+            canvas.classList.remove('notransition');
+        }
+        updateCanvasHeight();
+        window.addEventListener('resize', updateCanvasHeight);
     });
 
     globalEvents.dispatchInit();

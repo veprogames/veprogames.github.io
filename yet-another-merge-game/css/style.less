@@ -129,6 +129,7 @@ button {
 
     transition: transform 0.2s, filter 0.15s, box-shadow 0.2s;
     transition-timing-function: cubic-bezier(0.14, 0.35, 0.22, 2.2);
+    cursor: pointer;
 
     &.buy{
         font-size: 175%;
@@ -294,7 +295,7 @@ div.game-container {
 
     &.tabs-shown {
         bottom: 0;
-        overflow-y: scroll; // >:(
+        overflow-y: auto;
             
         .tab-settings .footer{
             bottom: 1em;
@@ -416,4 +417,11 @@ table.upgrades {
 
 .tab-settings textarea{
     max-width: 90%;
+}
+
+.notransition {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
 }
