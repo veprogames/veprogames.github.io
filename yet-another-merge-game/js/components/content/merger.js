@@ -11,16 +11,11 @@ Vue.component("merger",
                 this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
                 const lifeTime = game.settings.mergepediaAnimations ? Date.now() / 1000 : 10 + new Random(this.level).nextDouble() * 100;
                 if(game.settings.lowPerformanceMode){
-                    MergeObject.renderMergerSimple(this.ctx, 128, 128, this.radius, this.level, lifeTime);
+                    MergeObject.renderMergerSimple(this.ctx, 128, 128, 100, this.level, lifeTime);
                 }
                 else{
-                    MergeObject.renderMerger(this.ctx, 128, 128, this.radius, this.level, lifeTime);
+                    MergeObject.renderMerger(this.ctx, 128, 128, 100, this.level, lifeTime);
                 }
-            }
-        },
-        computed:{
-            radius(){
-                return this.level < 250 ? 100 : 75;
             }
         },
         mounted: function () {

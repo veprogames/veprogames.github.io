@@ -150,6 +150,7 @@ class MergeObject {
     static renderMergerNumber(ctx, x, y, r, sizeMod, level){
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
+        ctx.fillStyle = "black";
         if (level >= 250) {
             ctx.fillStyle = "white";
         }
@@ -292,10 +293,12 @@ class MergeObject {
 
                     if (Math.random() < Upgrade.apply(game.matter.upgrades.matterOnMerge).toNumber()) {
                         let income = game.matter.totalMatterPerSecond().mul(2);
-                        functions.createFloatingText(functions.formatNumber(income), this.x, this.y, h * 0.35, {
-                            color: "blue",
-                            size: h * 0.06
-                        });
+                        if(!game.settings.lowPerformanceMode){
+                            functions.createFloatingText(functions.formatNumber(income), this.x, this.y, h * 0.35, {
+                                color: "blue",
+                                size: h * 0.06
+                            });
+                        }
                         game.matter.amount = game.matter.amount.add(income);
                         game.matter.amountThisPrestige = game.matter.amountThisPrestige.add(income);
                     }
