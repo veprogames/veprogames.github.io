@@ -33,7 +33,8 @@ let functions =
         }
         precLim = forcePrecLim !== false ? forcePrecLim : prec;
         if (x.lt(lim)) {
-            return x.toNumber().toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: precLim });
+            numberLocale.maximumFractionDigits = precLim;
+            return numberLocale.format(x.toNumber());
         }
         return game.settings.currentNotation.formatDecimal(x, prec);
     },

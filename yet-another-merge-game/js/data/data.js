@@ -4,6 +4,8 @@ const inputManager = new InputManager();
 
 const windowManager = new WindowManager();
 
+const numberLocale = new Intl.NumberFormat("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+
 const ABILITY_SPAWN_SPEED = 0, ABILITY_MERGER_MOVE_SPEED = 1;
 
 let notations = [

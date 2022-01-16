@@ -261,12 +261,35 @@ canvas#mergedisplay {
             height: auto;
             max-width: 0;
         }
+        
+        // iPad Portrait
+        @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait){
+            max-height: 419.84px; //1024px * 41%
+        }
+    
+        // iPad Landscape
+        @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:landscape){
+            max-height: 314.88px; //768px * 41%
+        }
     }
 
     @media (orientation: portrait) {
         display: block;
         height: auto;
         max-width: 100vw;
+    }
+
+    // iPad vh / vw fix
+    // https://gist.github.com/pburtchaell/e702f441ba9b3f76f587
+    
+    // iPad Portrait
+    @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait){
+        max-height: 890.88px; //1024px * 87%
+    }
+  
+    // iPad Landscape
+    @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:landscape){
+        max-height: 668.16px; //768px * 87%
     }
 }
 
@@ -294,7 +317,7 @@ div.game-container {
 
     &.tabs-shown {
         bottom: 0;
-        overflow-y: scroll; // >:(
+        overflow-y: auto;
             
         .tab-settings .footer{
             bottom: 1em;

@@ -22,7 +22,7 @@ class MergeObject {
             if(game.isotopes.upgrades.autoQuantumFoam.level >= 1){
                 this.calculateOutput();
             }
-        }, 1000); //recalculating once per second si enough?! simplest solution
+        }, 1000);
     }
 
     assignEvents(destruct = false){
@@ -100,7 +100,7 @@ class MergeObject {
     }
 
     collidesWith(mergeObj) {
-        return Utils.dist(this.x, this.y, mergeObj.x, mergeObj.y) < this.radius + mergeObj.radius;
+        return Utils.distSquared(this.x, this.y, mergeObj.x, mergeObj.y) < (this.radius + mergeObj.radius) ** 2;
     }
 
     static getColor(level) {
