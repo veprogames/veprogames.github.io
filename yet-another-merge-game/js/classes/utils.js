@@ -38,4 +38,9 @@ class Utils {
     static reverseString(str) {
         return str.split("").reverse().join("");
     }
+
+    static isIPad(){
+        return /iPad|iPhone|iPod/.test(navigator.platform) || /Macintosh|Mac/.test(navigator.userAgent)
+            && navigator.maxTouchPoints && navigator.maxTouchPoints > 2;
+    }
 }
