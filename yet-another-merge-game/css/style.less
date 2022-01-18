@@ -249,13 +249,13 @@ canvas.merger{
 
 canvas#mergedisplay {
     width: auto;
-    max-height: 87vh;
+    max-height: calc(100vh - 9em + 1px);
     max-width: 100vw;
     transition: 0.3s;
     transition-timing-function: ease-in-out;
 
     &.tabs-shown {
-        max-height: 41vh;
+        max-height: calc(46vh - 4em + 1px);
 
         @media (orientation: portrait) {
             height: auto;
@@ -273,7 +273,7 @@ canvas#mergedisplay {
 // bottom game container
 div.game-container {
     position: fixed;
-    bottom: -46vh;
+    bottom: calc(-54vh + 5em);
     left: 0;
     height: 54vh;
     width: 100%;
@@ -342,6 +342,7 @@ div.game-container-side {
         right: -20vw;
         border-top-left-radius: 2em;
         border-bottom-left-radius: 2em;
+        overflow-y: auto;
 
         // Utility buttons
         button{

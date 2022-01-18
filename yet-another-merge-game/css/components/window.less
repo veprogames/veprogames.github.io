@@ -12,6 +12,18 @@
 
     animation: window-appear 300ms 1;
 
+    @media (max-width: 800px){
+        width: 500px;
+    }
+
+    @media (max-height: 500px){
+        min-height: 300px;
+    }
+
+    @media (max-height: 400px){
+        min-height: 250px;
+    }
+
     .header{
         display: flex;
         justify-content: space-between;

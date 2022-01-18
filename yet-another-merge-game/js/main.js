@@ -88,20 +88,6 @@ function gameInit() {
 
     onbeforeunload = SaveManager.saveGame;
 
-    if(Utils.isIPad()){
-        const iPadFix = () => {
-            const mergeDisplay = document.querySelector("#mergedisplay");
-            const header = document.querySelector("header");
-            const container = document.querySelector(".game-container");
-
-            mergeDisplay.style.height = `${container.offsetTop - header.clientHeight + 1}px`;
-        };
-
-        window.addEventListener("resize", iPadFix);
-
-        setInterval(iPadFix, 300);
-    }
-
     CanvasUtils.loadImages().then(img => {
         game.loading = false;
         less.refresh(); //workaround
