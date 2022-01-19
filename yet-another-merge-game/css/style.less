@@ -290,6 +290,10 @@ div.game-container {
         position: sticky;
         top: 0;
         z-index: 5;
+
+        @media (orientation: portrait) {
+            align-items: flex-start;
+        }
     }
 
     &.tabs-shown {

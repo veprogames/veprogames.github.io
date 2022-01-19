@@ -30,12 +30,12 @@ Vue.component("tab-prestige", {
     },
     template: `<div class="center">
     <div>
-        <div class="flex-evenly flex-center-v padding-h-xxl margin">
+        <div class="flex-evenly flex-wrap flex-center-v padding-h-xxl margin">
             <button class="text-l flex-center-center" :disabled="pendingFoam.lte(0)" @click="prestigeGame()">Prestige: 
                 <span class="with-icon text-xl"><img src="images/currencies/quantumfoam.png" alt="Quantum Foam: " />+{{pendingFoam | fnum}}</span></button>
-            <div v-if="nextMilestone !== undefined" style="transform: translateY(-40%);">
-                Reach <merger style="transform: translate(0, 40%);" :level="nextMilestoneLevel"></merger>
-                to get <span class="title">{{nextMilestoneBoost | fnum(1, 1)}}x</span> more Quantum Foam!
+            <div v-if="nextMilestone !== undefined" class="flex-center-center">
+                Reach <merger :level="nextMilestoneLevel"></merger>
+                <span>to get <span class="title">{{nextMilestoneBoost | fnum(1, 1)}}x</span> more Quantum Foam!</span>
             </div>
         </div>
         <div class="upgrade-container">
