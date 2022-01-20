@@ -1,0 +1,91 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(180deg, #eee8ff, #a8a8ff);
+}
+
+button {
+  border: 1.25px solid #0016d5;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #aba8ff, rgb(106, 155, 255));
+
+  transition: 0.5s;
+}
+
+button:hover{
+  filter: hue-rotate(40deg);
+  border-radius: 12px;
+}
+
+button:active{
+  transform: scale(1.1);
+}
+
+input {
+  background-color: #d8deff;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding-left: 3px;
+
+  transition: 0.5s;
+}
+
+input:hover{
+  background-color: #aab7ff;
+}
+
+#app {
+  margin: auto;
+}
+
+.currency {
+  border: 1px solid black;
+  background: linear-gradient(180deg, #e3ffe2, rgb(102, 255, 173));
+  padding: 10px;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center;
+}
+
+.prestige {
+  text-align: center;
+  background: linear-gradient(180deg, #2588e9, #005cb8);
+
+  transition: 0.5s;
+}
+
+.prestige:hover{
+    filter: hue-rotate(40deg) saturate(1.5);
+}
+
+.generators-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.generator {
+  border-radius: 8px;
+  background: linear-gradient(180deg, #d885ff, rgb(125, 66, 255));
+  text-align: center;
+}
+
+.generator-cost {
+  display: block;
+  color: #00caa8;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
+}
+
+.generator-amount {
+  color: #0d00a4;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px #00000063;
+}
+
+.generator-multiplier {
+  color: #930000;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px #00000063;
+}

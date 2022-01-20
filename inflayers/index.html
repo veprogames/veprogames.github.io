@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Infinite Layers of Prestige and huge numbers."/>
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Infinite Layers</title>
+
+    <meta name="title" content="Infinite Layers"/>
+    <meta name="description"
+            content="An Incremental Game with an infinite amount of prestige layers."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="indie, math, idle, incremental, game"/>
+    <meta name="url" content="https://cook1eegames.feedia.co/inflayers"/>
+    <meta name="og:title" content="Infinite Layers"/>
+    <meta name="og:type" content="website"/>
+    <meta name="og:url" content="https://cook1eegames.feedia.co/inflayers"/>
+    <meta name="og:description"
+            content="An Incremental Game with an infinite amount of prestige layers."/>
+    <meta name="og:image" content="https://cook1eegames.feedia.co/Images/Previews/inflayers.png"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Infinite Layers"/>
+    <meta name="twitter:description"
+            content="An Incremental Game with an infinite amount of prestige layers."/>
+    <meta name="twitter:image" content="https://cook1eegames.feedia.co/Images/Previews/inflayers.png"/>
+    <meta name="twitter:site" content="@cook1eegames"/>
+    <meta name="twitter:creator" content="@cook1eegames"/>
+</head>
+<body>
+  <div id="app">
+    <div>
+      <span><button onclick="saveGame()">Save</button> <button onclick="loadGame(prompt('Enter your save:'))">Load</button> <button onclick="exportGame()">Export</button> <button onclick="nextTheme()">Current theme: {{ player.currentTheme }}</button></span>
+    </div>
+    <h3>Notice: This is not my Game (only modified). The <a href="https://dan-simon.github.io/misc/b2/">Original Game</a> by Dan-Simon can be played here.</h3>
+    <div v-if="player.generators.length > 3">
+      <div>Display <input v-model.number="player.lowTiers"></input> lowest dimensions.</div>
+      <div>Display <input v-model.number="player.highTiers"></input> highest dimensions.</div>
+    </div>
+    <button class="transcensiontab" v-if="getTranscensionGain().gte(1) || player.transcension.points.gte(1)" v-on:click="player.tab = 'Transcension'">TRANSCENSION</button>
+    <div>
+      <button class="generatortab" :style="{filter: 'hue-rotate(' + generator.tabColor + 'deg) saturate(' + (1 + 0.5 * i) + ')'}" v-for="(generator, i) in player.generators" v-on:click="player.tab = i">{{player.generators[i].displayName}}</button>
+    </div>
+    <div class="column" v-for="(generator, idx) in player.generators">
+      <div v-if="player.tab === idx">
+        <div class="currency" style="text-align: center" :style="{filter: 'hue-rotate(' + (235 * idx % 360) + 'deg)'}">
+          <span>You have {{ formatWhole(generator.prestigeAmount) }} {{ generator.prestigeName }}
+              <span v-if="idx > 0"><br/> You have {{ format(generator.currencyAmount) }} {{ generator.currencyName }}, translated to a <b>x{{ format(generator.currencyAmount) }}</b> Boost on the previous layers</span>. 
+              <button @click="maxAll(idx)" v-if="idx < player.generators.length - 1">Max all (M)</button> 
+              <button @click="toggleAutoMaxAll(idx)" v-if="idx < player.generators.length - 2">Auto max all: {{ generator.autoMaxAll ? 'on' : 'off' }}</button> 
+              <button @click="togglePrestigeGain(idx)" v-if="idx < player.generators.length - 3">Prestige gain: {{ generator.prestigeGain ? 'on' : 'off' }}</button><br/>
+          <button class="prestige" v-if="getPrestigeGain(generator.prestigeAmount).gt(0)" @click="prestige(idx)">Get {{ formatWhole(getPrestigeGain(generator.prestigeAmount)) }} {{ generator.nextPrestigeName }}.</button>
+          <br/><br/>
+          <span v-if="player.singularity.unlocked">
+            You have {{ format(player.singularity.currencyAmount) }} singularity power, making all dimension multipliers x<sup>{{ formatLong(getSingularityPowerEffect()) }}</sup>.
+          </span>
+        </div>
+        <div class="generators-container">
+          <div v-for="(gen, jdx) in generator.list">
+            <div class="generator" :style="{filter: 'hue-rotate(' + ((jdx * 35 * (1 + idx * 0.5) + idx * 123) % 360) + 'deg) saturate(' + (0.5 + 0.25 * idx) + ')'}" v-if="jdx < player.lowTiers || jdx >= generator.list.length - player.highTiers">
+              <table style="width: 100%; font-size: 1.5em; padding-top: 0.175em;">
+                <tr>
+                  <td style="width: 50%">{{gen.generatorName}} <span class="generator-multiplier">x{{ formatWhole(getMult(idx, jdx)) }}</span></td>
+                  <td style="width: 10%; text-align: right;"><span class="generator-amount">{{ formatWhole(gen.amount) }}</span></td>
+                  <td style="width: 40%; text-align: right;"><span><button @click="buyGenerator(idx, jdx)" class="buy"><span class="generator-cost">{{ formatWhole(gen.cost) }}</span></button>
+                    <button @click="buyMaxGenerator(idx, jdx)" class="buy">Max</button></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+  </div>
+
+  <div v-if="player.tab === 'Transcension'">
+    <div class="currency transcension" style="text-align: center" >
+      <p>You have {{formatWhole(player.transcension.points)}} Transcension Points, 
+      translated to a <b>x{{formatWhole(getTranscensionBoost())}}</b> Boost on every Dimension.</p>
+
+      <button class="transcension" v-on:click="transcendGame">Transcend now to get {{formatWhole(getTranscensionGain())}} Transcendence Points</button>
+    </div>
+  </div>
+
+</div>
+  <div style="display: none;"><textarea id="exportOutput"></textarea></div>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/breakinfinity.js"></script>
+<script src="js/data.js"></script>
+<script src="js/format.js"></script>
+<script src="js/buying.js"></script>
+<script src="js/saving.js"></script>
+<script src="js/transcension.js"></script>
+<script src="js/style.js"></script>
+<script src="js/loop.js"></script>
+<script src="js/index.js"></script>
+</html>
