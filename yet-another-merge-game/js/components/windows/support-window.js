@@ -25,6 +25,6 @@ const SupportWindow = WindowComponent.extend({
                 <i class="fab fa-youtube margin-h"></i> Subscribe <div class="with-icon"><img src="images/currencies/matter.png"/> x{{socialBoost | ftnum}}</div>
             </button>   
         </div>
-        <p class="text-xl padding-l center" v-if="isSubscribed">Thank you so much! ♥ Your Matter production is now increased!</p>
+        <p class="text-xl padding-l center" v-if="isSubscribed">Thank you so much! Your Matter production is now increased by x{{socialBoost | ftnum}}!</p>
     </window>`
 });
