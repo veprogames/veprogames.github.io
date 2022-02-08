@@ -1,4 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 400;
+    src: url("fonts/montserrat/Montserrat-Regular.woff2") format("woff2"),
+        url("fonts/montserrat/Montserrat-Regular.woff") format("woff"),
+        url("fonts/montserrat/Montserrat-Regular.ttf") format("ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 700;
+    src: url("fonts/montserrat/Montserrat-Bold.woff2") format("woff2"),
+        url("fonts/montserrat/Montserrat-Bold.woff") format("woff"),
+        url("fonts/montserrat/Montserrat-Bold.ttf") format("ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 900;
+    src: url("fonts/montserrat/Montserrat-Black.woff2") format("woff2"),
+        url("fonts/montserrat/Montserrat-Black.woff") format("woff"),
+        url("fonts/montserrat/Montserrat-Black.ttf") format("ttf");
+}
 
 *{
     margin: 0;
@@ -7,7 +29,7 @@
 }
 
 body{
-    font-size: 16px;
+    font-size: 14px;
     font-family: Montserrat, sans-serif;
     background-color: var(--color-background);
     color: var(--color-text);
@@ -61,12 +83,21 @@ button.help img{
 
 input[type="text"], input[type="number"]{
     font-family: "Montserrat", sans-serif;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 input[type="color"]{
     width: 1.5rem;
     height: 1.5rem;
+}
+
+select, input[type="select"]{
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border: 1px solid white;
+    border-radius: 3px;
+    padding: 0.25rem;
+    margin: 0.25rem;
 }
 
 a, a:visited{
@@ -346,7 +377,6 @@ main{
     margin: auto auto 100px;
     justify-content: center;
     min-height: 400px;
-    max-width: 1200px;
     padding-bottom: 150px;
 }
 
@@ -355,17 +385,15 @@ main{
 }
 
 .team-management .players.inactive{
-    flex: 1;
     height: 300px;
-    flex-wrap: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .team-management .inactive-players{
     background-color: var(--color-background);
     position: fixed;
-    bottom: -150px;
+    bottom: 0;
     left: 0;
     width: 100%;
     padding: 1rem;
@@ -379,46 +407,31 @@ main{
     opacity: 1;
 }
 
+.team-management .inactive-players .player{
+    width: 45%;
+    height: 85px;
+}
+
 .team-management .players .player{
     margin: 0.5rem;
 }
 
 .team-management .players.active .player{
-    margin: 2rem;
+    margin: 0.5rem;
 }
 
 .team-management > .header{
     background-color: var(--color-header);
     border-top: 2px solid rgba(0, 0, 0, 0.5);
     display: flex;
+    flex-direction: column;
     font-size: 120%;
     padding: 1rem;
 }
 
-.team-management .header > *{
-    margin-right: 1rem;
-}
-
-.team-management .strategy{
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-}
-
-.team-management .strategy button{
-    margin: 0 0.5rem;
-    padding: 0.5rem 1rem;
-    min-width: 7.5rem;
-}
-
-.team-management .strategy button img{
-    height: 2em;
-}
-
-.team-management .strategies{
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--color-header);
+.team-management .header p, .team-management .header h4{
+    margin-right: 0.5rem;
+    display: inline;
 }
 
 .team-management .no-players{
@@ -434,24 +447,32 @@ main{
     border: 3px solid var(--color-card-border);
     border-radius: 8px;
     box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
-    min-width: 200px;
-    width: 200px;
-    height: 240px;
+    width: 30%;
+    height: 85px;
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
     align-items: center;
 }
 
 .player .header{
     font-weight: bold;
-    text-align: center;
+    text-align: left;
     color: black;
     padding: 0.25rem;
+    width: 8em;
+}
+
+.player .progress-bar{
+    width: 6em;
 }
 
 .player .header .icon-flex{ /*Clickable Area for Stat Breakdown*/
     cursor: pointer;
+}
+
+.player .header > div:first-child{
+    display: block;
+    text-align: left;
 }
 
 .player .header .icon-flex:hover{
@@ -464,24 +485,19 @@ main{
 }
 
 .player > .stats{
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
+    min-width: 150px;
+    text-align: left;
     margin: 0.5rem 0;
-    padding: 0.5rem;
-    background-color: var(--color-card-stat);
+    color: var(--color-text-dark);
 }
 
 .player > .stats p{
-    display: flex;
+    margin: 0 0.25rem;
+    display: inline-flex;
     align-items: center;
     font-weight: bold;
-    text-shadow: 3px 3px rgba(0, 0, 0, 0.2);
-    font-size: 90%;
-    width: 50%;
     overflow: hidden;
     white-space: nowrap;
-    padding: 0.5rem 0;
 }
 
 .player > .stats p > span{
@@ -491,26 +507,11 @@ main{
     font-size: 65%;
 }
 
-.player > .stats p:nth-child(2n) > span{
-    text-align: right;
-}
-
-.player > .stats p:nth-child(2n){
-    justify-content: flex-end;
-}
-
-.player .actions{
-    width: 100%;
-}
-
 .player button{
+    min-width: 8em;
     width: 100%;
     font-size: 70%;
     padding: 0.35rem;
-}
-
-.player progress{
-    width: 100px;
 }
 
 .placeholder{
@@ -970,11 +971,19 @@ main{
     .team-management .strategies{
         flex-direction: column;
     }
+
+    .player{
+        width: 45%;
+    }
+
+    .team-management .inactive-players .player{
+        width: 100%;
+    }
 }
 
 @media (max-width: 1024px){
     body, button, input[type="text"], input[type="number"]{
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .window{

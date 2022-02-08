@@ -4,6 +4,7 @@ document.body.onload = e => {
     let gameWrappers = document.querySelectorAll(".game-wrapper");
     let otherProjects = document.querySelector(".other-projects");
     let otherProjectsList = document.querySelector(".other-projects-list");
+    let spanYear = document.getElementById("year");
 
     let gameButton = document.querySelector(".dev-logo");
     let game = {
@@ -125,6 +126,8 @@ document.body.onload = e => {
 
     checkFadeIns();
     refreshParallax();
+
+    spanYear.innerText = new Date().getFullYear();
 
     onscroll = e => {
         checkFadeIns();

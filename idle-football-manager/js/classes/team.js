@@ -37,7 +37,7 @@ class Team {
     }
 
     getSortedPlayers(){
-        return Array.from(this.players).sort((p1, p2) => (p2.getBaseAttack().add(p2.getBaseDefense())).gte(p1.getBaseAttack().add(p1.getBaseDefense())) ? 1 : -1);
+        return Array.from(this.players).sort((p1, p2) => (p2.attack.add(p2.defense)).gte(p1.attack.add(p1.defense)) ? 1 : -1);
     }
 
     getActiveSortedPlayers(){

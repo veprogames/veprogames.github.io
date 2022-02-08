@@ -50,13 +50,13 @@ app.component("player", {
         }
     },
     template: `<div class="player">
-<p class="header"><div @click="showStatBreakdown = true" class="icon-flex"><img alt="" src="images/player.png"/><img v-if="player.hasRedCard()" alt="" src="images/icons/red-card.png"/> {{player.name}}</div>
+<p class="header"><div @click="showStatBreakdown = true" class="icon-flex"><img v-if="player.hasRedCard()" alt="" src="images/icons/red-card.png"/> {{player.name}}</div>
 <div class="icon-flex" v-if="isBought"><img alt="" src="images/icons/stamina.png"/> <progress-bar :value="player.currentStamina"></progress-bar></div></p>
 <div class="stats">
     <p><span>ATT</span> {{formatNumber(player.getBaseAttack())}}</p>
-    <p>{{formatNumber(player.getBaseDefense())}} <span>DEF</span></p>
+    <p><span>DEF</span> {{formatNumber(player.getBaseDefense())}}</p><br/>
     <p><span>AGG</span> {{formatNumber(player.aggressivity * 100)}}</p>
-    <p>{{formatNumber(player.stamina * 100)}} <span>STA</span></p>
+    <p><span>STA</span> {{formatNumber(player.stamina * 100)}}</p>
 </div>
 <div class="actions">
     <div v-if="isBought">
@@ -64,13 +64,13 @@ app.component("player", {
             <button v-if="!player.active" @click="removeFromTraining()">Stop Training</button>
         </div>
         <div v-else>
-            <button :style="{width: buttonWidth}" :disabled="!canMove" v-if="isBought" @click="player.active = !player.active"><span v-if="!player.active">Move to Team</span><span v-else>Move from Team</span></button>
+            <button :style="{width: buttonWidth}" :disabled="!canMove" v-if="isBought" @click="player.active = !player.active">Move</button>
             <button :style="{width: '50%'}" v-if="!player.active && trainingUnlocked" @click="addToTraining()">Train</button>
             <button class="negative" v-if="!player.active" @click="sellPlayer()">Sell ({{formatNumber(player.getSellAmount())}} $)</button>
         </div>
     </div>
     <div v-else>
-        <button :disabled="!player.canAfford()" @click="player.buy()">Buy ($ {{formatNumber(player.getPrice())}})</button>
+        <button :disabled="!player.canAfford()" @click="player.buy()">Buy<br/>($ {{formatNumber(player.getPrice())}})</button>
     </div>
 </div>
 <transition name="window-grow">

@@ -1,4 +1,18 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400|Work+Sans:400&display=swap');
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 400;
+    src: url("fonts/montserrat/Montserrat-Regular.woff2") format("woff2"),
+        url("fonts/montserrat/Montserrat-Regular.woff") format("woff"),
+        url("fonts/montserrat/Montserrat-Regular.ttf") format("ttf");
+}
+
+@font-face {
+    font-family: "Work Sans";
+    font-weight: 400;
+    src: url("fonts/worksans/WorkSans-Regular.woff2") format("woff2"),
+        url("fonts/worksans/WorkSans-Regular.woff") format("woff"),
+        url("fonts/worksans/WorkSans-Regular.ttf") format("ttf");
+}
 
 @keyframes wisdom-resource-rotate {
     0%{
