@@ -23,6 +23,7 @@ app.component("stadium", {
     <p>{{formatNumber(stadium.attendance)}} / {{formatNumber(stadium.getCapacity())}} watching</p>
     <p>{{formatNumber(stadium.fans)}} Fans</p>
     <p>{{formatNumber(stadium.getTicketPrice(), 2, 2)}} $ per Ticket → {{formatNumber(maxPayment)}} $ possible</p>
+    <img alt="Stadium" src="images/stadium.png"/>
 </div>
 <h4>Upgrades</h4>
 <div class="upgrade-container">
