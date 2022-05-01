@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accurate Clock</title>
+
+    <style>
+        @font-face {
+            font-family: "Segment14";
+            src: url("font/Segment14.woff2") format("woff2"),
+                url("font/Segment14.woff") format("woff"),
+                url("font/Segment14.ttf") format("ttf");
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        body{
+            background-color: black;
+            color: red;
+        }
+
+        p#time{
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            left: 0;
+            top: 50%;
+            font-family: "Segment14", sans-serif;
+            font-size: 15vh;
+            transform: translateY(-50%);
+        }
+
+        p#disclaimer, p#info{
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            left: 0;
+            bottom: 1em;
+        }
+    </style>
+</head>
+<body>
+    <p id="disclaimer">Enable Location Permission to fetch Longitude</p>
+    <p id="info" style="display: none">Time is based on a smoothed timezone without Daylight savings</p>
+    <p id="time"></p>
+    <script>
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.body.removeChild(document.getElementById("disclaimer"));
+            document.getElementById("info").style.display = "block";
+
+            const long = position.coords.longitude;
+            const hourOffset = Math.floor(long / 12);
+            const offset = long / 360 * 24;
+            
+            function r(){
+                const newDate = new Date(Date.now() + offset * 1000 * 3600);
+                document.getElementById("time").innerHTML = newDate.toLocaleTimeString("de-DE", {timeZone: "Etc/Greenwich"});
+                requestAnimationFrame(r);
+            }
+            requestAnimationFrame(r);
+        });
+    </script>
+</body>
+</html>
