@@ -1,2 +1,3 @@
 # veprogames.github.io
-Repository of Webgames
+
+Homepage for [https://veprogames.github.io](). If your are looking for the individual projects, check the other repositories
