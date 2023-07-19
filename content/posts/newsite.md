@@ -3,7 +3,7 @@ title: "New Site is up"
 date: 2023-07-18T21:04:13+02:00
 ---
 
-If you are reading this, the new site is online. It turned from a "Game Dev Portfolio" Site into a "Content Dump and Protfolio" Site, using the [Hugo](https://gohugo.io) Static Site Generator.
+If you are reading this, the new site is online. It turned from a "Game Dev Portfolio" Site into a "Content Dump and Portfolio" Site, using the [Hugo](https://gohugo.io) Static Site Generator.
 
 ## But whyyyyyy?
 
