@@ -1,0 +1,12 @@
+baseURL = 'https://veprogames.github.io'
+languageCode = 'en-us'
+title = 'VeproGames'
+theme = "vepronix"
+rssLimit = 25
+
+[menu]
+    [[menu.main]]
+        name = "RSS"
+        identifier = "rss"
+        url = "/index.xml"
+        weight = 100

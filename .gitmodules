@@ -1,0 +1,3 @@
+[submodule "themes/vepronix"]
+	path = themes/vepronix
+	url = https://github.com/veprogames/vepronix.git
