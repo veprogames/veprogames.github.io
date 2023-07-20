@@ -11,7 +11,7 @@ rssLimit = 25
         url = "/index.xml"
         weight = 100
     [[menu.footer]]
-        name = "CC-BY-ND 4.0"
+        name = "CC-BY-SA 4.0"
         identifier = "license"
         url = "/LICENSE"
         weight = 10
