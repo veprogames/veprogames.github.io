@@ -51,23 +51,23 @@ Run `cfdisk /dev/sda`. If prompted, select `gpt` as partitioning scheme. `dos` (
 
 Create the following partitions:
 
-| Size | Type | Info | Resulting Partition (for /dev/sda)
+| Size | Type | Info | Resulting Partition (for `/dev/sda`)
 | - | - | - | - |
-| 1M | BIOS boot | Allows legacy devices to boot with this partitioning scheme | /dev/sda1 |
-| 512M | EFI System | This is where Bootloaders go | /dev/sda2 |
-| 2G-4G | Linux Filesystem | This will be where Kernels and initrds are stored. This will be unencrypted | /dev/sda3 |
-| Remaining | Linux Filesystem | All of the data, this will be encrypted | /dev/sda4 |
+| 1M | BIOS boot | Allows legacy devices to boot with this partitioning scheme | `/dev/sda1` |
+| 512M | EFI System | This is where Bootloaders go | `/dev/sda2` |
+| 2G-4G | Linux Filesystem | This will be where Kernels and initrds are stored. This will be unencrypted | `/dev/sda3` |
+| Remaining | Linux Filesystem | All of the data, this will be encrypted | `/dev/sda4` |
 
 Next, create the Filesystems. Without a Filesystem, files cannot be organized by the system.
 
 * The BIOS boot partition needs no filesystem
-* Format /dev/sda2 as vfat: `mkfs.vfat /dev/sda2`
-* Format /dev/sda3 as ext4: `mkfs.ext4 /dev/sd3`. This will not BTRFS, so GRUB can store the default selection.
-* Don't format /dev/sda4.
+* Format `/dev/sda2` as vfat: `mkfs.vfat /dev/sda2`
+* Format `/dev/sda3` as ext4: `mkfs.ext4 /dev/sd3`. This will not BTRFS, so GRUB can store the default selection.
+* Don't format `/dev/sda4`.
 
 ## Encrypt the Disk
 
-Instead, create a LUKS Volume on /dev/sda4:
+Instead, create a LUKS Volume on `/dev/sda4`:
 
 `cryptsetup luksFormat /dev/sda4`
 
@@ -81,7 +81,7 @@ A new device file will appear under `/dev/mapper/rootcrypt`.
 
 ## BTRFS
 
-Now, create a BTRFS on the **mapped device** (not /dev/sda4!, this would destroy the LUKS volume):
+Now, create a BTRFS on the **mapped device** (not `/dev/sda4`!, this would destroy the LUKS volume):
 
 `mkfs.btrfs /dev/mapper/rootcrypt`
 
@@ -110,7 +110,7 @@ Since parts in `/var` are relevant for snapshots, especially the pacman Database
 
 Note that the subvolume name (e. g. @) is independent of the actual place where it will be mounted (e. g. /). Where things will be mounted, will be decided by the filesystem table file `fstab`, more on that later.
 
-Now that all subvolumes are created, we can unmount the /dev/mapper/rootcrypt device by just specifying the mountpoint (/mnt):
+Now that all subvolumes are created, we can unmount the /dev/mapper/rootcrypt device by just specifying the mountpoint (`/mnt`):
 
 `umount /mnt`
 
@@ -118,7 +118,7 @@ Now, let's mount the subvolumes:
 
 `mount -o noatime,compress=ztd,subvol=@ /dev/mapper/rootcrypt /mnt`
 
-This means: Mount the subvolume from /dev/mapper/rootcrypt on /mnt. Don't modify modification and access times and compress created files using `zstd`.
+This means: Mount the subvolume from `/dev/mapper/rootcrypt` on `/mnt`. Don't modify modification and access times and compress created files using `zstd`.
 
 Do this for the other volumes too:
 
@@ -174,7 +174,7 @@ Generate the fstab file for `/mnt`, and append (>>) it into `/mnt/etc/fstab`:
 
 `genfstab -U /mnt >> /mnt/etc/fstab`
 
-Don't forget the `-U`! This makes it use UUIDs instead of device file names, which would cause problems if sda would be mounted later when more drives are connected and would become /dev/sdb, causing mounting (and startup) to fail.
+Don't forget the `-U`! This makes it use UUIDs instead of device file names, which would cause problems if sda would be mounted later when more drives are connected and would become `/dev/sdb`, causing mounting (and startup) to fail.
 
 Next remove all occurences of `subvolid=xxx`, since static IDs are not the best idea either and the subvol name is already given.
 
@@ -200,7 +200,7 @@ Let's generate the locales:
 
 * Open `/etc/locale.gen` with a text editor, and uncomment all occurences of en_US and your locale, e. g. de_DE
 * Run locale-gen
-* Write the name of your locale (e. g. `en_US.UTF-8`) into /etc/locale.conf: `LOCALE=es_US.UTF-8`
+* Write the name of your locale (e. g. `en_US.UTF-8`) into /etc/locale.conf: `LANG=es_US.UTF-8`
 * Optionally, write the keymap into `/etc/vconsole.conf`: `KEYMAP=de-latin1`
 
 Now, set the timezone by symlinking the timezone file to /etc/localtime:
@@ -266,9 +266,9 @@ Protip: use `:r!blkid -o value -s PARTUUID /dev/sda4` in vim or nvim to directly
 In the GRUB_CMDLINE_LINUX_DEFAULT, add:
 `cryptdevice=PARTUUID=<the value we got>:rootcrypt root=/dev/mapper/rootcrypt`
 
-cryptdevice=... means that the LUKS Volume will be luksOpened to /dev/mapper/rootcrypt after the Passphrease was successfully input. root=... says where the partition with the / mountpoint resides.
+cryptdevice=... means that the LUKS Volume will be luksOpened to `/dev/mapper/rootcrypt` after the Passphrease was successfully input. root=... says where the partition with the / mountpoint resides.
 
-While we're at it, uncomment GRUB_DISABLE_SUBMENU=y and GRUB_SAVEDEFAULT=true, so your decisions will be remembered.
+While we're at it, uncomment `GRUB_DISABLE_SUBMENU=y`, `GRUB_SAVEDEFAULT=true` and `GRUB_DEFAULT=saved`, so your decisions will be remembered.
 
 Now generate the GRUB configuration:
 
@@ -295,3 +295,7 @@ Those are much more straightforward than what we did before. I won't cover it he
 * Need to edit GRUB parameters for a single run? Press e while before selecting an entry.
 
 * More Questions? The Arch Wiki (https://wiki.archlinux.org) covers topics in much more detail.
+
+## Notes
+
+* 2023-07-22: Fixed a mistake, it's `LANG=` not `LOCALE=` in `/etc/locale.conf`
